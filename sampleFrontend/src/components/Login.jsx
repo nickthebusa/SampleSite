@@ -9,10 +9,9 @@ function Login() {
   const [token, setToken] = useCookies(['my-token']);
   let navigate = useNavigate();
 
-  function LoggedIn() {
-    if (token['my-token']) {
-      navigate('/account');
-    }
+
+  if (token['my-token']) {
+    navigate('/account');
   }
 
   return (
