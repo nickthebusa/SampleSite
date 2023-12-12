@@ -1,11 +1,19 @@
 import { useState } from 'react'; 
-
+import {useCookies} from 'react-cookie';
+import {useNavigate} from 'react-router-dom';
 
 function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [token, setToken] = useCookies(['my-token']);
+  let navigate = useNavigate();
 
+  function LoggedIn() {
+    if (token['my-token']) {
+      navigate('/account');
+    }
+  }
 
   return (
     <div>
