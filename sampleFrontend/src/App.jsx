@@ -35,8 +35,6 @@ function App() {
     APIService.GetUsers()
       .then(res => setUsers(res))
 
-    // APIService.RequestAuthorization()
-    //   .then(res => console.log(res))
 
   }, [])
 

@@ -26,12 +26,12 @@ export default class APIService {
     return users;
   }
 
-  // static async RequestAuthorization() {
-  //   const res = await fetch('http://127.0.0.1:8000/auth', {
-  //     mode: 'cors'
-  //   })
-  //   return res
-  // }
+  static async RequestAuthorization() {
+    const res = await fetch('http://127.0.0.1:8000/auth', {
+      mode: 'cors'
+    })
+    return res
+  }
 
 
 }
