@@ -1,0 +1,5 @@
+Pipfile.lock
+.vscode
+
+sampleFrontend/node_modules
+sampleFrontend/yarn.lock 
