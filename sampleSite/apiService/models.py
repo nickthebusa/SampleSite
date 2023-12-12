@@ -14,7 +14,7 @@ class Sample(models.Model):
   audio_file = models.FileField(upload_to='audio_files/')
   tags = models.ManyToManyField('Tag', blank=True)
   date = models.DateField(default=datetime.date.today)
-  image = models.ImageField(upload_to="sample_images/", default='defaults/output-10.jpeg')
+  image = models.ImageField(upload_to="sample_images/", default='defaults/output01.jpeg')
   
   def __str__(self):
     return self.title

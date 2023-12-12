@@ -11,7 +11,10 @@ function Router() {
         <Routes>
           <Route exact path='/login' element={<Login />} />
           <Route exact path='/' element={<App />} />
-          <Route exact path='/account' element={<Account />} />
+          <Route 
+          path='/account/:id'
+          element={<Account />}
+          />
         </Routes>
       </BrowserRouter>
     </CookiesProvider>

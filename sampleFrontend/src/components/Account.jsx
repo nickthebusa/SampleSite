@@ -1,16 +1,22 @@
+import {useEffect} from 'react';
 import {useCookies} from 'react-cookie';
-import {useNavigate} from 'react-router-dom';
+import {useNavigate, useParams} from 'react-router-dom';
 
 
-function Account() {
+function Account(props) {
   const [token, setToken] = useCookies(['my-token']);
   let navigate = useNavigate();
 
+  const { id } = useParams();
+  console.log(id);
 
-  if (!token['my-token']) {
-    navigate('/login')
-  }
+  // useEffect(() => {
+  //   if (!token['my-token']) {
+  //     navigate('/login')
+  //   }
+  // })
 
+  console.log(props);
 
   return (
     <div>
