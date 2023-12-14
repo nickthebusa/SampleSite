@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import APIService from "./fetching/APIService";
+import {useCookies} from 'react-cookie';
 
 import Nav from "./components/Nav";
 import SampleList from "./components/SampleList";
@@ -14,15 +15,21 @@ import SampleList from "./components/SampleList";
 // implement search feature (with text & tag)
 // token authorization django
 // fetch users
+// select sample by pressing the name then going down with arrow key it plays the next sample
+  // by selecting the sample it will have a lit box around it showing its selected
 
 /* SECURITY*/
 // - have secret key in django & react .env files 
 
-function App() {
+function App({ userId }) {
 
   const [samples, setSamples] = useState([]);
   const [tags, setTags] = useState([]);
   const [users, setUsers] = useState([]);
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [token,] = useCookies(['my-token']);
+  
+
 
   useEffect(() => {
 
@@ -35,13 +42,20 @@ function App() {
     APIService.GetUsers()
       .then(res => setUsers(res))
 
+    if (token['my-token']) {
+      setLoggedIn(true);
+    } else {
+      setLoggedIn(false);
+    }
 
-  }, [])
+  }, [token])
+
+  console.log("App", userId);
 
   return (
     <div className="App">
 
-      <Nav />
+      <Nav loggedIn={loggedIn} userId={userId} />
       {samples.length > 0 && <SampleList samples={samples} tags={tags} users={users} />}
 
     </div>

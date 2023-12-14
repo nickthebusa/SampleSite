@@ -1,21 +1,49 @@
-import { useState } from 'react'; 
+import { useState, useEffect } from 'react'; 
 import {useCookies} from 'react-cookie';
 import {useNavigate} from 'react-router-dom';
+import APIService from '../fetching/APIService';
+
+import Nav from './Nav';
 
 function Login() {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [userId, setUserId] = useState(null);
   const [token, setToken] = useCookies(['my-token']);
+
   let navigate = useNavigate();
 
+  useEffect(() => {
+    
+    if (token['my-token'] && userId) {
+      navigate(`/account/${userId}`);
+    }
+    
+  }, [navigate, token, userId])
 
-  if (token['my-token']) {
-    navigate('/account');
+  function loginBtn() {
+
+    APIService.LoginUser({ username, password })
+      .then(res => {
+        setToken('my-token', res.token)
+        setUserId(res.user_id)
+        localStorage.setItem('user_id', parseInt(res.user_id));
+      })
+      .catch(err => console.log(err))
   }
+
+  function registerBtn() {
+    APIService.RegisterUser({ username, password })
+      .then(() => loginBtn())
+      .catch(err => console.log(err))
+  }
+
 
   return (
     <div>
+
+      <Nav loggedIn={false} />
 
       {isLogin ? <h1>Log In</h1> : <h1>Register</h1>}
       
@@ -25,13 +53,13 @@ function Login() {
       </div>
 
       <div className="password-div">
-        <label htmlFor="password">Password-: </label>
+        <label htmlFor="password">Password: </label>
         <input id='password' type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
       </div>
 
-      {/* {isLogin ? <button onClick={loginBtn} >LOGIN</button>
+      {isLogin ? <button onClick={loginBtn} >LOGIN</button>
         :  
-      <button onClick={registerBtn} >Register</button>} */}
+      <button onClick={registerBtn} >Register</button>}
 
       <div>
         <br />

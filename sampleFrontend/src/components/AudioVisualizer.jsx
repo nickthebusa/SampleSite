@@ -1,13 +1,13 @@
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import WaveForm from "./WaveForm";
 
-function AudioVisualizer({ audio_file, id }) {
+function AudioVisualizer({ audio_file, id, selected, setPlaying }) {
 
   const [analyzerData, setAnalyzerData] = useState(null);
   const audioElmRef = useRef(null);
   const [srcSet, setSrcSet] = useState(false);
 
-  const audioAnalyzer = () => {
+  const audioAnalyzer = useCallback(() => {
 
     const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
     const analyzer = audioCtx.createAnalyser();
@@ -24,28 +24,47 @@ function AudioVisualizer({ audio_file, id }) {
     setAnalyzerData({ analyzer, bufferLength, dataArray });
 
     setSrcSet(true);
-  }
+  }, [audioElmRef, setAnalyzerData, setSrcSet])
 
-
-  const playAudio = () => {
+  const playAudio = useCallback((e=null) => {
+    e && e.target.blur();
     if (!srcSet) audioAnalyzer();
     if (!audioElmRef.current.paused) {
       audioElmRef.current.pause();
       audioElmRef.current.currentTime = 0;
     }
     audioElmRef.current.play();
-  }
-  const pauseAudio = () => {
+  }, [srcSet, audioAnalyzer, audioElmRef])
+
+  const pauseAudio = useCallback((e=null) => {
+    e && e.target.blur();
     audioElmRef.current.pause();
-  }
+    setPlaying(false);
+  }, [audioElmRef, setPlaying])
+
+
+  useEffect(() => {
+    if (selected.id === id) {
+      if (selected.playing) {
+        playAudio();
+      }
+      // else {
+      //   pauseAudio();
+      //   audioElmRef.current.currentTime = 0;
+      // }
+    }
+  }, [selected, id, playAudio, pauseAudio])
+
+
+
 
   return (
     <div className="audioVisualizer">
 
       {analyzerData && <WaveForm analyzerData={analyzerData} id={id} />}
 
-      <button onClick={playAudio}>▶️</button>
-      <button onClick={pauseAudio}>⏸️</button>
+      <button onClick={(e) => playAudio(e)}>▶️</button>
+      <button onClick={(e) => pauseAudio(e)}>⏸️</button>
       <audio src={audio_file} crossOrigin="anonymous" ref={audioElmRef} />
 
     </div>
