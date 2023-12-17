@@ -6,3 +6,4 @@ from . import models
 admin.site.register(models.User, UserAdmin)
 admin.site.register(models.Sample)
 admin.site.register(models.Tag)
+admin.site.register(models.Folder)

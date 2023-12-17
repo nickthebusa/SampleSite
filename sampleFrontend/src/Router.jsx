@@ -29,7 +29,7 @@ function Router() {
             element={<App userId={userId} />} />
           <Route 
             path='/account/:id'
-            element={<Account />}
+            element={<Account userId={userId} />}
           />
         </Routes>
       </BrowserRouter>

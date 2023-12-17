@@ -17,6 +17,7 @@ import SampleList from "./components/SampleList";
 // fetch users
 // select sample by pressing the name then going down with arrow key it plays the next sample
   // by selecting the sample it will have a lit box around it showing its selected
+// post to users to add usr id to following or followers
 
 /* SECURITY*/
 // - have secret key in django & react .env files 

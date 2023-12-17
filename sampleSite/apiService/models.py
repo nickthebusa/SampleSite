@@ -9,6 +9,9 @@ class User(AbstractUser):
   following = models.ManyToManyField('self', related_name='following_users', blank=True, symmetrical=False)
   followers = models.ManyToManyField('self', related_name='follower_users', blank=True, symmetrical=False)
 
+  def __str__(self):
+    return self.username  
+
 
 class Sample(models.Model):
   user = models.ForeignKey(User, on_delete=models.CASCADE)

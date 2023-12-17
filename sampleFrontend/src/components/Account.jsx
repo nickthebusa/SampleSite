@@ -5,10 +5,12 @@ import APIService from '../fetching/APIService';
 import Nav from './Nav';
 
 import SampleList from './SampleList';
+// import { isButtonElement } from 'react-router-dom/dist/dom';
 
-function Account() {
+function Account({userId}) {
 
-  const [user, setUser] = useState(null);
+  const [userAccount, setUserAccount] = useState(null);
+  const [userLogged, setUserLogged] = useState(null);
   const [samples, setSamples] = useState([]);
   const [tags, setTags] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
@@ -21,54 +23,79 @@ function Account() {
 
   useEffect(() => {
 
-    if (!user) {
+    if (!userAccount) {
       APIService.GetUser(id)
-        .then(res => setUser(res))
+        .then(res => setUserAccount(res))
       
       APIService.GetTags()
         .then(res => setTags(res))
     }
-    if (user) {
+    if (userAccount) {
       APIService.GetSamples()
         .then(res => {
-          res = res.filter(sample => sample.user === user.id)
+          res = res.filter(sample => sample.user === userAccount.id)
           setSamples(res)
         })
     }
-    
+    if (userId) {
+      APIService.GetUser(userId, )
+        .then(res => setUserLogged(res))
+    }
 
     if (token['my-token']) {
       setLoggedIn(true);
     }
 
 
-  }, [user, id, token])
+  }, [userAccount, id, token])
+
+  function followBtn() {
+    if (userLogged) {
+      APIService.PostUser(userId, token, {
+        ...userLogged, following: userAccount.id
+      })
+        .then(res => console.log(res))
+    }
+  }
 
   // console.log("Account", userId);
+  // console.log(userId, id);
 
   return (
     <div>
 
       <Nav loggedIn={loggedIn} />
 
-      {user &&
+      {userAccount &&
         <div className='Account-div'>
-          <h4 className='Account-username'>{user.username}</h4>
+          <h4 className='Account-username'>{userAccount.username}</h4>
           <div className='Account-follow-div'>
             <div>
               <p>following</p>
-              <p>{user.following.length}</p>
+              <p>{userAccount.following.length}</p>
             </div>
             <div>
               <p>followers</p>
-              <p>{user.followers.length}</p>
-              </div>
+              <p>{userAccount.followers.length}</p>
+            </div>
+
+            {
+              userLogged && userAccount &&
+              userLogged.id !== userAccount.id &&
+              <button onClick={followBtn}>
+                {
+                  userLogged.following.includes(userAccount.id) ?
+                  "Following" : "Follow"
+                }
+              </button>
+            }
+
           </div>
         </div>
 
       }
 
-      {samples && samples.length > 0 && <SampleList samples={samples} tags={tags} users={user} />}
+      {samples && samples.length > 0 && <SampleList samples={samples} tags={tags} users={userAccount} />}
       
     </div>
   )

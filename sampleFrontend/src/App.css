@@ -75,7 +75,7 @@
   width: 400px;
 }
 .menu-nav.show-menu {
-  transform: translateY(100px);
+  transform: translateY(120px);
   transition: transform ease-in-out 0.2s;
 }
 .menu-nav a {
@@ -90,7 +90,7 @@
   background-color: #646cff;
 } 
 .menu {
-  --s: 45px; /* control the size */
+  --s: 48px; /* control the size */
   --c: white; /* the color */
   
   height: var(--s);
@@ -260,7 +260,7 @@ cursor: pointer;
 
 /*  MEDIA QUERIES  */
 
-@media (max-width: 750px) {
+@media (max-width: 850px) {
   .Nav-name {
     margin: 0 0 0 20px;
     font-family: 'Silkscreen', sans-serif;

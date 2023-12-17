@@ -11,19 +11,29 @@ function Nav({ loggedIn, userId }) {
   
   const ref = useRef();
   const menuRef = useRef();
+
+  function debounce(func, wait) {
+    let timeout;
+    return function () {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => func.apply(this, arguments), wait);
+    }
+  }
   
   useEffect(() => {
-    function handler(e) {
-      if (navbarOpen && ref.current && !ref.current.contains(e.target)) {
+    const handler = debounce((e) => {
+      if (navbarOpen && ref.current && !(ref.current.contains(e.target))) {
+        // debugger;
         setNavbarOpen(false);
         menuRef.current.checked = false;
       }
-    }
+    }, 100)
     document.addEventListener('mousedown', handler);
     return () => {
       document.removeEventListener('mousedown', handler);
     }
   }, [navbarOpen])
+
 
   function logOut() {
     if (token['my-token'] && loggedIn)  {
@@ -57,11 +67,11 @@ function Nav({ loggedIn, userId }) {
 
 
         <div className={`menu-nav${navbarOpen ? ' show-menu' : ''}`}
-        onClick={() => {
-          setNavbarOpen(false)
+        ref={ref}
+        onClick={()=> {
+          setNavbarOpen(false);
           menuRef.current.checked = false;
         }}
-        ref={ref}
         >
             <Link to={'/'}>home</Link>
             <Link to={'/'}>following</Link>

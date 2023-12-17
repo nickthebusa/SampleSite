@@ -36,6 +36,7 @@ export default class APIService {
 
   static async LoginUser(body) {
     const res = await fetch('http://127.0.0.1:8000/auth/', {
+      mode: 'cors',
       'method': 'POST',
       headers: {
         "Content-Type": "application/json"
@@ -46,5 +47,17 @@ export default class APIService {
     return status;
   }
 
+  static async PostUser(id, token, body) {
+    const res = await fetch(`http://127.0.0.1:8000/api/users/${id}/`, {
+      'method': 'POST',
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": `Token ${token}`
+      },
+      body: JSON.stringify(body)
+    })
+    const status = await res.json();
+    return status;
+  }
 
 }
