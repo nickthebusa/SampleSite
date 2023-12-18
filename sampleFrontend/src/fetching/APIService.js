@@ -47,12 +47,14 @@ export default class APIService {
     return status;
   }
 
-  static async PostUser(id, token, body) {
+  static async PostUser(id, token, csrf, body) {
+    console.log(token)
     const res = await fetch(`http://127.0.0.1:8000/api/users/${id}/`, {
-      'method': 'POST',
+      method: 'PUT',
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Token ${token}`
+        "Authorization": `Token ${token}`,
+        'X-CSRFToken': csrf
       },
       body: JSON.stringify(body)
     })

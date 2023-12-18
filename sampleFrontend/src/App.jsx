@@ -31,7 +31,6 @@ function App({ userId }) {
   const [token,] = useCookies(['my-token']);
   
 
-
   useEffect(() => {
 
     APIService.GetSamples()
@@ -51,7 +50,6 @@ function App({ userId }) {
 
   }, [token])
 
-  console.log("App", userId);
 
   return (
     <div className="App">

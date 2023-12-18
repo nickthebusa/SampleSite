@@ -17,8 +17,9 @@ class UserViewSet(viewsets.ModelViewSet):
   permission_classes = [IsAuthenticated]
   authentication_classes = (TokenAuthentication,)
   
+  
   def get_permissions(self):
-    if self.request.method =="GET":
+    if self.request.method == "GET":
       return [permissions.AllowAny()]
     return super().get_permissions()
 

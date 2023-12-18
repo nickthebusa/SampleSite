@@ -15,8 +15,8 @@ function Account({userId}) {
   const [tags, setTags] = useState([]);
   const [loggedIn, setLoggedIn] = useState(false);
 
-  const [token, ] = useCookies(['my-token']);
-
+  const [token] = useCookies(['my-token']);
+  const [csrf] = useCookies(['csrftoken'])
   
   const { id } = useParams();
   
@@ -51,8 +51,10 @@ function Account({userId}) {
 
   function followBtn() {
     if (userLogged) {
-      APIService.PostUser(userId, token, {
-        ...userLogged, following: userAccount.id
+      debugger;
+      console.log(userLogged.followers)
+      APIService.PostUser(userLogged.id, token['my-token'], csrf, {
+        ...userLogged, following: [...userLogged.followers, userAccount.id]
       })
         .then(res => console.log(res))
     }
@@ -60,6 +62,7 @@ function Account({userId}) {
 
   // console.log("Account", userId);
   // console.log(userId, id);
+  console.log(token['my-token'])
 
   return (
     <div>
