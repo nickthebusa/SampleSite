@@ -5,11 +5,12 @@ import APIService from '../fetching/APIService';
 
 import Nav from './Nav';
 
-function Login() {
+function Login({userLogged, userId}) {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [userId, setUserId] = useState(null);
+  const [loginErrors, setLoginErrors] = useState('');
+  
   const [token, setToken] = useCookies(['my-token']);
 
   let navigate = useNavigate();
@@ -26,11 +27,19 @@ function Login() {
 
     APIService.LoginUser({ username, password })
       .then(res => {
-        setToken('my-token', res.token)
-        setUserId(res.user_id)
-        localStorage.setItem('user_id', parseInt(res.user_id));
+        if (res.token && res.user_id) {
+          // sets auth token in cookies && userId in local-storage
+          setToken('my-token', res.token, {path: '/'})
+          localStorage.setItem('user_id', parseInt(res.user_id));
+        } else {
+          setLoginErrors("Credentials didn't match");
+        }
+
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err);
+        setLoginErrors("Credentials didn't match")
+      })
   }
 
   function registerBtn() {
@@ -43,10 +52,11 @@ function Login() {
   return (
     <div>
 
-      <Nav loggedIn={false} />
+      <Nav userLogged={userLogged}  />
 
       {isLogin ? <h1>Log In</h1> : <h1>Register</h1>}
       
+      {/*  LOGIN FORM  */}
       <div className="username-div">
         <label htmlFor="username">Username: </label>
         <input id='username' type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
@@ -56,7 +66,15 @@ function Login() {
         <label htmlFor="password">Password: </label>
         <input id='password' type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
       </div>
+      {/*  -----  */}
 
+      {loginErrors &&
+        <div className='login-errors'>
+          {loginErrors}
+        </div>
+      }
+
+      {/*  CHECKS IF MODE IS LOGIN OR REGISTER  */}
       {isLogin ? <button onClick={loginBtn} >LOGIN</button>
         :  
       <button onClick={registerBtn} >Register</button>}
@@ -67,6 +85,7 @@ function Login() {
           :
         <h5>If you have account, please <button onClick={() => setIsLogin(true)}>Log in</button></h5>}
       </div>
+      {/*  -----  */}
 
     </div>
   )

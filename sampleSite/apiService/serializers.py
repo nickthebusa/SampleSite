@@ -8,8 +8,7 @@ class UserSerializer(serializers.ModelSerializer):
     fields = "__all__"
     
     extra_kwargs = {'password': {
-      'write_only': True,
-      'required': True
+      'write_only': True
     }}
     
   # hashes password
@@ -23,6 +22,9 @@ class UserSerializer(serializers.ModelSerializer):
     
     
 class SampleSerializer(serializers.ModelSerializer):
+  
+  image = serializers.ImageField(required=False)
+  
   class Meta:
     model = models.Sample
     fields = "__all__"
@@ -31,4 +33,12 @@ class SampleSerializer(serializers.ModelSerializer):
 class TagSerializer(serializers.ModelSerializer):
   class Meta: 
     model = models.Tag
+    fields = "__all__"
+    
+class ProfileSerializer(serializers.ModelSerializer):
+  
+  # username = serializers.ReadOnlyField(source='user.username')
+  
+  class Meta:
+    model = models.Profile
     fields = "__all__"

@@ -1,32 +1,36 @@
 from . import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-import librosa
-import matplotlib.pyplot as plt
 import os
 from pathlib import Path
 from django.conf import settings
 
-@receiver(post_save, sender=models.Sample)
-def generate_and_save_plot(sender, instance, **kwargs):
-  if instance.audio_file:
+from .models import *
+
+
+@receiver(post_save, sender=User)
+def create_user_profile(sender, instance, created, **kwargs):
+  """
+  Signal receiver to create a Profile instance when a User is created.
+  """
+  if created:
+    Profile.objects.create(user=instance, name=instance.username)
+        
+
+@receiver(post_save, sender=User)
+def save_user_profile(sender, instance, **kwargs):
+  """
+  Signal receiver to save the Profile instance when a User is saved.
+  """
+  instance.profile.save()
+  
+@receiver(post_save, sender=Sample)
+def update_user_samples(sender, instance, created, **kwargs):
+  """
+  Signal handler to update user_samples filed in user's profile
+  when a new Sample is uploaded
+  """
+  if created:
+    user_profile, created = Profile.objects.get_or_create(user=instance.user)
+    user_profile.user_samples.add(instance)
     
-    audio_file_path = Path(instance.audio_file.path)
-    
-    audio_data, _ = librosa.load(audio_file_path, sr=None, mono=True)
-    
-    plt.plot(audio_data, 'k')
-    plt.axis('off')
-    
-    media_path = Path(settings.MEDIA_ROOT)
-    plot_output_path =  media_path / 'plots' / f'plot_{instance.id}.png'
-    
-    plt.savefig(plot_output_path, bbox_inches='tight', pad_inches=0)
-    plt.close()
-    
-    with open(plot_output_path, 'rb') as plot_file:
-      instance.plot_image.save(plot_output_path.name, plot_file)
-      
-    instance.save()
-    
-post_save.connect(generate_and_save_plot, sender=models.Sample)

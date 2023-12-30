@@ -60,10 +60,13 @@ MIDDLEWARE = [
     
 ]
 
-# allow vite app to connect to it
-CORS_ALLOWED_ORIGINS = [
-  'http://localhost:5173',
-]
+
+# CORS_ALLOWED_CREDENTIALS = True
+
+# allowed origins (for requests)
+CORS_ALLOWED_ORIGINS = ['http://localhost:5173']
+# allow csrf tokens to be accepted from these origins
+CSRF_TRUSTED_ORIGINS = ['http://localhost:5173']
 
 
 ROOT_URLCONF = 'sampleSite.urls'

@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import samplesite_logo from '../pictures/samplesite_logo.png';
 import {useCookies} from 'react-cookie';
 import { useEffect, useState, useRef } from 'react';
 
+function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
 
-function Nav({ loggedIn, userId }) {
+  let navigate = useNavigate();
 
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [token, , removeToken] = useCookies(['my-token']);
@@ -12,22 +13,23 @@ function Nav({ loggedIn, userId }) {
   const ref = useRef();
   const menuRef = useRef();
 
-  function debounce(func, wait) {
-    let timeout;
-    return function () {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func.apply(this, arguments), wait);
-    }
-  }
+  // function debounce(func, wait) {
+    //   let timeout;
+    //   return function () {
+    //     clearTimeout(timeout);
+    //     timeout = setTimeout(() => func.apply(this, arguments), wait);
+    //   }
+    // }
+  
   
   useEffect(() => {
-    const handler = debounce((e) => {
+
+    const handler = (e) => {
       if (navbarOpen && ref.current && !(ref.current.contains(e.target))) {
-        // debugger;
         setNavbarOpen(false);
-        menuRef.current.checked = false;
       }
-    }, 100)
+    }
+
     document.addEventListener('mousedown', handler);
     return () => {
       document.removeEventListener('mousedown', handler);
@@ -36,9 +38,12 @@ function Nav({ loggedIn, userId }) {
 
 
   function logOut() {
-    if (token['my-token'] && loggedIn)  {
-      removeToken('my-token');
+    if (token['my-token'] && userLogged)  {
+      removeToken('my-token', {path: '/'});
       localStorage.removeItem("user_id");
+      loggedUserRefetch();
+      if (fromAccount) navigate('/')
+      window.location.reload();
     }
   }
 
@@ -55,10 +60,9 @@ function Nav({ loggedIn, userId }) {
 
       <div className='Nav-links'>
         <Link to={'/'}>home</Link>
-        <Link to={'/'}>following</Link>
-        <Link to={'/'}>search</Link>
-        {loggedIn && <Link to={`/account/${userId}`}>account</Link>}
-        {loggedIn ?
+        {userLogged && <Link to={'/following'} onClick={loggedUserRefetch} >following</Link>}
+        {userLogged && <Link to={`/account/${userLogged.user}`} reloadDocument>account</Link>}
+        {userLogged ?
           <a onClick={logOut} className='link'>logout</a>
           :
           <Link to={"/login"}>login</Link>
@@ -70,27 +74,27 @@ function Nav({ loggedIn, userId }) {
         ref={ref}
         onClick={()=> {
           setNavbarOpen(false);
-          menuRef.current.checked = false;
         }}
         >
-            <Link to={'/'}>home</Link>
-            <Link to={'/'}>following</Link>
-            <Link to={'/'}>search</Link>
-            {loggedIn && <Link to={`/account/${userId}`}>account</Link>}
-            {loggedIn ?
+          <Link to={'/'}>home</Link>
+          {userLogged && <Link to={'/following'} onClick={loggedUserRefetch} >following</Link>}
+          {userLogged && <Link reloadDocument to={`/account/${userLogged.user}`}>account</Link>}
+            
+          {userLogged ?
             <a onClick={logOut} className='link'>logout</a>
                           :
             <Link to={"/login"}>login</Link>
-            }
+          }
         </div>
         
 
       <input
-        onClick={() => setNavbarOpen(!navbarOpen)}
+        onChange={() => setNavbarOpen(!navbarOpen)}
         type="checkbox"
         role="button"
         aria-label="Display the menu"
         className="menu"
+        checked={navbarOpen}
         ref={menuRef}
       ></input>
       

@@ -1,9 +1,12 @@
 import { useState, useEffect } from "react";
-import APIService from "./fetching/APIService";
-import {useCookies} from 'react-cookie';
 
 import Nav from "./components/Nav";
 import SampleList from "./components/SampleList";
+import Filter from "./components/Filter";
+
+import { sampleSearch } from './functions/samplesSearch';
+
+import { useSamples, useTags, useProfiles } from "./hooks/useFetch";
 
 /* NOTES: */
 // add loading functionally for slow connection
@@ -19,43 +22,78 @@ import SampleList from "./components/SampleList";
   // by selecting the sample it will have a lit box around it showing its selected
 // post to users to add usr id to following or followers
 
+// add a list mode in sample list where it's just the name, user and a play/pause button (maybe mini picture) and use the same motions to trigger sample
+
 /* SECURITY*/
 // - have secret key in django & react .env files 
 
-function App({ userId }) {
+function App({ userLogged, following, loggedUserRefetch }) {
 
-  const [samples, setSamples] = useState([]);
-  const [tags, setTags] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [token,] = useCookies(['my-token']);
+  // state for Filter Component
+  const [currentTags, setCurrentTags] = useState([]);
+  const [titleSearch, setTitleSearch] = useState('');
+
+  // Filtered 
+  const [filteredSamples, setFilteredSamples] = useState([]);
+
+  // useQuery
+  const [samples] = useSamples();
+  const [tags] = useTags();
+  const [profiles] = useProfiles();
   
-
   useEffect(() => {
 
-    APIService.GetSamples()
-      .then(res => setSamples(res))
-    
-    APIService.GetTags()
-      .then(res => setTags(res))
-    
-    APIService.GetUsers()
-      .then(res => setUsers(res))
-
-    if (token['my-token']) {
-      setLoggedIn(true);
-    } else {
-      setLoggedIn(false);
+    if (samples) {
+      let tempFilteredSamples = samples;
+      // first check if samples should filtered based on following status
+      if (following && userLogged) {
+        tempFilteredSamples =
+          samples.filter(s => userLogged.following.includes(s.user))
+      }
+      // then if any filter tags or queries exist filter samples based on that
+      if (samples.length > 0 && (currentTags.length > 0 || titleSearch.trim() !== '')) {
+        tempFilteredSamples =
+          sampleSearch(tempFilteredSamples, titleSearch, currentTags)
+        setFilteredSamples(tempFilteredSamples);
+        return;
+      }
+      // if no filters set filtered samples
+      else if (samples.length > 0 && currentTags.length <= 0 && titleSearch.trim() === '') {
+        setFilteredSamples(tempFilteredSamples);
+        return;
+      }
     }
 
-  }, [token])
+  }, [samples, tags, profiles, currentTags, titleSearch, following, userLogged])
 
 
   return (
     <div className="App">
 
-      <Nav loggedIn={loggedIn} userId={userId} />
-      {samples.length > 0 && <SampleList samples={samples} tags={tags} users={users} />}
+      <Nav userLogged={userLogged} loggedUserRefetch={loggedUserRefetch} />
+
+      {following && <h3>FOLLOWING</h3>}
+
+      <Filter
+        tags={tags}
+        currentTags={currentTags}
+        setCurrentTags={setCurrentTags}
+        titleSearch={titleSearch}
+        setTitleSearch={setTitleSearch}
+      />
+
+      {filteredSamples?.length > 0 && profiles ?
+        <SampleList
+          samples={filteredSamples}
+          tags={tags}
+          users={profiles}
+          currentTags={currentTags}
+          setCurrentTags={setCurrentTags}
+          userLogged={userLogged}
+        />
+        :
+        <div>NONE</div>
+      }
 
     </div>
   )

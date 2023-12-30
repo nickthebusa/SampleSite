@@ -1,35 +1,57 @@
-import { useState, useEffect } from 'react';
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
 import Login from './components/Login.jsx';
 import App from './App.jsx';
 import Account from './components/Account.jsx';
-import { CookiesProvider } from 'react-cookie';
+import { CookiesProvider, useCookies } from 'react-cookie';
+
+// useQuery 
+import { useLoggedUser} from './hooks/useFetch.js';
 
 function Router() {
 
-  const [userId, setUserId] = useState(null);
+  const [token,] = useCookies(["my-token"]);
+  const user_id = localStorage.getItem("user_id");
 
-  useEffect(() => {
-    const loggedInUser = localStorage.getItem("user_id");
-    if (loggedInUser) {
-      setUserId(loggedInUser);
-    }
-  }, [])
+  // only use user_id if user_id AND token
+  const [userLogged, refetch] = useLoggedUser(user_id && token ? user_id : null)
 
+
+  console.log('Router', userLogged, token['my-token'])
+  
   return (
     <CookiesProvider>
       <BrowserRouter>
         <Routes>
           <Route exact
             path='/login'
-            element={<Login />}
+            element={<Login
+              userLogged={userLogged}
+              loggedUserRefetch={refetch}
+              userId={user_id}
+            />}
           />
           <Route exact
             path='/'
-            element={<App userId={userId} />} />
+            element={<App
+              userLogged={userLogged}
+              following={false} 
+              loggedUserRefetch={refetch}
+            />}
+          />
+          <Route exact
+            path='/following'
+            element={<App
+              userLogged={userLogged}
+              following={true}
+              loggedUserRefetch={refetch}
+            />}
+          />
           <Route 
             path='/account/:id'
-            element={<Account userId={userId} />}
+            element={<Account
+              userLogged={userLogged}
+              loggedUserRefetch={refetch}
+            />}
           />
         </Routes>
       </BrowserRouter>

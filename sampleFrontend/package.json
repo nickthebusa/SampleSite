@@ -10,7 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.13.4",
+    "@fortawesome/fontawesome-svg-core": "^6.5.1",
+    "@fortawesome/free-brands-svg-icons": "^6.5.1",
+    "@fortawesome/free-regular-svg-icons": "^6.5.1",
+    "@fortawesome/free-solid-svg-icons": "^6.5.1",
+    "@fortawesome/react-fontawesome": "^0.2.0",
+    "@tanstack/react-query": "^5.14.2",
+    "axios": "^1.6.2",
+    "js-file-download": "^0.4.12",
     "process": "^0.11.10",
     "react": "^18.2.0",
     "react-cookie": "^6.1.1",
@@ -19,6 +26,7 @@
     "react-router-dom": "^6.20.1"
   },
   "devDependencies": {
+    "@tanstack/react-query-devtools": "^5.14.2",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@vitejs/plugin-react-swc": "^3.5.0",
