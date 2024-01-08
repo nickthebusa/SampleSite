@@ -1,0 +1,105 @@
+
+/*  FILTER  */
+.Filter {
+  border: 1px solid var(--white-color);
+  text-align: left;
+}
+.Filter h4 {
+  margin: 5px 0 0 0;
+  text-align: center;
+}
+
+.Filter-types {
+  margin: 0 20px;
+}
+
+.Filter-by-title {
+  grid-area: search-filter;
+  display: flex;
+  align-items: center;
+}
+.Filter-by-title input {
+  width: 200px;
+  font-size: .8rem;
+  padding: 2px;
+}
+
+.Filter-by-tag {
+  display: inline-block;
+  grid-area: tag-filter;
+}
+.Filter-dropdown {
+  /* display: inline-flex or display: none defined in React */
+  flex-direction: column;
+  margin: 0 0 10px 20px;
+}
+.Filter-dropdown input[type="text"] {
+  width: 200px;
+  font-size: .8rem;
+  padding: 2px;
+}
+.Filter-tags-dropdown {
+  display: flex;
+  flex-direction: row;
+  text-align: left;
+  align-items: center;
+}
+.Filter-tags-dropdown svg {
+  font-size: 1.5rem;
+  margin: 0 15px;
+  cursor: pointer;
+}
+.Filter-tags-list {
+  display: flex;
+  flex-direction: row;
+  margin: 10px 0;
+  flex-wrap: wrap;
+}
+.Filter-tag-checkbox-btn {
+  display: inline-block;
+  cursor: pointer;
+  padding: 10px 20px;
+  background-color: var(--background-color);
+  color: var(--white-color);
+  border: 1px solid var(--white-color);
+  border-radius: 999px;
+  outline: none;
+  margin: 5px;
+  padding: 8px;
+  transition: background-color 0.3s;
+  font-size: .8rem;
+  filter:drop-shadow(0px 6px 5px black);
+}
+input[type='checkbox']:checked + .Filter-tag-checkbox-btn {
+  background-color: var(--purple-color);
+  color: var(--white-color);
+}
+@media (hover: hover) {
+  .Filter-tag-checkbox-btn:hover {
+    background-color: var(--purple-color);
+    color: var(--white-color);
+  }
+}
+
+.search-dropdown-div {
+  text-align: left;
+  display: inline-flex;
+  flex-direction: column;
+  position: relative;
+}
+.search-dropdown {
+  border: 2px solid var(--white-color);
+  width: 200px; /* search input width */
+  padding: 2px;/* search input padding */
+  background-color: var(--background-color);
+  max-height: 400px;
+  position: absolute;
+  top: 1.6rem; /* font-size * 2*/
+  z-index: 10;
+}
+.search-dropdown p {
+  cursor: pointer;
+}
+.search-dropdown p:hover {
+  color: var(--purple-color);
+}

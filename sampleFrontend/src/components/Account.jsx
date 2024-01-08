@@ -17,7 +17,7 @@ import EditProfile from './EditProfile';
 import { sampleSearch } from '../functions/samplesSearch';
 import { useTags, useProfile, useSamplesById } from "../hooks/useFetch";
 
-
+import '../CSS/Account.css';
 
 function Account({ userLogged, loggedUserRefetch }) {
 

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import '../CSS/Filter.css';
 
 
 function Filter({ tags, currentTags, setCurrentTags, titleSearch, setTitleSearch }) {
@@ -30,13 +31,16 @@ function Filter({ tags, currentTags, setCurrentTags, titleSearch, setTitleSearch
   }, [])
 
   function checkUncheckTag(id) {
+
     if (!currentTags.includes(id)) {
       setCurrentTags([...currentTags, id])
     } else {
       const newTags = currentTags.filter(t => t !== id)
       setCurrentTags(newTags);
     }
-  }
+
+  } 
+
 
   function toggleDropdown() {
     setDropdownVis(!dropdownVis);
@@ -103,16 +107,15 @@ function Filter({ tags, currentTags, setCurrentTags, titleSearch, setTitleSearch
           <div className='Filter-tags-list'>
           {tags && tags.map((tag, i) => (
             <div key={i} className='Filter-tag-div'>
-              <label htmlFor={`tag-${i}`}>
+              <label htmlFor={`filter-tag-${i}`}>
                 <input
-                  className=""
-                  id={`tag-${i}`}
+                  id={`filter-tag-${i}`}
                   type='checkbox'
                   onChange={() => checkUncheckTag(tag.id)}
                   checked={currentTags.includes(tag.id)}
                   hidden
                 ></input>
-                <div className="Filter-tag-checkbox-btn">{tag?.name}</div>
+                <div className='Filter-tag-checkbox-btn'>{tag?.name}</div>
               </label>
             </div>
           ))}

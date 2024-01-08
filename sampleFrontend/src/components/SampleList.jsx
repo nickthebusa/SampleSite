@@ -8,6 +8,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEllipsisVertical, faX } from '@fortawesome/free-solid-svg-icons'
 import APIService from "../fetching/APIService";
 
+import '../CSS/SampleList.css';
+
 
 function SampleList({samples, tags, users, currentTags, setCurrentTags, userLogged}) {
 
@@ -251,7 +253,6 @@ function SampleList({samples, tags, users, currentTags, setCurrentTags, userLogg
               <div key={i} className="sample-tag-div">
                 <label htmlFor={`tag-${i}`}>
                   <input
-                    className=""
                     id={`tag-${i}`}
                     type='checkbox'
                     onChange={() => checkUncheckTag(tag)}

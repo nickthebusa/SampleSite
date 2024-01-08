@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import samplesite_logo from '../pictures/samplesite_logo.png';
 import {useCookies} from 'react-cookie';
 import { useEffect, useState, useRef } from 'react';
+import '../CSS/Nav.css';
 
 function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
 
@@ -25,7 +26,8 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
   useEffect(() => {
 
     const handler = (e) => {
-      if (navbarOpen && ref.current && !(ref.current.contains(e.target))) {
+      if (navbarOpen && ref.current && !(ref.current.contains(e.target))
+      && e.target !== menuRef.current) {
         setNavbarOpen(false);
       }
     }
@@ -89,9 +91,10 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
         
 
       <input
-        onChange={() => setNavbarOpen(!navbarOpen)}
+        onChange={() => setNavbarOpen(!navbarOpen)} 
         type="checkbox"
         role="button"
+        name="nav"
         aria-label="Display the menu"
         className="menu"
         checked={navbarOpen}

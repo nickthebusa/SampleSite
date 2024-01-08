@@ -1,0 +1,166 @@
+
+/*  NAV  */
+.Nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 15px auto;
+  position: relative;
+}
+.logo-and-name {
+  display: flex;
+  align-items: center;
+}
+.Nav-img-wrapper {
+  max-width: 100px;
+  max-height: 100px;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.Nav-img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.Nav-name {
+  margin: 0 20px;
+  font-family: 'Silkscreen', sans-serif;
+  color: var(--purple-color);
+}
+.Nav-links {
+  font-family: 'Turret Road', sans-serif;
+  font-size: 1rem;
+}
+.Nav-links a {
+  margin: 0 10px;
+  font-weight: 700;
+  color: var(--purple-color);
+} 
+/*  nav  -  HAMBURGER MENU  */
+.menu-nav {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--white-color);
+  z-index: 9;
+  box-shadow: 0 10px 15px -3px rgb(46 41 51 / 8%), 0 4px 6px -2px rgb(71 63 79 / 16%);
+  transform: translateY(-150px);
+  transition: transform ease-in-out 0.2s;
+  border: 1px solid var(--white-color);
+  justify-content: center;
+  width: 400px;
+}
+.menu-nav.show-menu {
+  transform: translateY(110px);
+  transition: transform ease-in-out 0.2s;
+}
+.menu-nav a {
+  color: var(--purple-color);
+  border: 1px solid var(--background-color);
+  font-size: 1.2rem;
+  font-family: 'Turret Road', sans-serif;
+  font-weight: 700;
+}
+.menu-nav a:hover {
+  color: var(--white-color);
+  background-color: var(--purple-color);
+} 
+.menu {
+  --s: 48px; /* control the size */
+  --c: var(--white-color); /* the color */
+  
+  height: var(--s);
+  aspect-ratio: 1;
+  border: none;
+  padding: 0;
+  border-inline: calc(var(--s)/2) solid #0000; 
+  box-sizing: content-box;
+  --_g1: linear-gradient(var(--c) 20%,#0000 0 80%,var(--c) 0) 
+         no-repeat content-box border-box;
+  --_g2: radial-gradient(circle closest-side at 50% 12.5%,var(--c) 95%,#0000) 
+         repeat-y content-box border-box;
+  background: 
+    var(--_g2) left  var(--_p,0px) top,
+    var(--_g1) left  calc(var(--s)/10 + var(--_p,.2px)) top,
+    var(--_g2) right var(--_p,0px) top,
+    var(--_g1) right calc(var(--s)/10 + var(--_p,.2px)) top;
+  background-size: 
+    20% 80%,
+    40% 100%;
+  position: relative;
+  clip-path: inset(0 25%);
+  -webkit-mask: linear-gradient(90deg,#0000,#000 25% 75%,#0000);
+  mask: linear-gradient(90deg,#0000,#000 25% 75%,#0000);
+  cursor: pointer;
+  transition: 
+    background-position .3s var(--_s,.3s), 
+    clip-path 0s var(--_s,.6s);
+  -webkit-appearance:none;
+  -moz-appearance:none;
+  appearance:none;
+}
+.menu:before,
+.menu:after {
+  content:"";
+  position: absolute;
+  border-radius: var(--s);
+  inset: 40% 0;
+  background: var(--c);
+  transition: transform .3s calc(.3s - var(--_s,.3s));
+}
+.menu:checked {
+  clip-path: inset(0);
+  --_p: calc(-1*var(--s));
+  --_s: 0s;
+}
+.menu:checked:before {
+  transform: rotate(45deg);
+}
+.menu:checked:after {
+  transform: rotate(-45deg);
+}
+.menu:focus-visible {
+  clip-path: none;
+  -webkit-mask: none;
+  mask: none;
+  border: none;
+  outline: 2px solid var(--c);
+  outline-offset: 5px;
+}
+.menu {
+  display: none;
+}
+
+
+@media (max-width: 850px) {
+  .Nav-name {
+    margin: 0 0 0 20px;
+    font-family: 'Silkscreen', sans-serif;
+    font-size: 2.5rem;
+    color: var(--purple-color);
+  }
+  .Nav-links {
+    display: none;
+  }
+  .Nav-img-wrapper {
+    max-width: 80px;
+    max-height: 80px;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .menu {
+    display: block;
+  }
+}
+
+@media (max-width: 450px) {
+  .Nav-img-wrapper {
+    display: none;
+  }
+  .Nav-img-wrapper img {
+    display: none;
+  }
+}
