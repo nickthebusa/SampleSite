@@ -6,20 +6,34 @@ import '../CSS/Filter.css';
 
 function Filter({ tags, currentTags, setCurrentTags, titleSearch, setTitleSearch }) {
 
+  const searchModes = ['TITLE', 'DESCRIPTION', 'USER'];
+
   // filter by tag
   const [dropdownVis, setDropdownVis] = useState(false);
   const [filterSearch, setFilterSearch] = useState('');
   const [searchTags, setSearchTags] = useState([]);
   const [tagSearchOpen, setTagSearchOpen] = useState(false);
+  const [openSearchModes, setOpenSearchModes] = useState(false);
+  const [searchMode, setSearchMode] = useState(searchModes[0]);
 
+  const searchDropdownCarrot = useRef(null);
   const tagSearchDropdownRef = useRef(null);
 
   useEffect(() => {
     function handleOutsideClick(e) {
+
       if (tagSearchDropdownRef.current &&
         !tagSearchDropdownRef.current.contains(e.target)) {
         setTagSearchOpen(false);
       }
+
+      // console.log(e.target)
+      // if (searchDropdownCarrot.current &&
+      //   !searchDropdownCarrot.current.contains(e.target) &&
+      //   openSearchModes) {
+      //   setOpenSearchModes(false);
+      // }
+
     }
 
     document.addEventListener('click', handleOutsideClick);
@@ -28,7 +42,7 @@ function Filter({ tags, currentTags, setCurrentTags, titleSearch, setTitleSearch
       document.removeEventListener('click', handleOutsideClick);
     };
 
-  }, [])
+  }, [openSearchModes])
 
   function checkUncheckTag(id) {
 
@@ -67,6 +81,14 @@ function Filter({ tags, currentTags, setCurrentTags, titleSearch, setTitleSearch
     setFilterSearch(v);
   }
 
+  function toggleSearchModeWindow() {
+    if (openSearchModes) {
+      setOpenSearchModes(false);
+    } else {
+      setOpenSearchModes(true);
+    }
+  }
+
 
   return (
     <div className='Filter'>
@@ -75,35 +97,71 @@ function Filter({ tags, currentTags, setCurrentTags, titleSearch, setTitleSearch
       <div className='Filter-types'>
 
       <div className='Filter-by-title'>
-        <label htmlFor="title-search">
-            Search by title: <input id="title-search" type="text"
-          value={titleSearch} onChange={(e) => setTitleSearch(e.target.value)}  />
-        </label>
+        <div className='custom-input-div'>
+          <label htmlFor="title-search" className='custom-input-label'>
+            Search by 
+            <div className='search-main' ref={searchDropdownCarrot}>
+            { openSearchModes ? 
+            <FontAwesomeIcon icon={faCaretDown} 
+            rotation={180} 
+            onClick={toggleSearchModeWindow}/> :
+            <FontAwesomeIcon icon={faCaretDown} 
+            onClick={toggleSearchModeWindow}/>
+            }
+            { openSearchModes && 
+              <div className='searchModesDropdown'>
+                <ul>
+                  {searchModes.map((e, i) => (
+                    e !== searchMode && (
+                    <li key={i} onClick={(e)=>setSearchMode(e.target.innerText)}>{e}</li>
+                    )
+                  ))}
+                </ul>
+              </div>
+            }
+            </div>
+            {searchMode}:
+          </label>
+          <input 
+            id="title-search" 
+            type="text" 
+            className='custom-input-text'
+            value={titleSearch} 
+            onChange={(e) => setTitleSearch(e.target.value)}  
+          />
+
+        </div>
       </div>
 
       <div className='Filter-by-tag'>
-        <div className='Filter-tags-dropdown' onClick={toggleDropdown}>
+        <div className='Filter-tags-dropdown'>
           <p>Filter-Tags: </p>{
             dropdownVis ?
-            <FontAwesomeIcon icon={faCaretDown} rotation={180} /> :
-            <FontAwesomeIcon icon={faCaretDown} />
+            <FontAwesomeIcon icon={faCaretDown} rotation={180} onClick={toggleDropdown}/> :
+            <FontAwesomeIcon icon={faCaretDown} onClick={toggleDropdown}/>
           }
-        </div>
+          {dropdownVis && 
+          <div className='custom-input-div search-tags'>
+            <label htmlFor="tag-search" className='custom-input-label'>Search Tags: </label>
+            <input 
+              className='custom-input-text'
+              id="tag-search" 
+              type="text" 
+              value={filterSearch}
+              onChange={(e) => updateOnSearch(e.target.value)} />
 
-        <div className='Filter-dropdown' style={{ display: dropdownVis ? 'inline-block' : 'none' }}>
             <div className='search-dropdown-div' ref={tagSearchDropdownRef}>
-            <label htmlFor="tag-search">
-              Search Tags: <input id="tag-search" type="text" value={filterSearch}
-                    onChange={(e) => updateOnSearch(e.target.value)} />
-            </label>
             {searchTags.length > 0 && tagSearchOpen &&
               <div className='search-dropdown'>
                 {searchTags.map((tag, i) => (
                   <p key={i} onClick={() => setCurrentTags([...currentTags, tag])}>{tags.find(t => t.id === tag).name}</p>
                 ))}
-              </div>
-              }
+              </div>}
           </div>
+          </div> }
+        </div>
+
+        <div className='Filter-dropdown' style={{ display: dropdownVis ? 'inline-block' : 'none' }}>
           <div className='Filter-tags-list'>
           {tags && tags.map((tag, i) => (
             <div key={i} className='Filter-tag-div'>

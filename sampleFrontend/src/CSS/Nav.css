@@ -47,14 +47,16 @@
   background-color: var(--white-color);
   z-index: 9;
   box-shadow: 0 10px 15px -3px rgb(46 41 51 / 8%), 0 4px 6px -2px rgb(71 63 79 / 16%);
-  transform: translateY(-150px);
+  transform: translateY(-1000px);
   transition: transform ease-in-out 0.2s;
-  border: 1px solid var(--white-color);
   justify-content: center;
-  width: 400px;
+  width: 95vw;
+  max-width: 500px;
+  border: 2px solid var(--background-color);
+  border-radius: 10px;
 }
 .menu-nav.show-menu {
-  transform: translateY(110px);
+  transform: translateY(200px);
   transition: transform ease-in-out 0.2s;
 }
 .menu-nav a {
@@ -63,6 +65,7 @@
   font-size: 1.2rem;
   font-family: 'Turret Road', sans-serif;
   font-weight: 700;
+  padding: 1rem;
 }
 .menu-nav a:hover {
   color: var(--white-color);
@@ -132,6 +135,7 @@
 }
 .menu {
   display: none;
+  z-index: 1;
 }
 
 

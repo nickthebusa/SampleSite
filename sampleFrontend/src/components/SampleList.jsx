@@ -158,10 +158,6 @@ function SampleList({samples, tags, users, currentTags, setCurrentTags, userLogg
   }
 
 
-  console.log('SAMPLE-LIST',
-    samples)
-
-
   return (
     <div className="sampleList">
       {samples.map((sample, i) => (

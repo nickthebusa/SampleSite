@@ -1,6 +1,6 @@
 :root {
   --background-color: #242424;
-  --purple-color: #646cff;
+  --purple-color: #9f64ff;
   --white-color: #fff;
 }
 #root {
@@ -23,10 +23,19 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  z-index: 1;
+  z-index: 2;
   background-color: rgba(0, 0, 0, 0.5);
 }
 .overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+}
+.overlay-hamburger {
   position: fixed;
   width: 100%;
   height: 100%;
@@ -42,7 +51,6 @@
   width: 100%;
   display: flex;
   flex-direction: column;
-  z-index: 2;
   position: relative;
   margin: 10px;
 }
@@ -57,12 +65,13 @@
   margin: 0;
   font-size: 0.8em;
   letter-spacing: 0.1em;
+  display: flex;
+  flex-direction: row;
 }
 .custom-input-text {
   outline: none;
-  width: 80%;
   padding: 0.8em 1em;
-  border: .1em solid white;
+  border: .1em solid var(--white-color);
   background-color: var(--background-color);
   background-origin: border-box;
   background-clip: padding-box, border-box;
@@ -100,7 +109,7 @@
 
 /*  FOLLOW-LIST  */
 .follow-list-div {
-  border: 1px solid white;
+  border: 1px solid var(--white-color);
   position: absolute;
   width: 500px;
   z-index: 10;
@@ -123,7 +132,7 @@
 
 /*  upload sample link  */
 .upload-sample-link-div {
-  border: 1px solid white;
+  border: 1px solid var(--white-color);
   width: 400px;
   margin: 15px auto;
 }
@@ -144,8 +153,8 @@
   width: 90%;
   max-width: 1200px;
   max-height: 95vh;
-  border: 1px solid white;
-  z-index: 15;
+  border: 1px solid var(--white-color);
+  z-index: 3;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -166,8 +175,8 @@
   background-color: var(--background-color);
   width: 90%;
   height: 500px;
-  border: 1px solid white;
-  z-index: 15;
+  border: 1px solid var(--white-color);
+  z-index: 3;
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -184,7 +193,7 @@
   flex-direction: column;
   justify-content: center;
   text-align: left;
-  border: 1px solid white;
+  border: 1px solid var(--white-color);
   background-color: var(--background-color);
   padding: 20px;
 }

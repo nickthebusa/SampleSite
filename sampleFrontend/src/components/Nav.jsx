@@ -13,15 +13,6 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
   
   const ref = useRef();
   const menuRef = useRef();
-
-  // function debounce(func, wait) {
-    //   let timeout;
-    //   return function () {
-    //     clearTimeout(timeout);
-    //     timeout = setTimeout(() => func.apply(this, arguments), wait);
-    //   }
-    // }
-  
   
   useEffect(() => {
 
@@ -53,6 +44,9 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
   return ( 
     <div className='Nav'>
 
+      {navbarOpen &&
+       <div className='overlay-hamburger'></div>}
+      
       <Link to={'/'} className='logo-and-name'>
         <div className='Nav-img-wrapper'>
           <img className='Nav-img' src={samplesite_logo} alt="nick_logo" />
@@ -72,7 +66,8 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
       </div>
 
 
-        <div className={`menu-nav${navbarOpen ? ' show-menu' : ''}`}
+        <div 
+        className={`menu-nav${navbarOpen ? ' show-menu' : ''}`}
         ref={ref}
         onClick={()=> {
           setNavbarOpen(false);
