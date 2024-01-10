@@ -24,6 +24,7 @@ class Profile(models.Model):
 
 class Sample(models.Model):
   user = models.ForeignKey(Profile, on_delete=models.CASCADE)
+  username = models.CharField(max_length=100, default='')
   title = models.CharField(max_length=50)
   description = models.CharField(max_length=150, blank=True)
   audio_file = models.FileField(upload_to='audio_files/')
@@ -31,6 +32,10 @@ class Sample(models.Model):
   date = models.DateField(default=datetime.date.today)
   image = models.ImageField(upload_to="sample_images/", default='defaults/output01.webp')
   
+  def save(self, *args, **kwargs):
+    self.username = self.user.name
+    super().save(*args, **kwargs)
+
   def __str__(self):
     return self.title
   

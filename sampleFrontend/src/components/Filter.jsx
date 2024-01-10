@@ -4,7 +4,8 @@ import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
 import '../CSS/Filter.css';
 
 
-function Filter({ tags, currentTags, setCurrentTags, titleSearch, setTitleSearch }) {
+function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery, 
+  searchMode, setSearchMode }) {
 
   const searchModes = ['TITLE', 'DESCRIPTION', 'USER'];
 
@@ -13,11 +14,9 @@ function Filter({ tags, currentTags, setCurrentTags, titleSearch, setTitleSearch
   const [filterSearch, setFilterSearch] = useState('');
   const [searchTags, setSearchTags] = useState([]);
   const [tagSearchOpen, setTagSearchOpen] = useState(false);
-  const [openSearchModes, setOpenSearchModes] = useState(false);
-  const [searchMode, setSearchMode] = useState(searchModes[0]);
 
-  const searchDropdownCarrot = useRef(null);
   const tagSearchDropdownRef = useRef(null);
+  const searchModeDisplay = useRef(null);
 
   useEffect(() => {
     function handleOutsideClick(e) {
@@ -27,13 +26,6 @@ function Filter({ tags, currentTags, setCurrentTags, titleSearch, setTitleSearch
         setTagSearchOpen(false);
       }
 
-      // console.log(e.target)
-      // if (searchDropdownCarrot.current &&
-      //   !searchDropdownCarrot.current.contains(e.target) &&
-      //   openSearchModes) {
-      //   setOpenSearchModes(false);
-      // }
-
     }
 
     document.addEventListener('click', handleOutsideClick);
@@ -42,7 +34,7 @@ function Filter({ tags, currentTags, setCurrentTags, titleSearch, setTitleSearch
       document.removeEventListener('click', handleOutsideClick);
     };
 
-  }, [openSearchModes])
+  }, [])
 
   function checkUncheckTag(id) {
 
@@ -81,11 +73,27 @@ function Filter({ tags, currentTags, setCurrentTags, titleSearch, setTitleSearch
     setFilterSearch(v);
   }
 
-  function toggleSearchModeWindow() {
-    if (openSearchModes) {
-      setOpenSearchModes(false);
-    } else {
-      setOpenSearchModes(true);
+  function toggleSearchMode() {
+    // searchModeDisplay.current.style.content = getNextSearchMode();
+    // searchModeDisplay.current.classList.add('flipped')
+
+    // setTimeout(() => {
+    //   searchModeDisplay.current.classList.remove('flipped');
+    // },300)
+
+    setSearchMode(getNextSearchMode());
+  }
+
+  function getNextSearchMode() {
+    switch (searchMode) {
+      case "TITLE":
+        return "DESCRIPTION";
+      case "DESCRIPTION":
+        return "USER";
+      case "USER":
+        return "TITLE";
+      default:
+        return "TITLE";
     }
   }
 
@@ -97,37 +105,24 @@ function Filter({ tags, currentTags, setCurrentTags, titleSearch, setTitleSearch
       <div className='Filter-types'>
 
       <div className='Filter-by-title'>
-        <div className='custom-input-div'>
-          <label htmlFor="title-search" className='custom-input-label'>
+        <div className='custom-input-div-search'>
+          <label htmlFor="title-search" className='custom-input-label-search'>
             Search by 
-            <div className='search-main' ref={searchDropdownCarrot}>
-            { openSearchModes ? 
-            <FontAwesomeIcon icon={faCaretDown} 
-            rotation={180} 
-            onClick={toggleSearchModeWindow}/> :
-            <FontAwesomeIcon icon={faCaretDown} 
-            onClick={toggleSearchModeWindow}/>
-            }
-            { openSearchModes && 
-              <div className='searchModesDropdown'>
-                <ul>
-                  {searchModes.map((e, i) => (
-                    e !== searchMode && (
-                    <li key={i} onClick={(e)=>setSearchMode(e.target.innerText)}>{e}</li>
-                    )
-                  ))}
-                </ul>
-              </div>
-            }
+            <div className='search-main-select' onClick={toggleSearchMode}>
+            <div className='search-main-arrow'>
+            <FontAwesomeIcon icon={faCaretDown} rotation={270} /> 
             </div>
-            {searchMode}:
+            <div className="flip-animate" tabIndex={0} ref={searchModeDisplay}>
+              <span>{searchMode}</span>:
+            </div>
+            </div>
           </label>
-          <input 
+          <input
             id="title-search" 
             type="text" 
-            className='custom-input-text'
-            value={titleSearch} 
-            onChange={(e) => setTitleSearch(e.target.value)}  
+            className='custom-input-text-search'
+            value={searchQuery} 
+            onChange={(e) => setSearchQuery(e.target.value)}  
           />
 
         </div>

@@ -31,7 +31,8 @@ function App({ userLogged, following, loggedUserRefetch }) {
 
   // state for Filter Component
   const [currentTags, setCurrentTags] = useState([]);
-  const [titleSearch, setTitleSearch] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchMode, setSearchMode] = useState('TITLE');
 
   // Filtered 
   const [filteredSamples, setFilteredSamples] = useState([]);
@@ -51,20 +52,20 @@ function App({ userLogged, following, loggedUserRefetch }) {
           samples.filter(s => userLogged.following.includes(s.user))
       }
       // then if any filter tags or queries exist filter samples based on that
-      if (samples.length > 0 && (currentTags.length > 0 || titleSearch.trim() !== '')) {
+      if (samples.length > 0 && (currentTags.length > 0 || searchQuery.trim() !== '')) {
         tempFilteredSamples =
-          sampleSearch(tempFilteredSamples, titleSearch, currentTags)
+          sampleSearch(tempFilteredSamples, searchQuery, currentTags, searchMode);
         setFilteredSamples(tempFilteredSamples);
         return;
       }
       // if no filters set filtered samples
-      else if (samples.length > 0 && currentTags.length <= 0 && titleSearch.trim() === '') {
+      else if (samples.length > 0 && currentTags.length <= 0 && searchQuery.trim() === '') {
         setFilteredSamples(tempFilteredSamples);
         return;
       }
     }
 
-  }, [samples, tags, profiles, currentTags, titleSearch, following, userLogged])
+  }, [samples, tags, profiles, currentTags, searchQuery, following, userLogged, searchMode])
 
 
   return (
@@ -78,8 +79,10 @@ function App({ userLogged, following, loggedUserRefetch }) {
         tags={tags}
         currentTags={currentTags}
         setCurrentTags={setCurrentTags}
-        titleSearch={titleSearch}
-        setTitleSearch={setTitleSearch}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        searchMode={searchMode}
+        setSearchMode={setSearchMode}
       />
 
       {filteredSamples?.length > 0 && profiles ?

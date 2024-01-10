@@ -47,14 +47,16 @@
 
 
 /*  CUSTOM-INPUTS  */
-.custom-input-div {
+.custom-input-div, 
+.custom-input-div-search {
   width: 100%;
   display: flex;
   flex-direction: column;
   position: relative;
   margin: 10px;
 }
-.custom-input-label {
+.custom-input-label, 
+.custom-input-label-search {
   padding: 0 0.8em;
   text-transform: uppercase;
   cursor: pointer;
@@ -68,7 +70,8 @@
   display: flex;
   flex-direction: row;
 }
-.custom-input-text {
+.custom-input-text, 
+.custom-input-text-search {
   outline: none;
   padding: 0.8em 1em;
   border: .1em solid var(--white-color);
@@ -84,6 +87,19 @@
   outline: 2px dashed rgba(255, 255, 255, 0.349);
   outline-offset: 0.8em;
 }
+
+.custom-input-div-search {
+  padding-top: .8rem
+}
+.custom-input-label-search {
+  left: 1.5em;
+  cursor: default;
+}
+.custom-input-text-search {
+  font-size: 1.3rem;
+  padding: .5rem 1rem;
+}
+
 
 /*  APP  */
 .App {

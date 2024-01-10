@@ -115,8 +115,16 @@ input[type='checkbox']:checked + .Filter-tag-checkbox-btn {
 .search-dropdown p:hover {
   color: var(--purple-color);
 }
-
-.search-main {
+.search-main-select {
+  display: flex;
+  perspective: 1000px;
+  position: relative;
+}
+.search-main-select:hover {
+  color: var(--purple-color);
+  cursor: pointer;
+}
+.search-main-arrow {
   position: relative;
   margin: 0 .3rem;
 }
@@ -134,3 +142,33 @@ input[type='checkbox']:checked + .Filter-tag-checkbox-btn {
 .searchModesDropdown li:hover {
   color: var(--purple-color);
 }
+
+
+
+/* flipping animation */
+/* .flip-animate {
+  perspective: 1000px;
+}
+.flip-animate span {
+  position: relative;
+  display: inline-block;
+  padding: 0;
+  transition: transform 0.4s;
+  transform-origin: 50% 0;
+  transform-style: preserve-3d;
+}
+.flip-animate span:before {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  transform: rotateX(-90deg);
+  transform-origin: 50% 0;
+  text-align: center;
+  overflow: hidden;
+}
+.flip-animate.flipped span {
+  transform: rotateX(90deg) translateY(-22px);
+} */
+
