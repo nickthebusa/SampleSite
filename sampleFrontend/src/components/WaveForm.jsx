@@ -11,13 +11,24 @@ function animateBars(analyser, canvas, canvasCtx, dataArray, bufferLength) {
   let x = 0;
   for (var i = 0; i < bufferLength; i++) {
     barHeight = (dataArray[i] / 255) * canvas.height;
-    // generate a shade of blue based on the audio input
-    const blueShade = Math.floor((dataArray[i] / 255) * 5); 
-    // waveform colors
-    const blueHex = ["#61dafb", "#5ac8fa", "#50b6f5", "#419de6", "#20232a"][
-      blueShade
-    ]; 
-    canvasCtx.fillStyle = blueHex;
+
+
+    // // generate a shade of blue based on the audio input
+    // const blueShade = Math.floor((dataArray[i] / 255) * 5); 
+    // // waveform colors
+    // const blueHex = ["#61dafb", "#5ac8fa", "#50b6f5", "#419de6", "#20232a"][
+    //   blueShade
+    // ]; 
+    // canvasCtx.fillStyle = blueHex;
+
+    
+    // generate a shade of purple
+    const purpleShade = Math.floor((dataArray[i] / 255) * 5);
+    const purpleHex = ["#5d0be0", "#792cf5", "#8943fa", "#9f64ff", "#20232a"][
+      purpleShade
+    ]
+    canvasCtx.fillStyle = purpleHex;
+
     canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
  
     x += barWidth + 1;

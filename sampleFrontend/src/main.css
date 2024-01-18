@@ -7,7 +7,9 @@
   max-width: 1280px;
   text-align: center;
   width: 100%;
+  margin: 0 auto;
 }
+
 
 .link:hover {
   cursor: pointer;
@@ -88,12 +90,15 @@
   outline-offset: 0.8em;
 }
 
+
 .custom-input-div-search {
   padding-top: .8rem
 }
 .custom-input-label-search {
   left: 1.5em;
   cursor: default;
+  display: flex;
+  align-items: center;
 }
 .custom-input-text-search {
   font-size: 1.3rem;
@@ -105,20 +110,12 @@
 .App {
   margin: 0 auto;
 }
-
-
-/*  AUDIO VISUALIZER  */
-.audioVisualizer {
-  height: 100%;
-}
-
-
-/*  WAVEFORM  */
-.waveform {
-  position: absolute;
-  z-index: -10;
-  left: 0;
-  bottom: 0;
+.App-following {
+  font-family: 'Press Start 2P', sans-serif;
+  font-family: 'Silkscreen', sans-serif;
+  font-size: 2rem;
+  margin: 0 0 .5rem 0;
+  font-weight: 300;
 }
 
 
@@ -148,8 +145,8 @@
 
 /*  upload sample link  */
 .upload-sample-link-div {
-  border: 1px solid var(--white-color);
-  width: 400px;
+  /* border: 1px solid var(--white-color); */
+  width: 10rem;
   margin: 15px auto;
 }
 .upload-sample-link-div p {
@@ -247,6 +244,13 @@
 
  
 /*  MEDIA QUERIES  */
+
+@media (max-width: 325px) {
+  #root {
+    zoom: .7;
+  }
+}
+
 
 /* @media (max-width: 850px) {
   .Nav-name {

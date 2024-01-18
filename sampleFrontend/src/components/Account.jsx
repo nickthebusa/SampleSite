@@ -15,7 +15,7 @@ import UploadSample from './UploadSample';
 import EditProfile from './EditProfile';
 
 import { sampleSearch } from '../functions/samplesSearch';
-import { useTags, useProfile, useSamplesById } from "../hooks/useFetch";
+import { useTags, useProfile, useUserSamplesById, useUserSavedSamples } from "../hooks/useFetch";
 
 import '../CSS/Account.css';
 
@@ -29,41 +29,59 @@ function Account({ userLogged, loggedUserRefetch }) {
     },
   })
 
+  // id of user who's page app is on
+  const { id } = useParams();
+
   // state if follow-comp is displayed 
   const [followComp, setFollowComp] = useState(null);
 
   // state for Filter Component
   const [currentTags, setCurrentTags] = useState([]);
-  const [titleSearch, setTitleSearch] = useState('');
-
+  const [searchQuery, setSearchQuery] = useState('');
   const [filteredSamples, setFilteredSamples] = useState([]);
+  const [searchMode, setSearchMode] = useState('TITLE');
 
+  // state for displaying user's posts or saved posts
+  const [savedOn, setSavedOn] = useState(false);
+
+  // state for displaying pop up forms
   const [editProfile, setEditProfile] = useState(false);
-
   const [uploadForm, setUploadForm] = useState(false);
-
-  // id of user who's page app is on
-  const { id } = useParams();
 
   // useQuery
   const [tags] = useTags();
   const [userAccount, refetchProfile] = useProfile(id);
-  const [userSamples, refetchSamples] = useSamplesById(userAccount);
-
+  const [userSamples, refetchSamples] = useUserSamplesById(id);
+  const [savedSamples] = useUserSavedSamples(id);
 
   useEffect(() => {
 
-    if (userSamples?.length > 0) {
-      if (currentTags.length > 0 || titleSearch.trim() !== '') {
-        const tempFilteredSamples =
-          sampleSearch(userSamples, titleSearch, currentTags);
+    if (savedOn) {
+      if (savedSamples?.length > 0) {
+        if (currentTags.length > 0 || searchQuery.trim() !== '') {
+          const tempFilteredSamples =
+            sampleSearch(savedSamples, searchQuery, currentTags, searchMode);
 
-        setFilteredSamples(tempFilteredSamples)
-      }
-      else if (currentTags.length <= 0 && titleSearch.trim() === '') {
-        setFilteredSamples(userSamples);
-      }
+          setFilteredSamples(tempFilteredSamples)
+        }
+        else if (currentTags.length <= 0 && searchQuery.trim() === '') {
+          setFilteredSamples(savedSamples);
+        }
+      } 
+    } else {
+      if (userSamples?.length > 0) {
+        if (currentTags.length > 0 || searchQuery.trim() !== '') {
+          const tempFilteredSamples =
+            sampleSearch(userSamples, searchQuery, currentTags, searchMode);
+
+          setFilteredSamples(tempFilteredSamples)
+        }
+        else if (currentTags.length <= 0 && searchQuery.trim() === '') {
+          setFilteredSamples(userSamples);
+        }
+      } 
     }
+
 
     function handleWindowPress(e) {
       const overlay = document.querySelector('.overlay');
@@ -81,7 +99,7 @@ function Account({ userLogged, loggedUserRefetch }) {
       window.removeEventListener('click', handleWindowPress);
     };
 
-  }, [userSamples, currentTags, tags, titleSearch, editProfile, uploadForm])
+  }, [userSamples, currentTags, tags, searchQuery, editProfile, uploadForm, searchMode, savedOn, savedSamples])
 
 
   // For following and un-following
@@ -175,6 +193,19 @@ function Account({ userLogged, loggedUserRefetch }) {
       }
 
       { userLogged?.user === userAccount?.user &&
+      <div className='user-or-saved-div'>
+          <div className={!savedOn ? 'selected' : ''} onClick={() => {
+            setSavedOn(false);
+          }
+          }>Your Uploads</div>
+          <div className={savedOn ? 'selected' : ''} onClick={() => {
+            setSavedOn(true);
+          }
+          }>Saved</div>
+      </div>
+      }
+
+      { userLogged?.user === userAccount?.user &&
         <>
     
             <div className='upload-sample-link-div'>
@@ -204,8 +235,10 @@ function Account({ userLogged, loggedUserRefetch }) {
         tags={tags}
         currentTags={currentTags}
         setCurrentTags={setCurrentTags}
-        titleSearch={titleSearch}
-        setTitleSearch={setTitleSearch}
+        searchQuery={searchQuery}
+        setSearchQuery={setSearchQuery}
+        searchMode={searchMode}
+        setSearchMode={setSearchMode}
       />
 
       
@@ -217,6 +250,7 @@ function Account({ userLogged, loggedUserRefetch }) {
           currentTags={currentTags}
           setCurrentTags={setCurrentTags}
           userLogged={userLogged}
+          loggedUserRefetch={loggedUserRefetch}
         />
         :
         <div>NONE</div>

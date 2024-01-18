@@ -34,18 +34,33 @@ class SampleViewSet(viewsets.ModelViewSet):
   
   def create(self, request, *args, **kwargs):
     print(request.data)
-    
     return super().create(request, *args, **kwargs)
   
+  # returns the sample objects from a list of pk's in the url
   @action(detail=True, methods=['get'])
   def get_samples_by_ids(self, request):
     sample_ids = request.query_params.getlist('samples_ids[]', [])
-    print(sample_ids)
     samples = models.Sample.objects.filter(id__in=sample_ids)
-    print(samples)
     serializer = self.get_serializer(samples, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
   
+  # returns the user's uploaded samples of a user based on the pk in url
+  @action(detail=True, methods=['get'])
+  def get_user_samples_by_user_id(self, request, pk=None):
+    user = models.Profile.objects.get(user=pk)
+    samples = models.Sample.objects.filter(id__in=user.user_samples.all())
+    serializer = self.get_serializer(samples, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+  
+  # returns the user's saved samples of a user based on the pk in url
+  @action(detail=True, methods=['get'])
+  def get_user_saved_samples(self, request, pk=None):
+    user = models.Profile.objects.get(user=pk)
+    samples = models.Sample.objects.filter(id__in=user.saved_samples.all())
+    serializer = self.get_serializer(samples, many=True)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+  
+  # endpoint for downloading sample audio file
   @action(detail=True, methods=["get"])
   def download_file(self, request, pk=None):
     sample = self.get_object()

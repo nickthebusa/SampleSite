@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons'
+import { faCaretDown, faX } from '@fortawesome/free-solid-svg-icons'
 import '../CSS/Filter.css';
+import FlippingText from './FlippingText.jsx';
 
 
 function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery, 
@@ -16,7 +17,10 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
   const [tagSearchOpen, setTagSearchOpen] = useState(false);
 
   const tagSearchDropdownRef = useRef(null);
-  const searchModeDisplay = useRef(null);
+  // const searchModeDisplay = useRef(null);
+
+  // for triggering FlippingText from this component
+  const [count, setCount] = useState(0);
 
   useEffect(() => {
     function handleOutsideClick(e) {
@@ -74,13 +78,6 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
   }
 
   function toggleSearchMode() {
-    // searchModeDisplay.current.style.content = getNextSearchMode();
-    // searchModeDisplay.current.classList.add('flipped')
-
-    // setTimeout(() => {
-    //   searchModeDisplay.current.classList.remove('flipped');
-    // },300)
-
     setSearchMode(getNextSearchMode());
   }
 
@@ -97,6 +94,14 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
     }
   }
 
+  function clickSearchBy() {
+    setCount(cur => cur + 1);
+    toggleSearchMode();
+  }
+
+  function clearCurrentTags() {
+    setCurrentTags([]);
+  }
 
   return (
     <div className='Filter'>
@@ -107,14 +112,12 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
       <div className='Filter-by-title'>
         <div className='custom-input-div-search'>
           <label htmlFor="title-search" className='custom-input-label-search'>
-            Search by 
-            <div className='search-main-select' onClick={toggleSearchMode}>
-            <div className='search-main-arrow'>
-            <FontAwesomeIcon icon={faCaretDown} rotation={270} /> 
-            </div>
-            <div className="flip-animate" tabIndex={0} ref={searchModeDisplay}>
-              <span>{searchMode}</span>:
-            </div>
+            Search by :
+            <div className='search-main-select' onClick={clickSearchBy}>
+                <FontAwesomeIcon className='search-main-arrow' icon={faCaretDown} rotation={270} /> 
+              <div className="flip-animate" tabIndex={0}>
+                <FlippingText words={searchModes} count={count} setCount={setCount} />
+              </div>
             </div>
           </label>
           <input
@@ -127,6 +130,8 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
 
         </div>
       </div>
+        
+      
 
       <div className='Filter-by-tag'>
         <div className='Filter-tags-dropdown'>
@@ -155,6 +160,11 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
           </div>
           </div> }
         </div>
+
+        {
+          dropdownVis && currentTags?.length !== 0 &&
+            <p className='clear-tags' onClick={clearCurrentTags}><FontAwesomeIcon icon={faX} />CLEAR TAGS</p>
+        }  
 
         <div className='Filter-dropdown' style={{ display: dropdownVis ? 'inline-block' : 'none' }}>
           <div className='Filter-tags-list'>

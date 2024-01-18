@@ -7,20 +7,22 @@ export function sampleSearch(samples, query, currentTags, mode) {
   const leftovers = [...samples];
   const filteredSamples = [];
 
+  let theQuery = query.toLowerCase().trim();
+
   // If sample text (title, description, username) begins with query
   if (query.trim() !== '') {
     for (let i of samples) { 
       let qq = null;
       if (mode === "TITLE") {
-        if (i.title.toLowerCase().startsWith(query.toLowerCase())) {
+        if (i.title.toLowerCase().startsWith(theQuery)) {
           qq = i;
         }
       } else if (mode === "DESCRIPTION") {
-        if (i.description.toLowerCase().startsWith(query.toLowerCase())) {
+        if (i.description.toLowerCase().startsWith(theQuery)) {
           qq= i;
         } 
       } else if (mode === "USER") {
-        if (i.username.toLowerCase().startsWith(query.toLowerCase())) {
+        if (i.username.toLowerCase().startsWith(theQuery)) {
           qq = i;
         }    
       }
@@ -33,15 +35,15 @@ export function sampleSearch(samples, query, currentTags, mode) {
     for (let i of leftovers) {
       let qq = null;
       if (mode === "TITLE") {
-        if (i.title.toLowerCase().includes(query.toLowerCase())) {
+        if (i.title.toLowerCase().includes(theQuery)) {
           qq = i;
         }
       } else if (mode === "DESCRIPTION") {
-        if (i.description.toLowerCase().includes(query.toLowerCase())) {
+        if (i.description.toLowerCase().includes(theQuery)) {
           qq = i;
         }
       } else if (mode === "USER") {
-        if (i.username.toLowerCase().includes(query.toLowerCase())) {
+        if (i.username.toLowerCase().includes(theQuery)) {
           qq = i;
         }
       }

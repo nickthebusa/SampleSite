@@ -88,7 +88,9 @@ function UploadSample({ userLogged, onFormUploaded }) {
     formData.append("title", data.title);
     formData.append("description", data.description);
     formData.append("audio_file", data.audio_file);
-    // formData.append("tags", data.tags);
+    for (let i of data.tags) {
+      formData.append('tags', i);
+    }
     formData.append("image", data.image);
     console.log(formData)
     return formData;

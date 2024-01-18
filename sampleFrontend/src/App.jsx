@@ -46,11 +46,14 @@ function App({ userLogged, following, loggedUserRefetch }) {
 
     if (samples) {
       let tempFilteredSamples = samples;
+
+      // (for following page)
       // first check if samples should filtered based on following status
       if (following && userLogged) {
         tempFilteredSamples =
           samples.filter(s => userLogged.following.includes(s.user))
       }
+
       // then if any filter tags or queries exist filter samples based on that
       if (samples.length > 0 && (currentTags.length > 0 || searchQuery.trim() !== '')) {
         tempFilteredSamples =
@@ -58,6 +61,7 @@ function App({ userLogged, following, loggedUserRefetch }) {
         setFilteredSamples(tempFilteredSamples);
         return;
       }
+
       // if no filters set filtered samples
       else if (samples.length > 0 && currentTags.length <= 0 && searchQuery.trim() === '') {
         setFilteredSamples(tempFilteredSamples);
@@ -73,7 +77,7 @@ function App({ userLogged, following, loggedUserRefetch }) {
 
       <Nav userLogged={userLogged} loggedUserRefetch={loggedUserRefetch} />
 
-      {following && <h3>FOLLOWING</h3>}
+      {following && <h3 className="App-following">FOLLOWING</h3>}
 
       <Filter
         tags={tags}
@@ -93,6 +97,7 @@ function App({ userLogged, following, loggedUserRefetch }) {
           currentTags={currentTags}
           setCurrentTags={setCurrentTags}
           userLogged={userLogged}
+          loggedUserRefetch={loggedUserRefetch}
         />
         :
         <div>NONE</div>

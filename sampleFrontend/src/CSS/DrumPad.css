@@ -1,0 +1,49 @@
+
+h2 {
+  font-family: 'Press Start 2P', sans-serif;
+}
+
+.list-and-pads {
+  display: flex;
+  flex-direction: row;
+}
+
+.DrumPad-pads-div {
+  border: 1px solid var(--white-color);
+  width: 90%;
+  margin: 0 auto;
+  display: grid;
+  gap: 1rem;
+}
+
+
+.DrumPad .pad {
+  border: 1px solid white;
+  height: 7rem;
+  -webkit-user-select: none; /* Safari */        
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+.DrumPad .pad.playing {
+  /* background-color: var(--purple-color); */
+  transition: .2s ease-in;
+}
+.DrumPad .pad.press {
+  background-color: var(--purple-color);
+  box-shadow: 0 11px 15px 1px var(--purple-color);
+  transition: .05s ease-in;
+}
+
+
+
+@media (min-width: 600px) {
+  .DrumPad-pads-div {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+@media (max-width: 599px) {
+  .DrumPad-pads-div {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

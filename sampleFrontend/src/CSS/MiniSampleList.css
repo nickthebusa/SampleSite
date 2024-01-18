@@ -1,0 +1,43 @@
+
+.MiniSampleList {
+  border: 1px solid var(--white-color);
+  margin: 0 .5rem;
+}
+
+.MiniSampleList h4 {
+  margin: 0;
+  text-decoration: underline;
+}
+
+.MiniSampleList ul {
+  list-style: none;
+  padding: .5rem;
+  margin: 0;
+  line-height: 2rem;
+  text-align: left;
+}
+.MiniSampleList ul li {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  align-items: center;
+}
+.MiniSampleList ul li p {
+  margin: 0 0 0 .5rem; 
+}
+.MiniSampleList ul li p.selected {
+  text-decoration: underline;
+  color: var(--purple-color);
+}
+.MiniSampleList ul li:hover {
+  color: var(--purple-color);
+  cursor: pointer;
+}
+.MiniSampleList ul li svg {
+  cursor: pointer;
+}
+
+.playPause-icon-div {
+  width: .7rem;
+}

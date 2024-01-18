@@ -18,5 +18,7 @@ urlpatterns = [
   path('api/download_file/<int:pk>/', views.SampleViewSet.as_view({'get': 'download_file'}), name='download_file'),
   path('api/add_saved_sample/<int:pk>/', views.ProfileViewSet.as_view({'put': 'add_saved_sample'}), name='add_saved_sample'),
   path('api/remove_saved_sample/<int:pk>/', views.ProfileViewSet.as_view({'put': 'remove_saved_sample'}), name='remove_saved_sample'),
-  path('api/edit_profile/<int:pk>/', views.ProfileViewSet.as_view({'put': 'edit_profile'}), name='edit_profile')
+  path('api/edit_profile/<int:pk>/', views.ProfileViewSet.as_view({'put': 'edit_profile'}), name='edit_profile'),
+  path('api/get_user_samples_by_user_id/<int:pk>', views.SampleViewSet.as_view({'get': 'get_user_samples_by_user_id'}), name='get_user_samples_by_user_id'),
+  path('api/get_user_saved_samples/<int:pk>', views.SampleViewSet.as_view({'get': 'get_user_saved_samples'}), name='get_user_saved_samples')
 ]

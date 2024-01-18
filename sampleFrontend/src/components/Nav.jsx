@@ -57,6 +57,7 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
       <div className='Nav-links'>
         <Link to={'/'}>home</Link>
         {userLogged && <Link to={'/following'} onClick={loggedUserRefetch} >following</Link>}
+        <Link to={'/drumpad'}>drumpad</Link>
         {userLogged && <Link to={`/account/${userLogged.user}`} reloadDocument>account</Link>}
         {userLogged ?
           <a onClick={logOut} className='link'>logout</a>
@@ -75,8 +76,8 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
         >
           <Link to={'/'}>home</Link>
           {userLogged && <Link to={'/following'} onClick={loggedUserRefetch} >following</Link>}
+          <Link to={'/drumpad'}>drumpad</Link>
           {userLogged && <Link reloadDocument to={`/account/${userLogged.user}`}>account</Link>}
-            
           {userLogged ?
             <a onClick={logOut} className='link'>logout</a>
                           :

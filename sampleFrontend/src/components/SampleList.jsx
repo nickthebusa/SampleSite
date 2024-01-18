@@ -11,14 +11,18 @@ import APIService from "../fetching/APIService";
 import '../CSS/SampleList.css';
 
 
-function SampleList({samples, tags, users, currentTags, setCurrentTags, userLogged}) {
+function SampleList({
+  samples, tags, users, currentTags, setCurrentTags, userLogged, loggedUserRefetch
+}) {
+  
 
   let [selected, setSelected] = useState({});
-  const [, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(false);
   const [sampleActions, setSampleActions] = useState({ open: false, sample: null });
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [unsaveConfirm, setUnsaveConfirm] = useState(false);
   const selectedRef = useRef(selected);
+
 
 
   function checkUncheckTag(id) {
@@ -35,7 +39,6 @@ function SampleList({samples, tags, users, currentTags, setCurrentTags, userLogg
       setSelected({ ...selected, playing: true })
       setPlaying(true);
     }
-
   }, [selected, setPlaying])
 
   useEffect(() => {
@@ -48,7 +51,11 @@ function SampleList({samples, tags, users, currentTags, setCurrentTags, userLogg
     function handleKeyPress(event) {
 
       if (selected.id) {
+
+        // debugger;
+
         if (event.key === 'ArrowUp') {
+          event.preventDefault();
         
           if (selectedRef.current && selectedRef.current.index !== 0) {
             const new_id = samples[selectedRef.current.index - 1].id
@@ -57,8 +64,13 @@ function SampleList({samples, tags, users, currentTags, setCurrentTags, userLogg
               index: selectedRef.current.index -= 1,
               id: new_id
             });
+          } else {
+            if (playing) {
+              playPause();
+            }
           }
         } else if (event.key === 'ArrowDown') {
+          event.preventDefault();
 
           if (selectedRef.current.index >= 0 &&
             selectedRef.current.index < samples.length - 1) {
@@ -68,13 +80,16 @@ function SampleList({samples, tags, users, currentTags, setCurrentTags, userLogg
               index: selectedRef.current.index += 1,
               id: new_id
             });
+          } else {
+            if (playing) {
+              playPause();
+            }
           }
         }
 
         if (event.key === " ") {
           event.preventDefault();
           playPause()
-          setPlaying(true)
         }
       }
     }
@@ -102,7 +117,7 @@ function SampleList({samples, tags, users, currentTags, setCurrentTags, userLogg
       window.removeEventListener('keydown', handleKeyPress);
       window.removeEventListener('click', handleWindowPress);
     };
-  }, [samples, playPause, selected, deleteConfirm, unsaveConfirm]);
+  }, [samples, playPause, selected, deleteConfirm, unsaveConfirm, playing]);
 
 
   function selectDiv(i, sample_id) {
@@ -144,7 +159,10 @@ function SampleList({samples, tags, users, currentTags, setCurrentTags, userLogg
 
   function saveSample(sample) {
     APIService.AddToSavedSample(userLogged?.user, { sample_id: sample.id })
-      .then(res => console.log(res))
+      .then(res => {
+        console.log(res)
+        loggedUserRefetch();
+      })
       .catch(err => console.log(err))
   }
 
@@ -152,13 +170,15 @@ function SampleList({samples, tags, users, currentTags, setCurrentTags, userLogg
     APIService.RemoveSavedSample(userLogged?.user, { sample_id: sample.id })
       .then(res => {
         console.log(res)
-        window.location.reload()
+        loggedUserRefetch();
+        setUnsaveConfirm(false);
       })
       .catch(err => console.log(err))
   }
 
 
   return (
+    <div className="sampleList-wrapper">
     <div className="sampleList">
       {samples.map((sample, i) => (
         <div key={i}
@@ -205,7 +225,7 @@ function SampleList({samples, tags, users, currentTags, setCurrentTags, userLogg
                 }
 
                 {userLogged?.user === sample.user && 
-                <div onClick={() => setDeleteConfirm(true)}>delete</div>}
+                <div onClick={() => setDeleteConfirm(true)} className="actions-delete">delete</div>}
 
               </div>
   
@@ -234,8 +254,10 @@ function SampleList({samples, tags, users, currentTags, setCurrentTags, userLogg
 
             <span className="sample-name" onClick={() => selectDiv(i, sample.id)}>{sample.title}</span>
             {users && 
-            <Link to={`/account/${sample.user}`}>
-                {users.find(n => n.user === sample.user)?.name}</Link> 
+            <div>
+              <Link to={`/account/${sample.user}`}>
+                  {sample.username}</Link>
+            </div>
             }
           </div>
           
@@ -274,6 +296,7 @@ function SampleList({samples, tags, users, currentTags, setCurrentTags, userLogg
         </div>
       ))}
 
+      </div>
     </div>
   )
 }

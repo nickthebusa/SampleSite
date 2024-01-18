@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import WaveForm from "./WaveForm";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons'
+
 function AudioVisualizer({ audio_file, id, selected, setPlaying }) {
 
   const [analyzerData, setAnalyzerData] = useState(null);
@@ -57,14 +60,15 @@ function AudioVisualizer({ audio_file, id, selected, setPlaying }) {
 
 
 
-
   return (
     <div className="audioVisualizer">
 
       {analyzerData && <WaveForm analyzerData={analyzerData} id={id} />}
 
-      <button onClick={(e) => playAudio(e)}>▶️</button>
-      <button onClick={(e) => pauseAudio(e)}>⏸️</button>
+      <div className="audioVisualizer-btns">
+        <button onClick={(e) => playAudio(e)}><FontAwesomeIcon icon={faPlay} /></button>
+        <button onClick={(e) => pauseAudio(e)}><FontAwesomeIcon icon={faPause} /></button>
+      </div>
       <audio src={audio_file} crossOrigin="anonymous" ref={audioElmRef} />
 
     </div>

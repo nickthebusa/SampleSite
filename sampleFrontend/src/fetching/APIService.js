@@ -110,9 +110,23 @@ export default class APIService {
   }
 
 
-  static async GetSamplesById(id_array) {
+  // static async GetSamplesById(id_array) {
+  //   return axios 
+  //     .get(`http://127.0.0.1:8000/api/get_samples_by_ids/?${id_array.map(id => `samples_ids[]=${id}`).join('&')}`)
+  //     .then(res => { return res })
+  //     .catch(err => { throw err })
+  // }
+  
+  static async GetUserSamplesByUserId(id) {
     return axios 
-      .get(`http://127.0.0.1:8000/api/get_samples_by_ids/?${id_array.map(id => `samples_ids[]=${id}`).join('&')}`)
+      .get(`http://127.0.0.1:8000/api/get_user_samples_by_user_id/${id}`)
+      .then(res => { return res })
+      .catch(err => { throw err })
+  }
+
+  static async GetUserSavedSamples(id) {
+    return axios 
+      .get(`http://127.0.0.1:8000/api/get_user_saved_samples/${id}`)
       .then(res => { return res })
       .catch(err => { throw err })
   }

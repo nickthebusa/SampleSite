@@ -1,0 +1,28 @@
+
+.flipping-text-div {
+  display: inline-flex;
+  margin: 0;
+  vertical-align: top;
+  position: relative;
+  -webkit-user-select: none;    
+  -moz-user-select: none; 
+  -ms-user-select: none; 
+  user-select: none; 
+  position: relative;
+}
+.flipping-text-div .word {
+  position: absolute;
+  display: flex;
+  opacity: 0;
+  transform-origin: center center 10px;
+}
+.flipping-text-div .word.out {
+  transform: rotateX(-90deg);
+  transition: 0.3s cubic-bezier(0, .6, 0, 0);
+}
+.flipping-text-div .word.in {
+  transition: 0.35s ease;
+}
+.flipping-text-div .word.behind {
+  transform: rotateX(90deg);
+}

@@ -90,21 +90,33 @@ export function useLoggedUser(id) {
 }
 
 
-export function useSamplesById(userAccount) {
-
-  const id_array = userAccount?.user_samples || [];
+export function useUserSamplesById(id) {
 
   const samples = useQuery({
-    queryKey: ["samples"],
-    queryFn: () => APIService.GetSamplesById(id_array),
-    enabled: id_array?.length > 0,
+    queryKey: ["user-samples"],
+    queryFn: () => APIService.GetUserSamplesByUserId(id),
+    enabled: !!id,
     refetchOnMount: true,
   })
 
   if (samples.isLoading) return [[], samples.refetch];
   else if (samples.isError) return [[], samples.refetch];
-  else if (id_array.length <= 0) return [[], samples.refetch];
 
   return [samples?.data?.data, samples.refetch];
 }
 
+
+export function useUserSavedSamples(id) {
+
+  const samples = useQuery({
+    queryKey: ["saved-samples"],
+    queryFn: () => APIService.GetUserSavedSamples(id),
+    enabled: !!id,
+    refetchOnMount: true,
+  })
+
+  if (samples.isLoading) return [[], samples.refetch];
+  else if (samples.isError) return [[], samples.refetch];
+
+  return [samples?.data?.data, samples.refetch];
+}

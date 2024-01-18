@@ -6,6 +6,7 @@ import { CookiesProvider, useCookies } from 'react-cookie';
 
 // useQuery 
 import { useLoggedUser} from './hooks/useFetch.js';
+import DrumPad from './components/DrumPad.jsx';
 
 function Router() {
 
@@ -51,6 +52,12 @@ function Router() {
             element={<Account
               userLogged={userLogged}
               loggedUserRefetch={refetch}
+            />}
+          />
+          <Route exact
+            path='/drumpad'
+            element={<DrumPad
+              userLogged={userLogged}
             />}
           />
         </Routes>
