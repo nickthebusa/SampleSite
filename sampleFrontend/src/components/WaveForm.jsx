@@ -12,7 +12,6 @@ function animateBars(analyser, canvas, canvasCtx, dataArray, bufferLength) {
   for (var i = 0; i < bufferLength; i++) {
     barHeight = (dataArray[i] / 255) * canvas.height;
 
-
     // // generate a shade of blue based on the audio input
     // const blueShade = Math.floor((dataArray[i] / 255) * 5); 
     // // waveform colors

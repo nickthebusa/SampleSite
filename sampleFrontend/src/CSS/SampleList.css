@@ -78,19 +78,23 @@
   margin: 10px;
 }
 .sample-img-wrapper {
-  border-radius: 5px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  max-width: 100px;
-  max-height: 100px;
+  border-radius: .5rem;
+  -webkit-border-radius: .5rem;
+  -moz-border-radius: .5rem;
+  width: 100px;
+  height: 100px;
   overflow: hidden;
   grid-area: img;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 .sample-title-section img {
   display: block;
   width: 100%;
   height: auto;
   object-fit: contain;
+  overflow: hidden;
 }
 .sample-name {
   font-size: 1.4rem;
@@ -103,6 +107,7 @@
   color: var(--purple-color);
   display: inline;
   grid-area: profile;
+  background-color: var(--background-color);
 }
 .sample-title-section span:hover {
   cursor: pointer;
@@ -136,7 +141,8 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-
+  border-radius: 1rem;
+  padding: .5rem .1rem;
 }
 .confirm-delete-window div, .confirm-unsave-window div {
   display: flex;

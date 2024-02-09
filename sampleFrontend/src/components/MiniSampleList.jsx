@@ -74,25 +74,28 @@ function MiniSampleList({ samples }) {
 
   return (
     <div className="MiniSampleList">
-      <h4>Samples</h4>
-      <div>
-        <ul>
-        {samples?.map((sample, i) => (
-          <li key={i}>
 
+      <div className="div-list">
+        <h4>Samples</h4>
 
-            <div className='playPause-icon-div'>
-              {playing[i] ?
-                <FontAwesomeIcon icon={faPause} onClick={() => pauseAudio(i)}/> :
-                <FontAwesomeIcon icon={faPlay} onClick={() => playAudio(i)}/>
-              }
-            </div>
+        <div></div>
 
-            <p draggable onDragStart={(e) => handleDragStart(e, sample)}>{sample.title}</p>
-            <audio ref={el => audioRefs.current[i] = el} src={sample?.audio_file} crossOrigin="anonymous" />
-          </li>
-        ))}
-        </ul>
+        <div>
+          <ul>
+          {samples?.map((sample, i) => (
+            <li key={i}>
+              <div className='playPause-icon-div'>
+                {playing[i] ?
+                  <FontAwesomeIcon icon={faPause} onClick={() => pauseAudio(i)}/> :
+                  <FontAwesomeIcon icon={faPlay} onClick={() => playAudio(i)}/>
+                }
+              </div>
+              <p draggable onDragStart={(e) => handleDragStart(e, sample)}>{sample.title}</p>
+              <audio ref={el => audioRefs.current[i] = el} src={sample?.audio_file} crossOrigin="anonymous" />
+            </li>
+          ))}
+          </ul>
+        </div>
       </div>
     </div>
   )

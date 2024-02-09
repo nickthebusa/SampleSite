@@ -61,6 +61,7 @@ export default class APIService {
   }
 
   static async LoginUser(body) {
+    console.log(body);
     const res = await fetch('http://127.0.0.1:8000/auth/', {
       mode: 'cors',
       method: 'POST',

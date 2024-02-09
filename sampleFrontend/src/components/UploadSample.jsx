@@ -2,6 +2,11 @@ import { useState } from 'react';
 import { useTags } from '../hooks/useFetch';
 import APIService from '../fetching/APIService';
 
+import '../CSS/UploadSample.css';
+
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faPaperclip } from '@fortawesome/free-solid-svg-icons'
+
 function UploadSample({ userLogged, onFormUploaded }) {
 
   const [tags, refetch] = useTags();
@@ -158,16 +163,20 @@ function UploadSample({ userLogged, onFormUploaded }) {
           
 
 
-        <label htmlFor="audio-file">
-          Audio File: <input
+
+        <label htmlFor="audio-file" className='upload-audio-label'>
+          Audio File:
+          <FontAwesomeIcon icon={faPaperclip} />
+          {errors.audio_file}
+        </label>
+        <input
+          className='upload-audio-input'
           type="file"
           name="audio_file"
           accept="audio/*"
           onChange={(e) => handleFileChange('audio_file', e)}
-          />
-          {errors.audio_file}
-        </label>
-
+        />
+        
         <label htmlFor="tags">
           Tags: <select
             multiple

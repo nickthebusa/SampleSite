@@ -12,7 +12,15 @@ import '../CSS/SampleList.css';
 
 
 function SampleList({
-  samples, tags, users, currentTags, setCurrentTags, userLogged, loggedUserRefetch
+  samples,
+  tags,
+  users,
+  currentTags,
+  setCurrentTags,
+  userLogged,
+  loggedUserRefetch,
+  refetchSamples, 
+  refetchSaved
 }) {
   
 
@@ -22,7 +30,6 @@ function SampleList({
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [unsaveConfirm, setUnsaveConfirm] = useState(false);
   const selectedRef = useRef(selected);
-
 
 
   function checkUncheckTag(id) {
@@ -47,12 +54,17 @@ function SampleList({
 
   useEffect(() => {
 
+    const selectedDiv = document.querySelector('.selected');
+    if (selectedDiv) {
+      selectedDiv.scrollIntoView({
+        behavior: "instant",
+        block: 'center'
+      })
+    }
+
     // for selecting and playing samples with space and up and down arrow keys
     function handleKeyPress(event) {
-
       if (selected.id) {
-
-        // debugger;
 
         if (event.key === 'ArrowUp') {
           event.preventDefault();
@@ -107,8 +119,8 @@ function SampleList({
         if (deleteConfirm) setDeleteConfirm(false);
 
         if (unsaveConfirm) setUnsaveConfirm(false);
-
       }
+      
     }
 
     window.addEventListener('click', handleWindowPress);
@@ -125,6 +137,20 @@ function SampleList({
       setSelected({});
     } else {
       setSelected({ playing: false, id: sample_id, index: i});
+    }
+  }
+
+  function toggleSampleActions(sample_id) {
+
+    if (sampleActions.open & sampleActions.sample !== sample_id) {
+      setUnsaveConfirm(false);
+      setDeleteConfirm(false)
+    }
+
+    if (sampleActions.open & !sample_id) {
+      setSampleActions({ open: false, sample: null })
+    } else {
+      setSampleActions({ open: true, sample: sample_id })
     }
   }
 
@@ -152,28 +178,35 @@ function SampleList({
     axios
       .delete(`http://127.0.0.1:8000/api/samples/${sample.id}/`)
       .then(() => {
-        window.location.reload();
+        loggedUserRefetch();
+        refetchSamples();
       })
       .catch(err => console.log(err))
   }
 
   function saveSample(sample) {
-    APIService.AddToSavedSample(userLogged?.user, { sample_id: sample.id })
-      .then(res => {
-        console.log(res)
-        loggedUserRefetch();
-      })
-      .catch(err => console.log(err))
+    if (!userLogged?.saved_samples.includes(sample.id)) {
+      APIService.AddToSavedSample(userLogged?.user, { sample_id: sample.id })
+        .then(res => {
+          console.log(res);
+          loggedUserRefetch();
+          refetchSaved();
+        })
+        .catch(err => console.log(err))
+    }
   }
 
   function unsaveSample(sample) {
-    APIService.RemoveSavedSample(userLogged?.user, { sample_id: sample.id })
-      .then(res => {
-        console.log(res)
-        loggedUserRefetch();
-        setUnsaveConfirm(false);
-      })
-      .catch(err => console.log(err))
+    if (userLogged?.saved_samples.includes(sample.id)) {
+      APIService.RemoveSavedSample(userLogged?.user, { sample_id: sample.id })
+        .then(res => {
+          console.log(res);
+          loggedUserRefetch();
+          refetchSaved();
+          setUnsaveConfirm(false);
+        })
+        .catch(err => console.log(err))
+    }
   }
 
 
@@ -234,12 +267,12 @@ function SampleList({
               {sampleActions.open && sampleActions.sample === sample.id ? 
                 <FontAwesomeIcon
                   icon={faX}
-                  onClick={() => setSampleActions({ open: false, sample: null})}
+                  onClick={toggleSampleActions}
                   className="open-close"
                 /> :
                 <FontAwesomeIcon
                   icon={faEllipsisVertical}
-                  onClick={() => setSampleActions({ open: true, sample: sample.id})}
+                  onClick={() => toggleSampleActions(sample.id)}
                   className="open-close"
                 />
                 }

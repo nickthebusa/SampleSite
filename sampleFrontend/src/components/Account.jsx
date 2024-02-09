@@ -27,12 +27,12 @@ function Account({ userLogged, loggedUserRefetch }) {
       return axios.put('http://127.0.0.1:8000/api/follow_unfollow/', body)
         .then(() => refetchProfile())
     },
-  })
+  });
 
   // id of user who's page app is on
   const { id } = useParams();
 
-  // state if follow-comp is displayed 
+  // state for FollowList, null for not open, then modes ('following', followers)
   const [followComp, setFollowComp] = useState(null);
 
   // state for Filter Component
@@ -52,37 +52,40 @@ function Account({ userLogged, loggedUserRefetch }) {
   const [tags] = useTags();
   const [userAccount, refetchProfile] = useProfile(id);
   const [userSamples, refetchSamples] = useUserSamplesById(id);
-  const [savedSamples] = useUserSavedSamples(id);
+  const [savedSamples, refetchSaved] = useUserSavedSamples(id);
 
   useEffect(() => {
 
+    // filter by loggedUser's saved samples
     if (savedOn) {
-      if (savedSamples?.length > 0) {
+      if (savedSamples) {
+
+        let tempFilteredSamples = savedSamples;
+
+        // filter by tags and search query
         if (currentTags.length > 0 || searchQuery.trim() !== '') {
-          const tempFilteredSamples =
+          tempFilteredSamples =
             sampleSearch(savedSamples, searchQuery, currentTags, searchMode);
-
-          setFilteredSamples(tempFilteredSamples)
         }
-        else if (currentTags.length <= 0 && searchQuery.trim() === '') {
-          setFilteredSamples(savedSamples);
-        }
+        setFilteredSamples(tempFilteredSamples);
       } 
-    } else {
+    }
+    // default, display account page user's samples
+    else {
       if (userSamples?.length > 0) {
-        if (currentTags.length > 0 || searchQuery.trim() !== '') {
-          const tempFilteredSamples =
-            sampleSearch(userSamples, searchQuery, currentTags, searchMode);
 
-          setFilteredSamples(tempFilteredSamples)
+        let tempFilteredSamples = userSamples;
+
+        // filter by tags and search query
+        if (currentTags.length > 0 || searchQuery.trim() !== '') {
+          tempFilteredSamples =
+            sampleSearch(userSamples, searchQuery, currentTags, searchMode);
         }
-        else if (currentTags.length <= 0 && searchQuery.trim() === '') {
-          setFilteredSamples(userSamples);
-        }
+        setFilteredSamples(tempFilteredSamples);
       } 
     }
 
-
+    // for clicking out of pop up form 
     function handleWindowPress(e) {
       const overlay = document.querySelector('.overlay');
       if (e.target === overlay && editProfile) {
@@ -111,38 +114,25 @@ function Account({ userLogged, loggedUserRefetch }) {
     }, 200)
   }
 
-  function addFollowComp(type) {
-    setFollowComp(type);
-  }
-
-
+  // closes upload form and reloads page on successful submit
   function onFormUploaded() {
     setUploadForm(false);
     refetchSamples(userAccount?.user_samples);
     window.location.reload();
   }
-  
-  function editProfileBtn() {
-    setEditProfile(true);
-  }
-
-
-  console.log(
-    'ACCOUNT',
-    'userLogged:', userLogged,
-    'userAccount:', userAccount,
-    'userSamples:', userSamples
-  );
 
 
   return (
-    
     <div className='Account'>
 
       {(uploadForm || editProfile) &&
-      <div className='overlay'></div>}
+      <div className='overlay' />}
 
-      <Nav userLogged={userLogged} loggedUserRefetch={loggedUserRefetch} fromAccount={userLogged ? true : false}/>
+      <Nav
+        userLogged={userLogged}
+        loggedUserRefetch={loggedUserRefetch}
+        fromAccount={userLogged ? true : false}
+      />
 
       {userAccount &&
         <div className='Account-div'>
@@ -155,14 +145,16 @@ function Account({ userLogged, loggedUserRefetch }) {
           <div className='Account-follow-div'>
             <div>
               <p>following</p>
-              <p className='follow-count'
-                onClick={() => addFollowComp('following')}>{userAccount.following.length}
+              <p
+                className='follow-count'
+                onClick={() => setFollowComp('following')}>{userAccount.following.length}
               </p>
             </div>
             <div>
               <p>followers</p>
-              <p className='follow-count'
-                onClick={() => addFollowComp('followers')}>{userAccount.followers.length}
+              <p
+                className='follow-count'
+                onClick={() => setFollowComp('followers')}>{userAccount.followers.length}
               </p>
             </div>
 
@@ -178,58 +170,48 @@ function Account({ userLogged, loggedUserRefetch }) {
 
             {
               userLogged?.user === userAccount?.user && 
-              <button onClick={editProfileBtn}>
+              <button onClick={() => setEditProfile(true)}>
                   EDIT PROFILE
               </button>
             }
 
-            {followComp !== null && 
+            {
+              followComp !== null && 
               <FollowList userAccount={userAccount} type={followComp} />
             }
 
           </div>
+          
+          { userLogged?.user === userAccount?.user &&
+            <>
+                <div className='upload-sample-link-div'>
+                  <p>upload sample! </p>
+                  <FontAwesomeIcon icon={faPlus} onClick={() => setUploadForm(!uploadForm)} />
+                </div>
+              { uploadForm &&
+                <div className='upload-sample-window-div'>
+                  <FontAwesomeIcon
+                    className='x'
+                    icon={faX}
+                    onClick={() => setUploadForm(!uploadForm)}
+                  />
+                  <UploadSample
+                    userLogged={userLogged}
+                    onFormUploaded={onFormUploaded}
+                  />
+                </div>}
+            </>
+          }
         </div>
-
       }
 
-      { userLogged?.user === userAccount?.user &&
-      <div className='user-or-saved-div'>
-          <div className={!savedOn ? 'selected' : ''} onClick={() => {
-            setSavedOn(false);
-          }
-          }>Your Uploads</div>
-          <div className={savedOn ? 'selected' : ''} onClick={() => {
-            setSavedOn(true);
-          }
-          }>Saved</div>
-      </div>
-      }
-
-      { userLogged?.user === userAccount?.user &&
-        <>
-    
-            <div className='upload-sample-link-div'>
-              <p>upload sample! </p>
-              <FontAwesomeIcon icon={faPlus} onClick={() => setUploadForm(!uploadForm)} />
-            </div>
-          { uploadForm &&
-            <div className='upload-sample-window-div'>
-              <FontAwesomeIcon icon={faX}  onClick={() => setUploadForm(!uploadForm)} />
-              <UploadSample
-                userLogged={userLogged}
-                onFormUploaded={onFormUploaded}
-              />
-            </div>
-          }
-        </>
-      }
-
-      { userLogged?.user === userAccount?.user && editProfile &&
+      {/* EDIT ACCOUNT POP UP FORM */}
+      {
+        userLogged?.user === userAccount?.user && editProfile &&
         <div className='edit-profile-window-div'>
           <EditProfile userLogged={userLogged} setEditProfile={setEditProfile} />
         </div>
       }
-
 
       <Filter
         tags={tags}
@@ -241,7 +223,20 @@ function Account({ userLogged, loggedUserRefetch }) {
         setSearchMode={setSearchMode}
       />
 
-      
+      {/* SWITCH BETWEEN USER SAMPLES AND SAVED SAMPLES */}
+      {userLogged?.user === userAccount?.user &&
+        <div className='user-or-saved-div'>
+            <div className={!savedOn ? 'selected' : ''} onClick={() => {
+              setSavedOn(false);
+            }
+            }>Your Uploads</div>
+            <div className={savedOn ? 'selected' : ''} onClick={() => {
+              setSavedOn(true);
+            }
+            }>Saved</div>
+        </div>
+      }
+
       {filteredSamples?.length > 0 && userAccount ?
         <SampleList
           samples={filteredSamples}
@@ -251,6 +246,8 @@ function Account({ userLogged, loggedUserRefetch }) {
           setCurrentTags={setCurrentTags}
           userLogged={userLogged}
           loggedUserRefetch={loggedUserRefetch}
+          refetchSamples={refetchSamples}
+          refetchSaved={refetchSaved}
         />
         :
         <div>NONE</div>

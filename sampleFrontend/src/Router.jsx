@@ -13,37 +13,37 @@ function Router() {
   const [token,] = useCookies(["my-token"]);
   const user_id = localStorage.getItem("user_id");
 
-  // only use user_id if user_id AND token
+  // Gets the user's profile if user_id saved in local storage & my-token exists
   const [userLogged, refetch] = useLoggedUser(user_id && token ? user_id : null)
-
-
-  console.log('Router', userLogged, token['my-token'])
   
   return (
     <CookiesProvider>
       <BrowserRouter>
         <Routes>
-          <Route exact
+          <Route
+            exact
             path='/login'
             element={<Login
               userLogged={userLogged}
-              loggedUserRefetch={refetch}
               userId={user_id}
+              register={false}
             />}
           />
-          <Route exact
+          <Route
+            exact
             path='/'
             element={<App
               userLogged={userLogged}
-              following={false} 
+              followingPage={false} 
               loggedUserRefetch={refetch}
             />}
           />
-          <Route exact
+          <Route
+            exact
             path='/following'
             element={<App
               userLogged={userLogged}
-              following={true}
+              followingPage={true}
               loggedUserRefetch={refetch}
             />}
           />
@@ -54,7 +54,8 @@ function Router() {
               loggedUserRefetch={refetch}
             />}
           />
-          <Route exact
+          <Route
+            exact
             path='/drumpad'
             element={<DrumPad
               userLogged={userLogged}

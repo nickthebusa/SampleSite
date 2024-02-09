@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import samplesite_logo from '../pictures/samplesite_logo.png';
+import samplesite_logo from '../pictures/sampleSiteLogoNewPurpleCropped.png';
 import {useCookies} from 'react-cookie';
 import { useEffect, useState, useRef } from 'react';
 import '../CSS/Nav.css';
@@ -31,9 +31,9 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
 
 
   function logOut() {
-    if (token['my-token'] && userLogged)  {
-      removeToken('my-token', {path: '/'});
+    if (token['my-token'] && userLogged) {
       localStorage.removeItem("user_id");
+      removeToken('my-token', {path: '/'});
       loggedUserRefetch();
       if (fromAccount) navigate('/')
       window.location.reload();
@@ -62,8 +62,9 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
         {userLogged ?
           <a onClick={logOut} className='link'>logout</a>
           :
-          <Link to={"/login"}>login</Link>
+          <Link to={"/login"} state={{register: false}}>login</Link>
         }
+        {!userLogged && <Link to={"/login"} state={{register: true}}>register</Link>}
       </div>
 
 
@@ -81,8 +82,9 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
           {userLogged ?
             <a onClick={logOut} className='link'>logout</a>
                           :
-            <Link to={"/login"}>login</Link>
+            <Link to={"/login"}state={{register: false}} >login</Link>
           }
+        {!userLogged && <Link to={"/login"} state={{register: true}}>register</Link>}
         </div>
         
 

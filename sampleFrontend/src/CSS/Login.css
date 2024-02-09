@@ -1,0 +1,13 @@
+
+.Login>h2 {
+  font-family: 'Press Start 2P', sans-serif;
+  font-size: 2.5rem;
+}
+.Login .div-form {
+  display: flex;
+  max-width: 500px;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin: 0 auto;
+}

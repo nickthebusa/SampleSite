@@ -1,9 +1,11 @@
 
 .MiniSampleList {
-  border: 1px solid var(--white-color);
   margin: 0 .5rem;
 }
 
+.MiniSampleList .div-list {
+  box-shadow: 0 0 15px 1px black;
+}
 .MiniSampleList h4 {
   margin: 0;
   text-decoration: underline;
