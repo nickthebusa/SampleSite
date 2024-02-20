@@ -52,11 +52,11 @@
 /*  CUSTOM-INPUTS  */
 .custom-input-div, 
 .custom-input-div-search {
-  width: 100%;
   display: flex;
+  flex: 1;
   flex-direction: column;
   position: relative;
-  margin: 10px;
+  margin: .5rem;
 }
 .custom-input-label, 
 .custom-input-label-search {
@@ -64,11 +64,11 @@
   text-transform: uppercase;
   cursor: pointer;
   position: absolute;
-  left: 3em;
+  left: 2em;
   top: -.7em;
   background-color: var(--background-color);
   margin: 0;
-  font-size: 0.8em;
+  font-size: 0.7em;
   letter-spacing: 0.1em;
   display: flex;
   flex-direction: row;
@@ -87,11 +87,15 @@
   letter-spacing: 0.1em;
   color: inherit
 }
+/*  // dotted border
 .custom-input-text:focus {
   outline: 2px dashed rgba(255, 255, 255, 0.349);
   outline-offset: 0.8em;
-}
+} */
 
+.custom-input-text:focus {
+  outline: none;
+}
 
 .custom-input-div-search {
   padding-top: .8rem
@@ -114,8 +118,7 @@
 }
 .App-following {
   font-family: 'Press Start 2P', sans-serif;
-  font-family: 'Silkscreen', sans-serif;
-  font-size: 2rem;
+  font-size: 1rem;
   margin: 0 0 .5rem 0;
   font-weight: 300;
 }
@@ -165,10 +168,10 @@
 .upload-sample-window-div {
   position: fixed;
   background-color: var(--background-color);
+  border-radius: 0.5rem;
   width: 90%;
   max-width: 1200px;
   max-height: 95vh;
-  border: 1px solid var(--white-color);
   z-index: 3;
   left: 50%;
   top: 50%;
@@ -177,9 +180,9 @@
 }
 .upload-sample-window-div .x {
   position: absolute;
-  right: 20px;
-  top: 20px;
-  font-size: 1.5rem;
+  right: 0.5rem;
+  top: 0.5rem;
+  font-size: 1.3rem;
   cursor: pointer;
 }
 

@@ -164,7 +164,7 @@ function UploadSample({ userLogged, onFormUploaded }) {
 
 
 
-        <label htmlFor="audio-file" className='upload-audio-label'>
+        <label htmlFor="audio-file-upload" className='upload-audio-label'>
           Audio File:
           <FontAwesomeIcon icon={faPaperclip} />
           {errors.audio_file}
@@ -172,11 +172,10 @@ function UploadSample({ userLogged, onFormUploaded }) {
         <input
           className='upload-audio-input'
           type="file"
-          name="audio_file"
+          id="audio-file-upload"
           accept="audio/*"
           onChange={(e) => handleFileChange('audio_file', e)}
         />
-        
         <label htmlFor="tags">
           Tags: <select
             multiple

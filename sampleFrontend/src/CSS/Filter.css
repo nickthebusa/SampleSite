@@ -5,7 +5,7 @@
   max-width: 40rem;
   margin: 0 auto;
   margin-bottom: 1rem;
-  border-radius: 5px;
+  border-radius: 0.5rem;
   box-shadow: 0 11px 15px 1px black;
 }
 
@@ -31,12 +31,11 @@
 .Filter-by-tag {
   display: inline-block;
   grid-area: tag-filter;
-  margin: 0 0 0 10px;
+  margin: .5rem 0 .5rem 10px;
 }
 .Filter-dropdown {
   /* display: inline-flex or display: none defined in React */
   flex-direction: column;
-  margin: 0 0 10px 20px;
 }
 .Filter-tags-dropdown {
   display: flex;
@@ -61,7 +60,7 @@
 .Filter-tags-list {
   display: flex;
   flex-direction: row;
-  margin: 5px 0 10px 0;
+  margin: 0.5rem 0 0.5rem 0;
   flex-wrap: wrap;
 }
 .Filter-tag-checkbox-btn {
@@ -90,8 +89,8 @@ input[type='checkbox']:checked + .Filter-tag-checkbox-btn {
     color: var(--white-color);
   }
 }
-.search-tags {
-  position: relative;
+.custom-input-div.search-tags {
+    margin: 0;
 }
 .search-dropdown-div {
   text-align: left;

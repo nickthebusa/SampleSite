@@ -31,8 +31,12 @@
 
 .upload-audio-label {
   cursor: pointer;
-  display: inline;
+  display: inline-block;
+  margin: .8rem 0 .8rem .5rem;
+}
+.upload-audio-label svg {
+  margin-left: .5rem;
 }
 .upload-audio-input {
-  opacity: 0;
+  display: none;
 }

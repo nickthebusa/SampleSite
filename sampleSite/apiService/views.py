@@ -72,7 +72,7 @@ class SampleViewSet(viewsets.ModelViewSet):
 class TagViewSet(viewsets.ModelViewSet):
   queryset = models.Tag.objects.all()
   serializer_class = TagSerializer
-  
+
   
 class ProfileViewSet(viewsets.ModelViewSet):
   queryset = models.Profile.objects.all()

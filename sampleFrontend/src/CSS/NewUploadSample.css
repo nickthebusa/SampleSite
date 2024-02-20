@@ -1,0 +1,123 @@
+/*  NEW UPLOAD SAMPLE  */
+.UploadSample {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  overflow: hidden;
+  padding: 0.5rem;
+}
+.UploadSample h3 {
+  margin: 0.3rem auto;
+}
+.UploadSample .div-form{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: left;
+  background-color: var(--background-color);
+}
+.UploadSample .img-and-input-div {
+  display: block;
+  text-align: left;
+}
+.UploadSample .img-container {
+  width: 100px;
+  height: 100px;
+  overflow: hidden;
+  position: relative;
+}
+.UploadSample .image-preview {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.upload-audio-label {
+  cursor: pointer;
+  display: inline-block;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin: .5rem 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.upload-audio-label p {
+  margin: 0 0 0 1rem;
+}
+.upload-audio-label svg {
+  margin-left: .5rem;
+}
+.upload-image-label {
+  cursor: pointer;
+  display: inline-block;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.upload-image-label svg {
+  margin-left: .5rem;
+}
+.upload-audio-input {
+  display: none;
+}
+.upload-image-input {
+  display: none;
+}
+
+.pic-title-username-div {
+  display: flex;
+  margin: 0.6rem;
+}
+.title-upload-div {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  margin: 0 0.5rem;
+}
+.profile-name {
+  display: inline-flex;
+  justify-content: flex-end;
+}
+.profile-name p {
+  margin: 0 0.5rem 0 0;
+}
+.description textarea {
+  font-size: 1rem;
+  resize: none;
+  overflow-y: hidden;
+}
+.select-tags-div {
+  border-radius: 0.5rem;
+  display:flex;
+  flex-wrap: wrap;
+  padding: .1rem .5rem;
+  align-items: center;
+  max-height: 8rem;
+  overflow-y: scroll;
+}
+.select-tags-label {
+  overflow: hidden;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+.add-tag-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  margin: .5rem 0;
+}
+
+.errors.title {
+  color: red;
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin: 0;
+}

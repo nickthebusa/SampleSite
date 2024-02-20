@@ -11,7 +11,8 @@ import Nav from './Nav';
 import FollowList from './FollowList';
 import SampleList from './SampleList';
 import Filter from "./Filter";
-import UploadSample from './UploadSample';
+//import UploadSample from './UploadSample';
+import NewUploadSample from './NewUploadSample';
 import EditProfile from './EditProfile';
 
 import { sampleSearch } from '../functions/samplesSearch';
@@ -195,7 +196,7 @@ function Account({ userLogged, loggedUserRefetch }) {
                     icon={faX}
                     onClick={() => setUploadForm(!uploadForm)}
                   />
-                  <UploadSample
+                  <NewUploadSample
                     userLogged={userLogged}
                     onFormUploaded={onFormUploaded}
                   />

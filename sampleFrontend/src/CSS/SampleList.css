@@ -9,7 +9,7 @@
   margin: 5px 5px;
   position: relative;
   box-shadow: 0 0 15px 1px black;
-  border-radius: 1rem;
+  border-radius: 0.5rem;
 }
 .sample-actions-div {
   border-bottom: 1px solid var(--white-color);
@@ -75,7 +75,7 @@
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-template-areas: "img title profile";
-  margin: 10px;
+  margin: 0.6rem;
 }
 .sample-img-wrapper {
   border-radius: .5rem;

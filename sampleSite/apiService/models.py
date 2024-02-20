@@ -23,7 +23,7 @@ class Profile(models.Model):
 
 class Sample(models.Model):
   user = models.ForeignKey(Profile, on_delete=models.CASCADE)
-  username = models.CharField(max_length=100, default='')
+  username = models.CharField(max_length=50, default='')
   title = models.CharField(max_length=50)
   description = models.CharField(max_length=150, blank=True)
   audio_file = models.FileField(upload_to='audio_files/')
@@ -54,3 +54,7 @@ class Folder(models.Model):
   
   def __str__(self):
     return self.name
+
+
+
+

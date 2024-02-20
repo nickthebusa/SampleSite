@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import samplesite_logo from '../pictures/sampleSiteLogoNewPurpleCropped.png';
+import samplesite_logo from '../pictures/sampleSiteLogoNewpurpleCropped.png';
 import {useCookies} from 'react-cookie';
 import { useEffect, useState, useRef } from 'react';
 import '../CSS/Nav.css';

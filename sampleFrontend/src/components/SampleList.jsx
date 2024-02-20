@@ -53,15 +53,13 @@ function SampleList({
   }, [selected]);
 
   useEffect(() => {
-
-    const selectedDiv = document.querySelector('.selected');
+    const selectedDiv = document.querySelector('.sample.selected');
     if (selectedDiv) {
       selectedDiv.scrollIntoView({
         behavior: "instant",
         block: 'center'
       })
     }
-
     // for selecting and playing samples with space and up and down arrow keys
     function handleKeyPress(event) {
       if (selected.id) {
@@ -300,11 +298,11 @@ function SampleList({
 
           <div className="sample-tags-div">
             <h6>tags:</h6>
-            {tags && tags.length > 0 ? sample.tags.map((tag, i) => (
+            {tags && tags.length > 0 ? sample.tags.map((tag, i)  => (
               <div key={i} className="sample-tag-div">
-                <label htmlFor={`tag-${i}`}>
+                <label htmlFor={`tag-${tag}`}>
                   <input
-                    id={`tag-${i}`}
+                    id={`tag-${tag}`}
                     type='checkbox'
                     onChange={() => checkUncheckTag(tag)}
                     hidden
