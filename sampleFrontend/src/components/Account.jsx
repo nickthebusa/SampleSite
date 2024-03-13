@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faX } from '@fortawesome/free-solid-svg-icons'
+
+import APIService from '../fetching/APIService';
 
 //components
 import Nav from './Nav';
@@ -21,15 +21,6 @@ import { useTags, useProfile, useUserSamplesById, useUserSavedSamples } from "..
 import '../CSS/Account.css';
 
 function Account({ userLogged, loggedUserRefetch }) {
-
-  // PUT request for follow_unfollow, user_id in body
-  const mutation = useMutation({
-    mutationFn: async (body) => {
-      return axios.put('http://127.0.0.1:8000/api/follow_unfollow/', body)
-        .then(() => refetchProfile())
-    },
-  });
-
   // id of user who's page app is on
   const { id } = useParams();
 
@@ -69,7 +60,10 @@ function Account({ userLogged, loggedUserRefetch }) {
             sampleSearch(savedSamples, searchQuery, currentTags, searchMode);
         }
         setFilteredSamples(tempFilteredSamples);
-      } 
+      }
+      else {
+        setFilteredSamples([]);
+      }
     }
     // default, display account page user's samples
     else {
@@ -83,7 +77,10 @@ function Account({ userLogged, loggedUserRefetch }) {
             sampleSearch(userSamples, searchQuery, currentTags, searchMode);
         }
         setFilteredSamples(tempFilteredSamples);
-      } 
+      }
+      else {
+        setFilteredSamples([]);
+      }
     }
 
     // for clicking out of pop up form 
@@ -109,7 +106,7 @@ function Account({ userLogged, loggedUserRefetch }) {
   // For following and un-following
   function followBtn(e) {
     e.target.disabled = true;
-    mutation.mutate({ userLogged: userLogged.user, userAccount: userAccount.user })
+    APIService.Follow_Unfollow({ userLogged: userLogged.user, userAccount: userAccount.user });
     setTimeout(() => {
       e.target.disabled = false;
     }, 200)
@@ -127,7 +124,7 @@ function Account({ userLogged, loggedUserRefetch }) {
     <div className='Account'>
 
       {(uploadForm || editProfile) &&
-      <div className='overlay' />}
+        <div className='overlay' />}
 
       <Nav
         userLogged={userLogged}
@@ -164,32 +161,32 @@ function Account({ userLogged, loggedUserRefetch }) {
               <button onClick={(e) => followBtn(e)}>
                 {
                   !(userAccount.followers.includes(userLogged?.user)) ?
-                  "follow" : "following" 
+                    "follow" : "following"
                 }
               </button>
             }
 
             {
-              userLogged?.user === userAccount?.user && 
+              userLogged?.user === userAccount?.user &&
               <button onClick={() => setEditProfile(true)}>
-                  EDIT PROFILE
+                EDIT PROFILE
               </button>
             }
 
             {
-              followComp !== null && 
+              followComp !== null &&
               <FollowList userAccount={userAccount} type={followComp} />
             }
 
           </div>
-          
-          { userLogged?.user === userAccount?.user &&
+
+          {userLogged?.user === userAccount?.user &&
             <>
-                <div className='upload-sample-link-div'>
-                  <p>upload sample! </p>
-                  <FontAwesomeIcon icon={faPlus} onClick={() => setUploadForm(!uploadForm)} />
-                </div>
-              { uploadForm &&
+              <div className='upload-sample-link-div'>
+                <p>upload sample! </p>
+                <FontAwesomeIcon icon={faPlus} onClick={() => setUploadForm(!uploadForm)} />
+              </div>
+              {uploadForm &&
                 <div className='upload-sample-window-div'>
                   <FontAwesomeIcon
                     className='x'
@@ -227,14 +224,14 @@ function Account({ userLogged, loggedUserRefetch }) {
       {/* SWITCH BETWEEN USER SAMPLES AND SAVED SAMPLES */}
       {userLogged?.user === userAccount?.user &&
         <div className='user-or-saved-div'>
-            <div className={!savedOn ? 'selected' : ''} onClick={() => {
-              setSavedOn(false);
-            }
-            }>Your Uploads</div>
-            <div className={savedOn ? 'selected' : ''} onClick={() => {
-              setSavedOn(true);
-            }
-            }>Saved</div>
+          <div className={!savedOn ? 'selected' : ''} onClick={() => {
+            setSavedOn(false);
+          }
+          }>Your Uploads</div>
+          <div className={savedOn ? 'selected' : ''} onClick={() => {
+            setSavedOn(true);
+          }
+          }>Saved</div>
         </div>
       }
 

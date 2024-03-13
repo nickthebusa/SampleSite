@@ -1,37 +1,40 @@
 import axios from 'axios';
 
+// const siteName = "http://192.168.1.177:8000";
+const siteName = 'http://127.0.0.1:8000';
+
 export default class APIService {
 
   static async GetSamples() {
     return axios
-      .get('http://127.0.0.1:8000/api/samples/')
+      .get(`${siteName}/api/samples/`)
       .then(res => { return res })
       .catch(err => { throw err })
   }
 
   static async GetTags() {
     return axios
-      .get('http://127.0.0.1:8000/api/tags/')
+      .get(`${siteName}/api/tags/`)
       .then(res => { return res })
       .catch(err => { throw err })
   }
 
   static async GetUsers() {
     return axios
-      .get('http://127.0.0.1:8000/api/users/')
+      .get(`${siteName}/api/users/`)
       .then(res => { return res })
       .catch(err => { throw err })
   }
 
   static async GetProfiles() {
     return axios
-      .get('http://127.0.0.1:8000/api/profiles/')
+      .get(`${siteName}/api/profiles/`)
       .then(res => { return res })
       .catch(err => { throw err })
   }
 
   static async GetUser(id) {
-    const res = await fetch(`http://127.0.0.1:8000/api/users/${id}`, {
+    const res = await fetch(`${siteName}/api/users/${id}`, {
       mode: 'cors',
     });
     const user = await res.json();
@@ -40,16 +43,16 @@ export default class APIService {
 
   static async GetProfile(id) {
     return axios
-    .get(`http://127.0.0.1:8000/api/profiles/${id}/`)
-    .then(res => {
+      .get(`${siteName}/api/profiles/${id}/`)
+      .then(res => {
         return res
       })
-    .catch(err => { throw err })
+      .catch(err => { throw err })
   }
 
 
   static async UpdateProfile(id, body) {
-    const res = await fetch(`http://127.0.0.1:8000/api/profiles/${id}/`, {
+    const res = await fetch(`${siteName}/api/profiles/${id}/`, {
       method: 'PUT',
       headers: {
         "Content-Type": "application/json",
@@ -62,7 +65,7 @@ export default class APIService {
 
   static async LoginUser(body) {
     console.log(body);
-    const res = await fetch('http://127.0.0.1:8000/auth/', {
+    const res = await fetch(`${siteName}/auth/`, {
       mode: 'cors',
       method: 'POST',
       headers: {
@@ -75,7 +78,7 @@ export default class APIService {
   }
 
   static async RegisterUser(body) {
-    const res = await fetch('http://127.0.0.1:8000/api/users/', {
+    const res = await fetch(`${siteName}/api/users/`, {
       mode: 'cors',
       method: 'POST',
       headers: {
@@ -88,8 +91,8 @@ export default class APIService {
   }
 
   static async AddTag(body) {
-    return axios 
-      .post('http://127.0.0.1:8000/api/tags/', body)
+    return axios
+      .post(`${siteName}/api/tags/`, body)
       .then(res => { return res })
       .catch(err => { throw err })
   }
@@ -105,7 +108,7 @@ export default class APIService {
     // }
 
     return axios
-      .post('http://127.0.0.1:8000/api/samples/', formData)
+      .post(`${siteName}/api/samples/`, formData)
       .then(res => { return res })
       .catch(err => { throw err })
   }
@@ -117,40 +120,72 @@ export default class APIService {
   //     .then(res => { return res })
   //     .catch(err => { throw err })
   // }
-  
+
   static async GetUserSamplesByUserId(id) {
-    return axios 
-      .get(`http://127.0.0.1:8000/api/get_user_samples_by_user_id/${id}`)
+    return axios
+      .get(`${siteName}/api/get_user_samples_by_user_id/${id}`)
       .then(res => { return res })
       .catch(err => { throw err })
   }
 
   static async GetUserSavedSamples(id) {
-    return axios 
-      .get(`http://127.0.0.1:8000/api/get_user_saved_samples/${id}`)
+    return axios
+      .get(`${siteName}/api/get_user_saved_samples/${id}`)
       .then(res => { return res })
       .catch(err => { throw err })
   }
 
   static async AddToSavedSample(user_id, body) {
-    return axios 
-      .put(`http://127.0.0.1:8000/api/add_saved_sample/${user_id}/`, body)
+    return axios
+      .put(`${siteName}/api/add_saved_sample/${user_id}/`, body)
       .then(res => { return res })
       .catch(err => { throw err })
   }
 
   static async RemoveSavedSample(user_id, body) {
-    return axios 
-      .put(`http://127.0.0.1:8000/api/remove_saved_sample/${user_id}/`, body)
+    return axios
+      .put(`${siteName}/api/remove_saved_sample/${user_id}/`, body)
       .then(res => { return res })
       .catch(err => { throw err })
   }
 
   static async EditProfile(id, body) {
-    return axios 
-      .put(`http://127.0.0.1:8000/api/edit_profile/${id}/`, body)
+    return axios
+      .put(`${siteName}/api/edit_profile/${id}/`, body)
       .then(res => { return res })
       .catch(err => { throw err })
+  }
+
+  static async DownloadFile(id, title) {
+    return axios
+      .get(`${siteName}/api/download_file/${id}/`, {
+        responseType: 'blob'
+      })
+      .then(res => {
+        const blobUrl = URL.createObjectURL(new Blob([res.data]))
+
+        // create element and trigger download
+        const a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = `${title}.wav`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+      })
+      .catch(err => console.log(err))
+  }
+
+  static async Follow_Unfollow(body) {
+    return axios.put(`${siteName}/api/follow_unfollow/`, body)
+      .then(res => { return res })
+      .catch(err => { return err })
+  }
+
+  static async DeleteFile(id) {
+    return axios.delete(`${siteName}/api/samples/${id}/`)
+      .then(res => { return res })
+      .then(err => { return err })
   }
 
 }

@@ -43,7 +43,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'apiService',
-    'django_cleanup.apps.CleanupConfig'
+    'django_cleanup.apps.CleanupConfig',
+
+    'storages',
 ]
 
 MIDDLEWARE = [
@@ -147,3 +149,45 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
+# S-3 BUCKETS
+
+# TODO
+# MOVE TO ENV FILE
+AWS_ACCESS_KEY_ID = 'AKIAYS2NVLGM6HHD5UV5'
+AWS_SECRET_ACCESS_KEY = 'Q/2UCXTE30ZsPyNrwbwhSN/Lgd0qcZHxRI4LFcpS'
+
+
+AWS_STORAGE_BUCKET_NAME = 'sample-site-bucket-test'
+
+AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
+
+AWS_S3_FILE_OVERWRITE = False
+
+
+STORAGES = {
+    # media file (image) management
+    "default": {
+        "BACKEND" : "storages.backends.s3boto3.S3StaticStorage",
+    },
+
+    # CSS and JS file management
+    "staticfiles" : {
+        "BACKEND" : "storages.backends.s3boto3.S3StaticStorage",
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+

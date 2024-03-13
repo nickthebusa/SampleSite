@@ -28,10 +28,10 @@ function App({ userLogged, followingPage, loggedUserRefetch }) {
   const [filteredSamples, setFilteredSamples] = useState([]);
 
   // useQuery
-  const [samples] = useSamples();
+  const [samples, refetchSamples] = useSamples();
   const [tags] = useTags();
   const [profiles] = useProfiles();
-  
+
 
   useEffect(() => {
 
@@ -51,6 +51,9 @@ function App({ userLogged, followingPage, loggedUserRefetch }) {
       }
 
       setFilteredSamples(tempFilteredSamples);
+    }
+    else {
+      setFilteredSamples([]);
     }
 
   }, [samples, tags, profiles, currentTags, searchQuery, followingPage, userLogged, searchMode])
@@ -78,18 +81,20 @@ function App({ userLogged, followingPage, loggedUserRefetch }) {
 
       {
         filteredSamples?.length > 0 && profiles
-        ?
-        <SampleList
-          samples={filteredSamples}
-          tags={tags}
-          users={profiles}
-          currentTags={currentTags}
-          setCurrentTags={setCurrentTags}
-          userLogged={userLogged}
-          loggedUserRefetch={loggedUserRefetch}
-        />
-        :
-        <div>NONE</div>
+          ?
+          <SampleList
+            samples={filteredSamples}
+            tags={tags}
+            users={profiles}
+            currentTags={currentTags}
+            setCurrentTags={setCurrentTags}
+            userLogged={userLogged}
+            loggedUserRefetch={loggedUserRefetch}
+            refetchSamples={refetchSamples}
+          // refetchSaved passed in props from Account component
+          />
+          :
+          <div>NONE</div>
       }
 
     </div>

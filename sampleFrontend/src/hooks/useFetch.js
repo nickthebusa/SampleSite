@@ -13,7 +13,7 @@ export function useSamples() {
   if (samples.isLoading) return [];
   else if (samples.isError) return [];
 
-  return [samples?.data?.data];
+  return [samples?.data?.data, samples.refetch];
 }
 
 
