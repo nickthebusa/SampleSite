@@ -10,9 +10,9 @@ function FlippingText({ words, count, setCount }) {
 
     let currentWord = wordArray[currentWordIndex];
     let nextWord =
-      currentWordIndex === wordArray.length-1 ?
+      currentWordIndex === wordArray.length - 1 ?
         wordArray[0] : wordArray[currentWordIndex + 1];
-    
+
     currentWord.className = "word out";
 
     nextWord.style.opacity = "1";
@@ -62,9 +62,9 @@ function FlippingText({ words, count, setCount }) {
 
 
   return (
-    <div className="flipping-text-div">
+    <div className="flipping-text-div" data-testid="flipping-text-div">
       {
-        words?.length > 0 && 
+        words?.length > 0 &&
         words.map((w, i) => (
           <span key={i} className='word'>{w}</span>
         ))

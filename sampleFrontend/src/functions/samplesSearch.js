@@ -5,7 +5,7 @@ export function sampleSearch(samples, query, currentTags, mode) {
 
   // !!! only add if sample already in list
   const leftovers = [...samples];
-  const filteredSamples = [];
+  let filteredSamples = [];
 
   let theQuery = query.toLowerCase().trim();
 
@@ -62,6 +62,21 @@ export function sampleSearch(samples, query, currentTags, mode) {
       }
     }
   }
+
+  let samplesHi = filteredSamples;
+
+  console.log(filteredSamples);
+
+  samplesHi.sort((sA, sB) => {
+    const matchingTagsA = sA.tags.filter(tag => currentTags.includes(tag));
+    const matchingTagsB = sB.tags.filter(tag => currentTags.includes(tag));
+
+    return matchingTagsB.length - matchingTagsA.length;
+  })
+
+  filteredSamples = samplesHi;
+
+  console.log(filteredSamples);
 
   return filteredSamples;
 }

@@ -96,7 +96,7 @@
   border-radius: 0.5rem;
   display:flex;
   flex-wrap: wrap;
-  padding: .1rem .5rem;
+  padding: .3rem .5rem .4rem .5rem;
   align-items: center;
   max-height: 8rem;
   overflow-y: scroll;
@@ -114,10 +114,20 @@
   margin: .5rem 0;
 }
 
-.errors.title {
+.errors {
   color: red;
   font-size: 0.7rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   margin: 0;
+}
+
+.audio-upload-div, .image-upload-div {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.errors.audio-file {
+  margin-left: 1rem;
 }
