@@ -7,10 +7,23 @@ export function sampleSearch(samples, query, currentTags, mode) {
   const leftovers = [...samples];
   let filteredSamples = [];
 
-  let theQuery = query.toLowerCase().trim();
+  // strip query and make lowercase for to use in search
+  const theQuery = query.toLowerCase().trim();
+
+  // filter by tag
+  for (let tag of currentTags) {
+    for (let sample of samples) {
+      if (sample.tags.includes(tag) &&
+        !(filteredSamples.includes(sample))) {
+        filteredSamples.push(sample);
+      }
+    }
+  }
 
   // If sample text (title, description, username) begins with query
-  if (query.trim() !== '') {
+  if (theQuery !== '') {
+
+    // If search query string is in beginning
     for (let i of samples) {
       let qq = null;
       if (mode === "TITLE") {
@@ -53,30 +66,17 @@ export function sampleSearch(samples, query, currentTags, mode) {
     }
   }
 
-  // then filter by tag
-  for (let tag of currentTags) {
-    for (let sample of samples) {
-      if (sample.tags.includes(tag) &&
-        !(filteredSamples.includes(sample))) {
-        filteredSamples.push(sample);
-      }
-    }
-  }
-
+  // if no query make put the samples with the most matched tags at the top of the list
+  //  if (!theQuery) {
   let samplesHi = filteredSamples;
-
-  console.log(filteredSamples);
-
   samplesHi.sort((sA, sB) => {
     const matchingTagsA = sA.tags.filter(tag => currentTags.includes(tag));
     const matchingTagsB = sB.tags.filter(tag => currentTags.includes(tag));
 
     return matchingTagsB.length - matchingTagsA.length;
   })
-
   filteredSamples = samplesHi;
-
-  console.log(filteredSamples);
+  //}
 
   return filteredSamples;
 }

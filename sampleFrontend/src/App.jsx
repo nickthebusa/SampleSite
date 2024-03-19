@@ -4,7 +4,7 @@ import Nav from "./components/Nav";
 import SampleList from "./components/SampleList";
 import Filter from "./components/Filter";
 
-import { sampleSearch } from './functions/samplesSearch';
+import { sampleSearch } from './functions/sampleSearch';
 
 import { useSamples, useTags, useProfiles } from "./hooks/useFetch";
 
@@ -22,7 +22,7 @@ function App({ userLogged, followingPage, loggedUserRefetch }) {
   // state for Filter Component
   const [currentTags, setCurrentTags] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchMode, setSearchMode] = useState('TITLE');
+  const [searchMode, setSearchMode] = useState('title');
 
   // samples that get sent to SampleList Component
   const [filteredSamples, setFilteredSamples] = useState([]);

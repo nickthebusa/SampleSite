@@ -1,11 +1,12 @@
 from . import models
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 import os
 from pathlib import Path
 from django.conf import settings
 
 from .models import *
+
 
 
 @receiver(post_save, sender=User)
@@ -24,6 +25,7 @@ def save_user_profile(sender, instance, **kwargs):
   """
   instance.profile.save()
   
+
 @receiver(post_save, sender=Sample)
 def update_user_samples(sender, instance, created, **kwargs):
   """
@@ -33,4 +35,15 @@ def update_user_samples(sender, instance, created, **kwargs):
   if created:
     user_profile, created = Profile.objects.get_or_create(user=instance.user)
     user_profile.user_samples.add(instance)
-    
+ 
+
+@receiver(post_delete, sender=Sample)
+def delete_files_on_delete(sender, instance, **kwargs):
+  """
+  Signal handler to remove the files associated with the sample
+  """
+  if instance.audio_file:
+    instance.audio_file.delete(save=False)
+  if instance.image:
+    instance.image.delete(save=False)
+

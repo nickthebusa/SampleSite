@@ -14,7 +14,6 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
   const [tags, refetch] = useTags();
 
   const [newTag, setNewTag] = useState('');
-  const [addedTags, setAddedTags] = useState([]);
 
   const descRef = useRef(null);
 
@@ -57,22 +56,27 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
   }
 
   function handleFileChange(type, e) {
+
     let newData = { ...data };
     newData[type] = e.target.files[0];
     setData(newData);
 
     // set Image Prev to readable file 
     if (type === "image") {
-      const theFile = e.target.files;
-      if (theFile.length > 0) {
-        let fileReader = new FileReader();
-        fileReader.onload = function(event) {
-          setImagePrev(event.target.result)
-        }
-        fileReader.readAsDataURL(theFile[0]);
-        return;
-      }
+      previewImage(e.target.files);
     }
+  }
+
+  function previewImage(targetFiles) {
+    const theFile = targetFiles;
+    if (theFile.length > 0) {
+      let fileReader = new FileReader();
+      fileReader.onload = function (event) {
+        setImagePrev(event.target.result)
+      }
+      fileReader.readAsDataURL(theFile[0]);
+    }
+    return;
   }
 
   function isFileAccepted(file, type) {
@@ -93,16 +97,19 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
     const file = e.dataTransfer.files[0];
     if (type === "audio") {
       if (isFileAccepted(file, "audio")) {
-        setData({ ...data, audio_file: file })
+        setData({ ...data, audio_file: file });
+        setErrors({ ...errors, audio_file: "" });
       } else {
-        setErrors({ ...errors, audio_file: "not accepted type" })
+        setErrors({ ...errors, audio_file: "not accepted type" });
       }
     } else if (type === "image") {
       if (isFileAccepted(file, "image")) {
-        setData({ ...data, image: file })
+        previewImage(e.dataTransfer.files);
+        setData({ ...data, image: file });
+        setErrors({ ...errors, image: "" });
       }
       else {
-        setErrors({ ...errors, image: "not accepted type" })
+        setErrors({ ...errors, image: "not accepted type" });
       }
     }
   }
@@ -110,7 +117,7 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
   function addRemoveTag(id) {
     let newData = { ...data };
     if (newData.tags?.includes(id)) {
-      newData.tags.splice(newData.tags.indexOf(id));
+      newData.tags.splice(newData.tags.indexOf(id), 1);
       setData(newData);
     } else {
       newData.tags.push(id);
@@ -209,10 +216,40 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
 
   useEffect(() => {
 
+    // for adding outline to inputs when dragging file over them
+    function addHoverClass(e) {
+      e.preventDefault();
+      this.classList.add("hover");
+    }
+    function removeHoverClass(e) {
+      e.preventDefault();
+      this.classList.remove("hover");
+    }
 
+    const imgInput = document.querySelector(".img-and-input-div");
+    const audioInput = document.querySelector(".upload-audio-label");
+
+    imgInput.addEventListener('dragover', addHoverClass, false);
+    imgInput.addEventListener('dragleave', removeHoverClass, false);
+    imgInput.addEventListener('drop', removeHoverClass, false);
+
+    audioInput.addEventListener('dragover', addHoverClass, false);
+    audioInput.addEventListener('dragleave', removeHoverClass, false);
+    audioInput.addEventListener('drop', removeHoverClass, false);
+
+
+    // resizes textarea
     descRef.current?.addEventListener("input", resizeArea);
 
     return () => {
+      imgInput.removeEventListener('dragover', addHoverClass, false);
+      imgInput.removeEventListener('dragleave', removeHoverClass, false);
+      imgInput.removeEventListener('drop', removeHoverClass, false);
+
+      audioInput.removeEventListener('dragover', addHoverClass, false);
+      audioInput.removeEventListener('dragleave', removeHoverClass, false);
+      audioInput.removeEventListener('drop', removeHoverClass, false);
+
       descRef.current?.removeEventListener("input", resizeArea);
     }
 
@@ -224,29 +261,29 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
       <h3>Upload Sample</h3>
 
       <div className="pic-title-username-div">
-        <div className="img-and-input-div">
-          <div className='img-container'>
-            <img src={imagePrev} alt="profile-image" className='image-preview' />
-          </div>
-          <div className="image-upload-div">
-            <label
-              onDragOver={handleDragOver}
-              onDrop={(e) => handleDrop(e, "image")}
-              htmlFor="image"
-              className="upload-image-label"
-            >
-              Image:
-              <FontAwesomeIcon icon={faPaperclip} />
-            </label>
-            <input
-              className="upload-image-input"
-              type="file"
-              id="image"
-              accept="image/*"
-              onChange={(e) => handleFileChange('image', e)}
-            />
-            <p className="errors image">{errors.image}</p>
-          </div>
+        <div
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, "image")}
+          className="img-and-input-div"
+        >
+          <label
+            htmlFor="image"
+            className="upload-image-label"
+          >
+            <div className='img-container'>
+              <img src={imagePrev} alt="profile-image" className='image-preview' />
+            </div>
+            Image:
+            <FontAwesomeIcon icon={faPaperclip} />
+          </label>
+          <input
+            className="upload-image-input"
+            type="file"
+            id="image"
+            accept="image/*"
+            onChange={(e) => handleFileChange('image', e)}
+          />
+          <p className="errors image">{errors.image}</p>
         </div>
 
         <div className="title-upload-div">
@@ -296,27 +333,27 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
 
       <div className='div-form'>
 
-        <div className="audio-upload-div">
-          <label
-            onDragOver={handleDragOver}
-            onDrop={(e) => handleDrop(e, "audio")}
-            htmlFor="audio-file-upload"
-            className='upload-audio-label'
-          >
+        <label
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, "audio")}
+          htmlFor="audio-file-upload"
+          className='upload-audio-label'
+        >
+          <div className="audio-upload-div">
             Audio File:
             <FontAwesomeIcon icon={faPaperclip} />
             <p>{`${data.audio_file?.name || "none"}`}</p>
-          </label>
-          <input
-            className='upload-audio-input'
-            type="file"
-            id="audio-file-upload"
-            accept="audio/*"
-            onChange={(e) => handleFileChange('audio_file', e)}
-          />
-          <p className="errors audio-file">{errors.audio_file}</p>
+            <input
+              className='upload-audio-input'
+              type="file"
+              id="audio-file-upload"
+              accept="audio/*"
+              onChange={(e) => handleFileChange('audio_file', e)}
+            />
+            <p className="errors audio-file">{errors.audio_file}</p>
 
-        </div>
+          </div>
+        </label>
 
         <div className="select-tag-list">
           <label htmlFor="tags" className="select-tags-label">Tags: </label>

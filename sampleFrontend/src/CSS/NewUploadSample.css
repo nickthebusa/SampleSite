@@ -20,6 +20,12 @@
   display: block;
   text-align: left;
 }
+.UploadSample .img-and-input-div:hover,
+.UploadSample .img-and-input-div.hover {
+  outline: 2px dotted var(--purple-color);
+  border-radius: 0.3rem;
+  cursor: pointer;
+}
 .UploadSample .img-container {
   width: 100px;
   height: 100px;
@@ -46,6 +52,12 @@
   font-size: 0.7rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
+}
+.upload-audio-label:hover, 
+.upload-audio-label.hover {
+  outline: 2px dotted var(--purple-color);
+  border-radius: 0.3rem;
+  cursor: pointer;
 }
 .upload-audio-label p {
   margin: 0 0 0 1rem;
@@ -122,12 +134,15 @@
   margin: 0;
 }
 
-.audio-upload-div, .image-upload-div {
+.audio-upload-div {
   display: flex;
   flex-direction: row;
   align-items: center;
 }
+.errors.image {
 
+}
 .errors.audio-file {
   margin-left: 1rem;
 }
+

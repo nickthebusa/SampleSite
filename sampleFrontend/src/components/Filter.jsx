@@ -5,10 +5,10 @@ import '../CSS/Filter.css';
 import FlippingText from './FlippingText.jsx';
 
 
-function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery, 
+function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery,
   searchMode, setSearchMode }) {
 
-  const searchModes = ['TITLE', 'DESCRIPTION', 'USER'];
+  const searchModes = ['title', 'description', 'username'];
 
   // filter by tag
   const [dropdownVis, setDropdownVis] = useState(false);
@@ -49,7 +49,7 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
       setCurrentTags(newTags);
     }
 
-  } 
+  }
 
 
   function toggleDropdown() {
@@ -83,14 +83,14 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
 
   function getNextSearchMode() {
     switch (searchMode) {
-      case "TITLE":
-        return "DESCRIPTION";
-      case "DESCRIPTION":
-        return "USER";
-      case "USER":
-        return "TITLE";
+      case "title":
+        return "description";
+      case "description":
+        return "username";
+      case "username":
+        return "title";
       default:
-        return "TITLE";
+        return "title";
     }
   }
 
@@ -109,84 +109,84 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
 
       <div className='Filter-types'>
 
-      <div className='Filter-by-title'>
-        <div className='custom-input-div-search'>
-          <label htmlFor="title-search" className='custom-input-label-search'>
-            Search by :
-            <div className='search-main-select' onClick={clickSearchBy}>
-                <FontAwesomeIcon className='search-main-arrow' icon={faCaretDown} rotation={270} /> 
-              <div className="flip-animate" tabIndex={0}>
-                <FlippingText words={searchModes} count={count} setCount={setCount} />
+        <div className='Filter-by-title'>
+          <div className='custom-input-div-search'>
+            <label htmlFor="title-search" className='custom-input-label-search'>
+              Search by :
+              <div className='search-main-select' onClick={clickSearchBy}>
+                <FontAwesomeIcon className='search-main-arrow' icon={faCaretDown} rotation={270} />
+                <div className="flip-animate" tabIndex={0}>
+                  <FlippingText words={searchModes} count={count} setCount={setCount} />
+                </div>
               </div>
-            </div>
-          </label>
-          <input
-            id="title-search" 
-            type="text" 
-            className='custom-input-text-search'
-            value={searchQuery} 
-            onChange={(e) => setSearchQuery(e.target.value)}  
-          />
+            </label>
+            <input
+              id="title-search"
+              type="text"
+              className='custom-input-text-search'
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
 
+          </div>
         </div>
-      </div>
-        
-      
 
-      <div className='Filter-by-tag'>
-        <div className='Filter-tags-dropdown'>
-          <p>Filter-Tags: </p>{
-            dropdownVis ?
-            <FontAwesomeIcon icon={faCaretDown} rotation={180} onClick={toggleDropdown}/> :
-            <FontAwesomeIcon icon={faCaretDown} onClick={toggleDropdown}/>
-          }
-          {dropdownVis && 
-          <div className='custom-input-div search-tags'>
-            <label htmlFor="tag-search" className='custom-input-label'>Search Tags: </label>
-            <input 
-              className='custom-input-text'
-              id="tag-search" 
-              type="text" 
-              value={filterSearch}
-              onChange={(e) => updateOnSearch(e.target.value)} />
 
-            <div className='search-dropdown-div' ref={tagSearchDropdownRef}>
-            {searchTags.length > 0 && tagSearchOpen &&
-              <div className='search-dropdown'>
-                {searchTags.map((tag, i) => (
-                  <p key={i} onClick={() => setCurrentTags([...currentTags, tag])}>{tags.find(t => t.id === tag).name}</p>
-                ))}
+
+        <div className='Filter-by-tag'>
+          <div className='Filter-tags-dropdown'>
+            <p>Filter-Tags: </p>{
+              dropdownVis ?
+                <FontAwesomeIcon icon={faCaretDown} rotation={180} onClick={toggleDropdown} /> :
+                <FontAwesomeIcon icon={faCaretDown} onClick={toggleDropdown} />
+            }
+            {dropdownVis &&
+              <div className='custom-input-div search-tags'>
+                <label htmlFor="tag-search" className='custom-input-label'>Search Tags: </label>
+                <input
+                  className='custom-input-text'
+                  id="tag-search"
+                  type="text"
+                  value={filterSearch}
+                  onChange={(e) => updateOnSearch(e.target.value)} />
+
+                <div className='search-dropdown-div' ref={tagSearchDropdownRef}>
+                  {searchTags.length > 0 && tagSearchOpen &&
+                    <div className='search-dropdown'>
+                      {searchTags.map((tag, i) => (
+                        <p key={i} onClick={() => setCurrentTags([...currentTags, tag])}>{tags.find(t => t.id === tag).name}</p>
+                      ))}
+                    </div>}
+                </div>
               </div>}
           </div>
-          </div> }
-        </div>
 
-        {
-          dropdownVis && currentTags?.length !== 0 &&
+          {
+            dropdownVis && currentTags?.length !== 0 &&
             <p className='clear-tags' onClick={clearCurrentTags}><FontAwesomeIcon icon={faX} />CLEAR TAGS</p>
-        }  
+          }
 
-        <div className='Filter-dropdown' style={{ display: dropdownVis ? 'inline-block' : 'none' }}>
-          <div className='Filter-tags-list'>
-          {tags && tags.map((tag, i) => (
-            <div key={i} className='Filter-tag-div'>
-              <label htmlFor={`filter-tag-${i}`}>
-                <input
-                  id={`filter-tag-${i}`}
-                  type='checkbox'
-                  onChange={() => checkUncheckTag(tag.id)}
-                  checked={currentTags.includes(tag.id)}
-                  hidden
-                ></input>
-                <div className='Filter-tag-checkbox-btn'>{tag?.name}</div>
-              </label>
+          <div className='Filter-dropdown' style={{ display: dropdownVis ? 'inline-block' : 'none' }}>
+            <div className='Filter-tags-list'>
+              {tags && tags.map((tag, i) => (
+                <div key={i} className='Filter-tag-div'>
+                  <label htmlFor={`filter-tag-${i}`}>
+                    <input
+                      id={`filter-tag-${i}`}
+                      type='checkbox'
+                      onChange={() => checkUncheckTag(tag.id)}
+                      checked={currentTags.includes(tag.id)}
+                      hidden
+                    ></input>
+                    <div className='Filter-tag-checkbox-btn'>{tag?.name}</div>
+                  </label>
+                </div>
+              ))}
             </div>
-          ))}
           </div>
         </div>
+
       </div>
-        
-    </div>
     </div>
   )
 }

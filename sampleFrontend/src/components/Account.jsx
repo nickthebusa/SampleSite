@@ -15,7 +15,7 @@ import Filter from "./Filter";
 import NewUploadSample from './NewUploadSample';
 import EditProfile from './EditProfile';
 
-import { sampleSearch } from '../functions/samplesSearch';
+import { sampleSearch } from '../functions/sampleSearch';
 import { useTags, useProfile, useUserSamplesById, useUserSavedSamples } from "../hooks/useFetch";
 
 import '../CSS/Account.css';
@@ -31,7 +31,7 @@ function Account({ userLogged, loggedUserRefetch }) {
   const [currentTags, setCurrentTags] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredSamples, setFilteredSamples] = useState([]);
-  const [searchMode, setSearchMode] = useState('TITLE');
+  const [searchMode, setSearchMode] = useState('title');
 
   // state for displaying user's posts or saved posts
   const [savedOn, setSavedOn] = useState(false);
