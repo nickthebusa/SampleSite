@@ -19,8 +19,6 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
   const tagSearchDropdownRef = useRef(null);
   // const searchModeDisplay = useRef(null);
 
-  // for triggering FlippingText from this component
-  const [count, setCount] = useState(0);
 
   useEffect(() => {
     function handleOutsideClick(e) {
@@ -77,6 +75,7 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
     setFilterSearch(v);
   }
 
+
   function toggleSearchMode() {
     setSearchMode(getNextSearchMode());
   }
@@ -94,14 +93,11 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
     }
   }
 
-  function clickSearchBy() {
-    setCount(cur => cur + 1);
-    toggleSearchMode();
-  }
 
   function clearCurrentTags() {
     setCurrentTags([]);
   }
+
 
   return (
     <div className='Filter'>
@@ -113,10 +109,13 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
           <div className='custom-input-div-search'>
             <label htmlFor="title-search" className='custom-input-label-search'>
               Search by :
-              <div className='search-main-select' onClick={clickSearchBy}>
+              <div className='search-main-select' onClick={toggleSearchMode}>
                 <FontAwesomeIcon className='search-main-arrow' icon={faCaretDown} rotation={270} />
                 <div className="flip-animate" tabIndex={0}>
-                  <FlippingText words={searchModes} count={count} setCount={setCount} />
+                  <FlippingText
+                    words={searchModes}
+                    searchMode={searchMode}
+                  />
                 </div>
               </div>
             </label>

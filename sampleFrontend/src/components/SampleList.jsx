@@ -24,9 +24,12 @@ function SampleList({
 
   let [selected, setSelected] = useState({});
   const [playing, setPlaying] = useState(false);
+
+  // sample actions
   const [sampleActions, setSampleActions] = useState({ open: false, sample: null });
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [unsaveConfirm, setUnsaveConfirm] = useState(false);
+
   const selectedRef = useRef(selected);
 
 
@@ -275,8 +278,9 @@ function SampleList({
               <span className="sample-name" onClick={() => selectDiv(i, sample.id)}>{sample.title}</span>
               {users &&
                 <div>
-                  <Link to={`/account/${sample.user}`}>
-                    {sample.username}</Link>
+                  <Link reloadDocument to={`/account/${sample.user}`}>
+                    {sample.username}
+                  </Link>
                 </div>
               }
             </div>

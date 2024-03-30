@@ -29,9 +29,9 @@
 }
 
 .Filter-by-tag {
-  display: inline-block;
+  display: grid;
   grid-area: tag-filter;
-  margin: .5rem 0 .5rem 10px;
+  margin: .5rem 10px .5rem 10px;
 }
 .Filter-dropdown {
   /* display: inline-flex or display: none defined in React */
@@ -90,7 +90,7 @@ input[type='checkbox']:checked + .Filter-tag-checkbox-btn {
   }
 }
 .custom-input-div.search-tags {
-    margin: 0;
+  margin: 0;
 }
 .search-dropdown-div {
   text-align: left;

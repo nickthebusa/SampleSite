@@ -4,6 +4,7 @@ import "../CSS/MiniSampleList.css";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons'
 
+
 function MiniSampleList({ samples }) {
 
   const [playing, setPlaying] = useState(Array(8).fill(false));
@@ -68,7 +69,7 @@ function MiniSampleList({ samples }) {
           ref.removeEventListener('ended', handleAudioEnd);
         }
       })
-    } 
+    }
   })
 
 
@@ -82,18 +83,18 @@ function MiniSampleList({ samples }) {
 
         <div>
           <ul>
-          {samples?.map((sample, i) => (
-            <li key={i}>
-              <div className='playPause-icon-div'>
-                {playing[i] ?
-                  <FontAwesomeIcon icon={faPause} onClick={() => pauseAudio(i)}/> :
-                  <FontAwesomeIcon icon={faPlay} onClick={() => playAudio(i)}/>
-                }
-              </div>
-              <p draggable onDragStart={(e) => handleDragStart(e, sample)}>{sample.title}</p>
-              <audio ref={el => audioRefs.current[i] = el} src={sample?.audio_file} crossOrigin="anonymous" />
-            </li>
-          ))}
+            {samples?.map((sample, i) => (
+              <li key={i}>
+                <div className='playPause-icon-div'>
+                  {playing[i] ?
+                    <FontAwesomeIcon icon={faPause} onClick={() => pauseAudio(i)} /> :
+                    <FontAwesomeIcon icon={faPlay} onClick={() => playAudio(i)} />
+                  }
+                </div>
+                <p draggable onDragStart={(e) => handleDragStart(e, sample)}>{sample.title}</p>
+                <audio ref={el => audioRefs.current[i] = el} src={sample?.audio_file} crossOrigin="anonymous" />
+              </li>
+            ))}
           </ul>
         </div>
       </div>

@@ -176,8 +176,8 @@ export default class APIService {
       .catch(err => console.log(err))
   }
 
-  static async Follow_Unfollow(body) {
-    return axios.put(`${siteName}/api/follow_unfollow/`, body)
+  static async Follow_Unfollow(followed_id, follower_id) {
+    return axios.put(`${siteName}/api/follow_unfollow/${followed_id}/${follower_id}/`)
       .then(res => { return res })
       .catch(err => { return err })
   }

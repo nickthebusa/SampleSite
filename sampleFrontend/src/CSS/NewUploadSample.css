@@ -104,6 +104,9 @@
   resize: none;
   overflow-y: hidden;
 }
+.select-tag-list {
+  margin: 0.5rem 0;
+}
 .select-tags-div {
   border-radius: 0.5rem;
   display:flex;
@@ -140,9 +143,16 @@
   align-items: center;
 }
 .errors.image {
-
+  position: absolute;
 }
 .errors.audio-file {
   margin-left: 1rem;
 }
-
+.errors.description{
+  display: inline-block;
+}
+.errors.tags {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 50%);
+}

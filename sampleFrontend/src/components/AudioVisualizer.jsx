@@ -29,7 +29,8 @@ function AudioVisualizer({ audio_file, id, selected, setPlaying }) {
     setSrcSet(true);
   }, [audioElmRef, setAnalyzerData, setSrcSet])
 
-  const playAudio = useCallback((e=null) => {
+  const playAudio = useCallback((e = null) => {
+    debugger;
     e && e.target.blur();
     if (!srcSet) audioAnalyzer();
     if (!audioElmRef.current.paused) {
@@ -39,7 +40,7 @@ function AudioVisualizer({ audio_file, id, selected, setPlaying }) {
     audioElmRef.current.play();
   }, [srcSet, audioAnalyzer, audioElmRef])
 
-  const pauseAudio = useCallback((e=null) => {
+  const pauseAudio = useCallback((e = null) => {
     e && e.target.blur();
     audioElmRef.current.pause();
     setPlaying(false);

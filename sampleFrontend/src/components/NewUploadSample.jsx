@@ -1,13 +1,10 @@
 import { useState, useEffect, useRef } from 'react';
 import { useTags } from '../hooks/useFetch';
 import APIService from '../fetching/APIService';
-
-import '../CSS/NewUploadSample.css';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPaperclip } from '@fortawesome/free-solid-svg-icons'
 import defaultLogo from '../pictures/output01.webp';
-
+import '../CSS/NewUploadSample.css';
 
 function NewUploadSample({ userLogged, onFormUploaded }) {
 
@@ -30,7 +27,7 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
     title: "",
     description: "",
     audio_file: "",
-    tags: [],
+    tags: "",
     image: ""
   })
 
@@ -39,21 +36,23 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
     if (type === "title") {
       if (value?.length > 50) {
         setErrors({ ...errors, title: "Over character limit" });
-        console.log("Reached char limit.");
         return;
       }
     }
     else if (type === "description") {
       if (value?.length > 150) {
         setErrors({ ...errors, description: "Over character limit" });
-        console.log("Reached char limit.");
         return;
       }
     }
     let newData = { ...data };
     newData[type] = value;
     setData(newData);
+    let newErrors = { ...errors };
+    newErrors[type] = "";
+    setErrors(newErrors);
   }
+
 
   function handleFileChange(type, e) {
 
@@ -67,17 +66,19 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
     }
   }
 
+
   function previewImage(targetFiles) {
     const theFile = targetFiles;
     if (theFile.length > 0) {
       let fileReader = new FileReader();
-      fileReader.onload = function (event) {
+      fileReader.onload = function(event) {
         setImagePrev(event.target.result)
       }
       fileReader.readAsDataURL(theFile[0]);
     }
     return;
   }
+
 
   function isFileAccepted(file, type) {
     if (type === "audio") {
@@ -88,9 +89,11 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
     }
   }
 
+
   function handleDragOver(e) {
     e.preventDefault();
   }
+
 
   function handleDrop(e, type) {
     e.preventDefault();
@@ -113,6 +116,7 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
       }
     }
   }
+
 
   function addRemoveTag(id) {
     let newData = { ...data };
@@ -162,8 +166,8 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
     return formData;
   }
 
-  async function doSubmit() {
 
+  async function doSubmit() {
     if (data.title.trim() === "" || data.audio_file === "") {
       const newErrors = { ...errors }
       if (data.title.trim() === "") {
@@ -180,13 +184,14 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
     APIService.UploadSample(formData)
       .then(res => {
         console.log(res)
-        onFormUploaded();
+        onFormUploaded('uploaded_sample');
       })
       .catch(err => {
         console.log(err)
         setErrors(err)
       })
   }
+
 
   // resize textarea
   function resizeArea() {
@@ -197,9 +202,9 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
     }
   }
 
+
   // resets text area if too big of text gets copy and pasted
   useEffect(() => {
-
     if (errors.description && data.description === "") {
       setTimeout(() => {
         setErrors({ ...errors, description: "" });
@@ -214,8 +219,8 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
 
   }, [errors, data])
 
-  useEffect(() => {
 
+  useEffect(() => {
     // for adding outline to inputs when dragging file over them
     function addHoverClass(e) {
       e.preventDefault();
@@ -237,7 +242,6 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
     audioInput.addEventListener('dragleave', removeHoverClass, false);
     audioInput.addEventListener('drop', removeHoverClass, false);
 
-
     // resizes textarea
     descRef.current?.addEventListener("input", resizeArea);
 
@@ -254,6 +258,7 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
     }
 
   }, [])
+
 
   return (
     <div className="UploadSample">
@@ -312,8 +317,8 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
       <div>
 
 
+        <p className="errors description">{errors.description}</p>
         <div className='custom-input-div description'>
-          <p className="errors description">{errors.description}</p>
           <label htmlFor="description" className='custom-input-label'>Description
           </label>
           <textarea
@@ -381,8 +386,8 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
             ))}
           </div>
         </div>
-        {errors.tags}
 
+        <p className="errors tags">{errors.tags}</p>
         <div className="add-tag-container">
           <div className="custom-input-div add-tag">
             <label htmlFor="add-tag" className='custom-input-label add-tag'>
@@ -393,7 +398,14 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
               type='text'
               name='add-tag'
               value={newTag}
-              onChange={(e) => setNewTag(e.target.value)}
+              onChange={(e) => {
+                if (e.target.value.length > 50) {
+                  setErrors({ ...errors, tags: "Over character limit" });
+                  return;
+                }
+                setNewTag(e.target.value);
+                setErrors({ ...errors, tags: "" });
+              }}
             />
           </div>
           <button onClick={submitNewTag}>ADD</button>

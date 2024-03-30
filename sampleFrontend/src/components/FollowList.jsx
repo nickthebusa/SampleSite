@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react'
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useProfiles } from '../hooks/useFetch';
+
+import '../CSS/FollowList.css';
 
 function FollowList({ userAccount, type }) {
 
@@ -10,7 +12,6 @@ function FollowList({ userAccount, type }) {
 
   useEffect(() => {
     if (userAccount) {
-
 
       switch (type) {
         case "following":
@@ -28,27 +29,30 @@ function FollowList({ userAccount, type }) {
 
 
   return (
-    <div className='follow-list-div'>
-      <ul>
-      {
-        userAccount &&
-        profiles &&
-        list.length > 0 ? list.map((item, i) => (
-          <div className='follow-list-item' key={i}>
-            <img className="follow-list-img"
-              src={profiles.find(p => p?.user === item)?.image}
-              alt="profile-pic"
-            />
-            <Link reloadDocument to={`/account/${item}`}>
-              {profiles.find(p => p?.user === item)?.name}
-            </Link>
-          </div>
-        ))
-          :
-        <div>none</div>
-      }
-      </ul>
-    </div>
+    <>
+      <h4>{type}</h4>
+      <div className='follow-list-div'>
+        <ul className='follow-list'>
+          {
+            userAccount &&
+              profiles &&
+              list.length > 0 ? list.map((item, i) => (
+                <div className='follow-list-item' key={i}>
+                  <img className="follow-list-img"
+                    src={profiles.find(p => p?.user === item)?.image}
+                    alt="profile-pic"
+                  />
+                  <Link reloadDocument to={`/account/${item}`}>
+                    {profiles.find(p => p?.user === item)?.name}
+                  </Link>
+                </div>
+              ))
+              :
+              <div style={{ textAlign: 'left' }}>none</div>
+          }
+        </ul >
+      </div >
+    </>
   )
 }
 

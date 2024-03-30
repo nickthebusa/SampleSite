@@ -77,30 +77,27 @@ class TagViewSet(viewsets.ModelViewSet):
 class ProfileViewSet(viewsets.ModelViewSet):
   queryset = models.Profile.objects.all()
   serializer_class = ProfileSerializer
-  
+
+
   @action(detail=True, methods=['put'])
-  def follow_unfollow(self, request):
-    
-    userLoggedId = request.data.get('userLogged')
-    userAccountId = request.data.get('userAccount')
-    
-    if models.Profile.objects.filter(user=userLoggedId).exists():
-      userLogged = models.Profile.objects.get(user=userLoggedId)
-    if models.Profile.objects.filter(user=userAccountId).exists():
-      userAccount = models.Profile.objects.get(user=userAccountId)
-    
-    if userLogged and userAccount:
-      if userAccount in userLogged.following.all():
-        userLogged.following.remove(userAccount)
-        userAccount.followers.remove(userLogged)
-        return Response({'success': 'updated DB'})
-      elif userAccount not in userLogged.following.all():
-        userLogged.following.add(userAccount)
-        userAccount.followers.add(userLogged)
-        return Response({'success': 'updated DB'})
-    
+  def follow_unfollow(self, request, followed_id, follower_id):
+
+    if models.Profile.objects.filter(user=followed_id).exists():
+      followed_user = models.Profile.objects.get(user=followed_id)
+    if models.Profile.objects.filter(user=follower_id).exists():
+      follower_user = models.Profile.objects.get(user=follower_id)
+
+    if followed_user and follower_user:
+      if follower_user in followed_user.followers.all():
+        followed_user.followers.remove(follower_user)
+        return Response({'success': 'updatedDB'})
+      elif follower_user not in followed_user.followers.all():
+        followed_user.followers.add(follower_user)
+        return Response({'success': 'updatedDB'})
+
     return Response({'error': 'did not update'})
-  
+
+
   @action(detail=True, methods=['put'])
   def add_saved_sample(self, request, pk=None):
     user_profile = self.get_object()
@@ -109,7 +106,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
       user_profile.saved_samples.add(sample)
       return Response({'success': 'updated DB'})
     return Response({'error': 'sample not found'})
-  
+
   @action(detail=True, methods=['put'])
   def remove_saved_sample(self, request, pk=None):
     user_profile = self.get_object()
@@ -118,7 +115,7 @@ class ProfileViewSet(viewsets.ModelViewSet):
       user_profile.saved_samples.remove(sample)
       return Response({'success': 'updated DB'})
     return Response({'error': 'sample not found'})
-  
+
   @action(detail=True, methods=['put'])
   def edit_profile(self, request, pk=None):
     user_profile = self.get_object()
@@ -135,8 +132,8 @@ class ProfileViewSet(viewsets.ModelViewSet):
       user.save()
       return Response({"success": "updated DB"})
     return Response({"error": "something went wrong"})
-      
-  
+
+
 
 
 

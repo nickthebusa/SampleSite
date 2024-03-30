@@ -1,0 +1,20 @@
+/*  FOLLOW-LIST  */
+.follow-list-div {
+  max-height: 90vh;
+  overflow-y: auto;
+  margin: 0 1rem 1.5rem 1rem;
+  box-shadow: inset 0 0 15px 1px black;
+}
+.follow-list {
+  margin-bottom: 1.5rem;
+}
+.follow-list-item {
+  display: flex;
+  align-items: center;
+}
+.follow-list-img {
+  width: 40px;
+  border-radius: 999px;
+  margin: 10px;
+}
+

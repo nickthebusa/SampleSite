@@ -125,24 +125,6 @@
 
 
 
-/*  FOLLOW-LIST  */
-.follow-list-div {
-  border: 1px solid var(--white-color);
-  position: absolute;
-  width: 500px;
-  z-index: 10;
-  background-color: var(--background-color);
-  bottom: 0;
-}
-.follow-list-item {
-  display: flex;
-  align-items: center;
-}
-.follow-list-img {
-  width: 40px;
-  border-radius: 999px;
-  margin: 10px;
-}
 
 
 
@@ -165,7 +147,12 @@
 
 
 /*  upload sample window  */
-.upload-sample-window-div {
+/*  edit profile window  */
+/* follow-list window */
+.upload-sample-window-div,
+.edit-profile-window-div,
+.follow-list-window-div
+{
   position: fixed;
   background-color: var(--background-color);
   border-radius: 0.5rem;
@@ -176,9 +163,12 @@
   left: 50%;
   top: 50%;
   transform: translate(-50%, -50%);
-  overflow-y: auto;
+  /*overflow-y: auto;*/
+  overflow-y: hidden;
 }
-.upload-sample-window-div .x {
+.upload-sample-window-div .x,
+.edit-profile-window-div .x,
+.follow-list-window-div .x {
   position: absolute;
   right: 0.5rem;
   top: 0.5rem;
@@ -187,36 +177,7 @@
 }
 
 
-/*  edit profile window  */
-.edit-profile-window-div {
-  position: fixed;
-  background-color: var(--background-color);
-  width: 90%;
-  height: 500px;
-  border: 1px solid var(--white-color);
-  z-index: 3;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-}
 
-
-
-
-/*  EDIT PROFILE  */
-.EditProfile {
-  position: relative;
-}
-.EditProfile .open-close {
-  cursor: pointer;
-  position: absolute;
-  top: 0;
-  right: 15px;
-}
-.EditProfile .image-preview {
-  width: 250px;
-  height: auto;
-}
 
  
 /*  MEDIA QUERIES  */

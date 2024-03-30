@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import '../CSS/DrumPad.css';
 import MiniSampleList from './MiniSampleList';
 
@@ -19,6 +19,27 @@ function DrumPad({ userLogged }) {
 
   // useQuery
   const [samples] = useSamples();
+
+  // web audio api
+  const [masterGain, setMasterGain] = useState(0.8);
+
+  function handleMasterGainChange(e) {
+    setMasterGain(parseFloat(e.target.value))
+  }
+
+
+  // initialize audioContext for drum pads
+  //  const initAudio = useCallback(() => {
+  //
+  //    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  //
+  //    const source = audioCtx.createMediaElementSource(audioElmRef.current);
+  //    source.connect(audioCtx.destination);
+  //    source.onended = () => {
+  //      source.disconnect();
+  //    };
+  //
+  //  }, [audioRefs])
 
 
   // for dragging and dropping events
@@ -95,6 +116,14 @@ function DrumPad({ userLogged }) {
       }
     })
 
+
+    // Audio Stuff
+    const masterAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const masterGainNode = masterAudioCtx.createGain();
+    masterGainNode.connect(masterAudioCtx.destination);
+
+
+
     return () => {
       window.removeEventListener('keydown', playKeys);
       myAudioElements.forEach((ref) => {
@@ -102,16 +131,29 @@ function DrumPad({ userLogged }) {
           ref.removeEventListener('ended', handleAudioEnd);
         }
       })
+      masterGainNode.disconnect();
+      masterAudioCtx.close();
     };
-  })
+  }, [masterGain])
 
-
+  console.log(masterGain);
 
   return (
     <div className="DrumPad">
       <Nav userLogged={userLogged} />
-      
+
       <h2>DrumPad</h2>
+
+      <input
+        className="master-volume"
+        type="range"
+        min="0.0" max="1.0"
+        step="0.01"
+        list="volumes"
+        name="volume"
+        value={masterGain}
+        onChange={handleMasterGainChange}
+      />
 
       <div className="list-and-pads">
 
@@ -129,8 +171,8 @@ function DrumPad({ userLogged }) {
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
             >
-            {pad ? pad.title : 'none'}
-            <audio ref={el => audioRefs.current[i] = el} src={pad?.audio_file} crossOrigin="anonymous" />
+              {pad ? pad.title : 'none'}
+              <audio ref={el => audioRefs.current[i] = el} src={pad?.audio_file} crossOrigin="anonymous" />
             </div>
           ))
           }

@@ -85,12 +85,16 @@ function Account({ userLogged, loggedUserRefetch }) {
 
     // for clicking out of pop up form 
     function handleWindowPress(e) {
+
       const overlay = document.querySelector('.overlay');
       if (e.target === overlay && editProfile) {
         setEditProfile(false);
       }
       if (e.target === overlay && uploadForm) {
         setUploadForm(false);
+      }
+      if (e.target === overlay && followComp) {
+        setFollowComp(null);
       }
     }
 
@@ -100,30 +104,44 @@ function Account({ userLogged, loggedUserRefetch }) {
       window.removeEventListener('click', handleWindowPress);
     };
 
-  }, [userSamples, currentTags, tags, searchQuery, editProfile, uploadForm, searchMode, savedOn, savedSamples])
+  }, [userSamples, currentTags, tags, searchQuery,
+    editProfile, uploadForm, searchMode, savedOn,
+    savedSamples, followComp])
 
 
   // For following and un-following
   function followBtn(e) {
     e.target.disabled = true;
-    APIService.Follow_Unfollow({ userLogged: userLogged.user, userAccount: userAccount.user });
+    APIService.Follow_Unfollow(userAccount.user, userLogged.user)
+      .then(() => {
+        loggedUserRefetch();
+        refetchProfile();
+      })
+      .catch((err) => {
+        console.log(err);
+      })
     setTimeout(() => {
       e.target.disabled = false;
     }, 200)
   }
 
   // closes upload form and reloads page on successful submit
-  function onFormUploaded() {
-    setUploadForm(false);
-    refetchSamples(userAccount?.user_samples);
-    window.location.reload();
+  function onFormUploaded(so = null) {
+    if (so) {
+      setUploadForm(false);
+      refetchSamples(userAccount?.user_samples);
+      return;
+    }
+    setEditProfile(false);
+    refetchProfile();
+    loggedUserRefetch();
   }
 
 
   return (
     <div className='Account'>
 
-      {(uploadForm || editProfile) &&
+      {(uploadForm || editProfile || followComp) &&
         <div className='overlay' />}
 
       <Nav
@@ -145,14 +163,14 @@ function Account({ userLogged, loggedUserRefetch }) {
               <p>following</p>
               <p
                 className='follow-count'
-                onClick={() => setFollowComp('following')}>{userAccount.following.length}
+                onClick={() => setFollowComp('following')}>{userAccount.following?.length}
               </p>
             </div>
             <div>
               <p>followers</p>
               <p
                 className='follow-count'
-                onClick={() => setFollowComp('followers')}>{userAccount.followers.length}
+                onClick={() => setFollowComp('followers')}>{userAccount.followers?.length}
               </p>
             </div>
 
@@ -160,8 +178,8 @@ function Account({ userLogged, loggedUserRefetch }) {
               userLogged?.user !== userAccount?.user &&
               <button onClick={(e) => followBtn(e)}>
                 {
-                  !(userAccount.followers.includes(userLogged?.user)) ?
-                    "follow" : "following"
+                  userAccount.followers.includes(userLogged?.user) ?
+                    "following" : "follow"
                 }
               </button>
             }
@@ -173,25 +191,38 @@ function Account({ userLogged, loggedUserRefetch }) {
               </button>
             }
 
+            {/* FOLLOW LIST POP UP FORM */}
             {
-              followComp !== null &&
-              <FollowList userAccount={userAccount} type={followComp} />
+              followComp &&
+              <div className='follow-list-window-div'>
+                <FontAwesomeIcon
+                  className='x'
+                  icon={faX}
+                  onClick={() => setFollowComp(null)}
+                />
+                <FollowList
+                  userAccount={userAccount}
+                  type={followComp}
+                />
+              </div>
             }
 
           </div>
 
+          {/* UPLOAD SAMPLE SECTION */}
           {userLogged?.user === userAccount?.user &&
             <>
               <div className='upload-sample-link-div'>
                 <p>upload sample! </p>
                 <FontAwesomeIcon icon={faPlus} onClick={() => setUploadForm(!uploadForm)} />
               </div>
+              {/* UPLOAD SAMPLE POP UP FORM */}
               {uploadForm &&
                 <div className='upload-sample-window-div'>
                   <FontAwesomeIcon
                     className='x'
                     icon={faX}
-                    onClick={() => setUploadForm(!uploadForm)}
+                    onClick={() => setUploadForm(false)}
                   />
                   <NewUploadSample
                     userLogged={userLogged}
@@ -207,7 +238,12 @@ function Account({ userLogged, loggedUserRefetch }) {
       {
         userLogged?.user === userAccount?.user && editProfile &&
         <div className='edit-profile-window-div'>
-          <EditProfile userLogged={userLogged} setEditProfile={setEditProfile} />
+          <FontAwesomeIcon
+            className='x'
+            icon={faX}
+            onClick={() => setEditProfile(false)}
+          />
+          <EditProfile userLogged={userLogged} onFormUploaded={onFormUploaded} />
         </div>
       }
 

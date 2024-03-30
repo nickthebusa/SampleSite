@@ -34,11 +34,24 @@ class TagSerializer(serializers.ModelSerializer):
   class Meta: 
     model = models.Tag
     fields = "__all__"
-    
+
+
 class ProfileSerializer(serializers.ModelSerializer):
-  
+  following = serializers.SerializerMethodField()
   # username = serializers.ReadOnlyField(source='user.username')
   
   class Meta:
     model = models.Profile
-    fields = "__all__"
+    fields = ('user',
+              'name',
+              'image',
+              'user_samples',
+              'saved_samples',
+              'followers',
+              'following')
+
+  def get_following(self, obj):
+    # Assuming 'following' is a related_name on the ManyToManyField
+    following_data = ProfileSerializer(obj.following.all(), many=True).data
+    user_ids = [profile['user'] for profile in following_data]
+    return user_ids
