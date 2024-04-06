@@ -30,7 +30,6 @@ function AudioVisualizer({ audio_file, id, selected, setPlaying }) {
   }, [audioElmRef, setAnalyzerData, setSrcSet])
 
   const playAudio = useCallback((e = null) => {
-    debugger;
     e && e.target.blur();
     if (!srcSet) audioAnalyzer();
     if (!audioElmRef.current.paused) {

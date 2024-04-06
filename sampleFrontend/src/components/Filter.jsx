@@ -74,7 +74,10 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
     }
     setFilterSearch(v);
   }
-
+  function clickSearchResult(tag) {
+    setCurrentTags([...currentTags, tag])
+    setTagSearchOpen(!tagSearchOpen)
+  }
 
   function toggleSearchMode() {
     setSearchMode(getNextSearchMode());
@@ -146,6 +149,7 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
                   className='custom-input-text'
                   id="tag-search"
                   type="text"
+                  autoComplete='off'
                   value={filterSearch}
                   onChange={(e) => updateOnSearch(e.target.value)} />
 
@@ -153,7 +157,9 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
                   {searchTags.length > 0 && tagSearchOpen &&
                     <div className='search-dropdown'>
                       {searchTags.map((tag, i) => (
-                        <p key={i} onClick={() => setCurrentTags([...currentTags, tag])}>{tags.find(t => t.id === tag).name}</p>
+                        <p key={i} onClick={() => clickSearchResult(tag)}>
+                          {tags.find(t => t.id === tag).name}
+                        </p >
                       ))}
                     </div>}
                 </div>

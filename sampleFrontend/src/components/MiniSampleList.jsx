@@ -5,11 +5,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons'
 
 
-function MiniSampleList({ samples }) {
+function MiniSampleList({ samples, userLogged, assignSamples, setAssignSamples, selectedItem, setSelectedItem }) {
+
+  const [currentSamples, setCurrentSamples] = useState(samples);
 
   const [playing, setPlaying] = useState(Array(8).fill(false));
 
   const audioRefs = useRef(Array(8).fill(null));
+
+  const [savedSamples, setSavedSamples] = useState(false);
 
   function handleDragStart(e, sample) {
     e.dataTransfer.setData('text/plain', JSON.stringify(sample));
@@ -45,6 +49,12 @@ function MiniSampleList({ samples }) {
     }
   }
 
+  function handleItemClick(sample) {
+    if (assignSamples) {
+      setSelectedItem(sample);
+    }
+  }
+
   useEffect(() => {
 
     function handleAudioEnd(i) {
@@ -72,33 +82,61 @@ function MiniSampleList({ samples }) {
     }
   })
 
+  useEffect(() => {
+
+    if (savedSamples && userLogged) {
+      setCurrentSamples(samples.filter(s => userLogged.saved_samples.includes(s.id)))
+    } else {
+      setCurrentSamples(samples);
+    }
+
+  }, [samples, assignSamples, savedSamples])
 
   return (
     <div className="MiniSampleList">
 
-      <div className="div-list">
-        <h4>Samples</h4>
+      <h4>Samples</h4>
 
-        <div></div>
-
-        <div>
-          <ul>
-            {samples?.map((sample, i) => (
-              <li key={i}>
-                <div className='playPause-icon-div'>
-                  {playing[i] ?
-                    <FontAwesomeIcon icon={faPause} onClick={() => pauseAudio(i)} /> :
-                    <FontAwesomeIcon icon={faPlay} onClick={() => playAudio(i)} />
-                  }
-                </div>
-                <p draggable onDragStart={(e) => handleDragStart(e, sample)}>{sample.title}</p>
-                <audio ref={el => audioRefs.current[i] = el} src={sample?.audio_file} crossOrigin="anonymous" />
-              </li>
-            ))}
-          </ul>
+      <div className='switches'>
+        <div className='switch-div'>
+          <label className="switch">
+            <input type="checkbox" checked={assignSamples} onChange={() => setAssignSamples(!assignSamples)} />
+            <span className="slider round"></span>
+          </label>
+          <p>assign samples</p>
         </div>
+        {userLogged &&
+          <div className='switch-div'>
+            <label className="switch">
+              <input type="checkbox" checked={savedSamples} onChange={() => setSavedSamples(!savedSamples)} />
+              <span className="slider round"></span>
+            </label>
+            <p>use saved</p>
+          </div>
+        }
       </div>
-    </div>
+
+      <div className="div-list">
+
+        <ul>
+          {currentSamples?.map((sample, i) => (
+            <li
+              className={`${selectedItem === sample ? "selected-item" : ""}`}
+              onClick={() => handleItemClick(sample)} key={i}>
+              <div className='playPause-icon-div'>
+                {playing[i] ?
+                  <FontAwesomeIcon icon={faPause} onClick={() => pauseAudio(i)} /> :
+                  <FontAwesomeIcon icon={faPlay} onClick={() => playAudio(i)} />
+                }
+              </div>
+              <p draggable onDragStart={(e) => handleDragStart(e, sample)}>{sample.title}</p>
+              <audio ref={el => audioRefs.current[i] = el} src={sample?.audio_file} crossOrigin="anonymous" />
+            </li>
+          ))}
+        </ul>
+
+      </div>
+    </div >
   )
 }
 

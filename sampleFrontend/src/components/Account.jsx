@@ -154,7 +154,9 @@ function Account({ userLogged, loggedUserRefetch }) {
         <div className='Account-div'>
 
           <div className='Account-pic-name'>
-            <img src={userAccount.image} alt="profile-pic" className='profile-pic' />
+            <div className="img-container">
+              <img src={userAccount.image} alt="profile-pic" className='profile-pic' />
+            </div>
             <h4 className='Account-username'>{userAccount.name}</h4>
           </div>
 

@@ -69,10 +69,8 @@
   padding: 10px 20px;
   background-color: var(--background-color);
   color: var(--white-color);
-  /* border: 3px solid var(--white-color); */
   border-radius: 999px;
   outline: none;
-  margin: 5px;
   padding: 8px;
   transition: background-color 0.3s;
   font-size: .8rem;

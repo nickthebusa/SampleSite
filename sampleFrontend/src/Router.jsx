@@ -61,6 +61,7 @@ function Router() {
             path='/drumpad'
             element={<DrumPad
               userLogged={userLogged}
+              loggedUserRefetch={refetch}
             />}
           />
         </Routes>

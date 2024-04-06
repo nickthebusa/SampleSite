@@ -123,33 +123,62 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
     if (newData.tags?.includes(id)) {
       newData.tags.splice(newData.tags.indexOf(id), 1);
       setData(newData);
+      setErrors({ ...errors, tags: "" })
     } else {
-      newData.tags.push(id);
-      setData(newData);
+      if (newData.tags.length < 5) {
+        newData.tags.push(id);
+        setData(newData);
+      } else {
+        setErrors({ ...errors, tags: "max 5 tags" })
+      }
     }
+  }
+
+  function addNewTag(e) {
+    if (e.target.value.length > 25) {
+      setErrors({ ...errors, tags: "Over character limit" });
+      return;
+    }
+    setNewTag(e.target.value);
+    setErrors({ ...errors, tags: "" });
   }
 
 
   function submitNewTag() {
 
     const tagNames = tags.map(t => t.name)
-    if (newTag.trim() !== "" &&
-      !(tagNames.includes(newTag.trim().toUpperCase()))) {
-      APIService.AddTag({ name: newTag.toUpperCase() })
-        .then(res => {
-          refetch();
-          let newData = { ...data };
-          newData["tags"] = [...data.tags, res.data.id]
-          setData(newData);
-        })
-        .catch(err => console.log(err))
-    } else if (tagNames.includes(newTag.trim().toUpperCase())) {
-      let newData = { ...data };
-      newData["tags"] = [
-        ...data.tags, tags.find(t => t.name === newTag.trim().toUpperCase()).id
-      ]
-      setData(newData);
+
+    // if newtag doesn't match any existing tags
+    if (newTag.trim() !== "" && !(tagNames.includes(newTag.trim().toUpperCase()))) {
+      if (data.tags.length < 5) {
+        // add tag to DB
+        APIService.AddTag({ name: newTag.toUpperCase() })
+          .then(res => {
+            refetch();
+            let newData = { ...data };
+            newData["tags"] = [...data.tags, res.data.id]
+            setData(newData);
+          })
+          .catch(err => console.log(err))
+      } else {
+        setErrors({ ...errors, tags: "max 5 tags" })
+      }
     }
+    // if tag already exists
+    else if (tagNames.includes(newTag.trim().toUpperCase())) {
+
+      const newTagId = tags.find(t => t.name === newTag.trim().toUpperCase()).id;
+
+      if (!data.tags.includes(newTagId)) {
+        let newData = { ...data };
+        newData["tags"] = [
+          ...data.tags, newTagId
+        ]
+        setData(newData);
+      }
+
+    }
+    setNewTag("")
   }
 
 
@@ -259,6 +288,8 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
 
   }, [])
 
+  console.log(data.tags.length)
+  console.log(data.tags)
 
   return (
     <div className="UploadSample">
@@ -385,9 +416,9 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
 
             ))}
           </div>
+          <p className="errors tags">{errors.tags}</p>
         </div>
 
-        <p className="errors tags">{errors.tags}</p>
         <div className="add-tag-container">
           <div className="custom-input-div add-tag">
             <label htmlFor="add-tag" className='custom-input-label add-tag'>
@@ -398,14 +429,7 @@ function NewUploadSample({ userLogged, onFormUploaded }) {
               type='text'
               name='add-tag'
               value={newTag}
-              onChange={(e) => {
-                if (e.target.value.length > 50) {
-                  setErrors({ ...errors, tags: "Over character limit" });
-                  return;
-                }
-                setNewTag(e.target.value);
-                setErrors({ ...errors, tags: "" });
-              }}
+              onChange={addNewTag}
             />
           </div>
           <button onClick={submitNewTag}>ADD</button>

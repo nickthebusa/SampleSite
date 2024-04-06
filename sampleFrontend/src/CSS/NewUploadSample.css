@@ -15,6 +15,7 @@
   justify-content: center;
   text-align: left;
   background-color: var(--background-color);
+  margin: 0 0.5rem;
 }
 .UploadSample .img-and-input-div {
   display: block;
@@ -40,6 +41,9 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  border-radius: .5rem;
+  -webkit-border-radius: .5rem;
+  -moz-border-radius: .5rem;
 }
 
 .upload-audio-label {
@@ -105,7 +109,8 @@
   overflow-y: hidden;
 }
 .select-tag-list {
-  margin: 0.5rem 0;
+  margin: 0.5rem 0 1rem;
+  position: relative;
 }
 .select-tags-div {
   border-radius: 0.5rem;
@@ -154,5 +159,5 @@
 .errors.tags {
   position: absolute;
   left: 50%;
-  transform: translate(-50%, 50%);
+  transform: translate(-50%, 20%);
 }

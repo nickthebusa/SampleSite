@@ -46,6 +46,13 @@ def delete_files_on_delete(sender, instance, **kwargs):
   if instance.audio_file:
     instance.audio_file.delete(save=False)
   if instance.image:
+    image_path = instance.image.path
+
+    # prevent deleting default sample image
+    defaults_path = os.path.join(settings.MEDIA_ROOT, instance.image.name)
+    if image_path == defaults_path:
+      return
+
     instance.image.delete(save=False)
 
 

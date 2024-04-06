@@ -6,7 +6,7 @@ import Nav from "./Nav"
 
 import { useSamples } from "../hooks/useFetch";
 
-function DrumPad({ userLogged }) {
+function DrumPad({ userLogged, loggedUserRefetch }) {
 
   // drum pads state
   const [padSamples, setPadSamples] = useState(Array(8).fill(null));
@@ -16,6 +16,11 @@ function DrumPad({ userLogged }) {
   const audioRefs = useRef(Array(8).fill(null));
   // references for the div of each pad
   const padsRef = useRef(Array(8).fill(null));
+
+  // assign pads
+  const [assignSamples, setAssignSamples] = useState(false);
+  const [selectedPad, setSelectedPad] = useState(null);
+  const [selectedItem, setSelectedItem] = useState(null);
 
   // useQuery
   const [samples] = useSamples();
@@ -59,6 +64,13 @@ function DrumPad({ userLogged }) {
     let padSamplesNew = [...padSamples];
     padSamplesNew[e.target.id] = draggedData;
     setPadSamples(padSamplesNew);
+  }
+
+  function handlePadClick(i) {
+    if (assignSamples) {
+      setSelectedPad(i);
+    }
+    playAudio(i);
   }
 
   function playAudio(i) {
@@ -136,28 +148,36 @@ function DrumPad({ userLogged }) {
     };
   }, [masterGain])
 
-  console.log(masterGain);
+  useEffect(() => {
+    if (assignSamples) {
+      if (selectedPad !== null && selectedItem) {
+        const tmp = [...padSamples];
+        tmp[selectedPad] = selectedItem;
+        setPadSamples(tmp);
+        setSelectedItem(null);
+      }
+    }
+  }, [assignSamples, selectedPad, selectedItem])
+
+  console.log(selectedPad, selectedItem)
 
   return (
     <div className="DrumPad">
-      <Nav userLogged={userLogged} />
+      <Nav userLogged={userLogged} loggedUserRefetch={loggedUserRefetch} />
 
       <h2>DrumPad</h2>
 
-      <input
-        className="master-volume"
-        type="range"
-        min="0.0" max="1.0"
-        step="0.01"
-        list="volumes"
-        name="volume"
-        value={masterGain}
-        onChange={handleMasterGainChange}
-      />
 
       <div className="list-and-pads">
 
-        <MiniSampleList samples={samples} />
+        <MiniSampleList
+          samples={samples}
+          userLogged={userLogged}
+          assignSamples={assignSamples}
+          setAssignSamples={setAssignSamples}
+          selectedItem={selectedItem}
+          setSelectedItem={setSelectedItem}
+        />
 
         <div className='DrumPad-pads-div'>
           {padSamples?.map((pad, i) => (
@@ -165,8 +185,10 @@ function DrumPad({ userLogged }) {
               ref={el => padsRef.current[i] = el}
               key={i}
               id={i}
-              className={`pad ${playing[i] ? 'playing' : ''}`}
-              onClick={() => playAudio(i)}
+              className={`pad ${playing[i] ? 'playing' : ''}
+                          ${assignSamples ? 'assignmode' : ''}
+                          ${selectedPad === i ? 'selected' : ''}`}
+              onClick={() => handlePadClick(i)}
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
@@ -179,7 +201,22 @@ function DrumPad({ userLogged }) {
         </div>
       </div>
 
-    </div>
+      <div className='master-volume-div'>
+        <label htmlFor="masterVolume">Master Volume: </label>
+        <input
+          id="masterVolume"
+          className="master-volume"
+          type="range"
+          min="0.0" max="1.0"
+          step="0.01"
+          list="volumes"
+          name="volume"
+          value={masterGain}
+          onChange={handleMasterGainChange}
+        />
+      </div>
+
+    </div >
   )
 }
 

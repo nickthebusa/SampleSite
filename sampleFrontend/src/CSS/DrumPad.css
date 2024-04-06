@@ -1,3 +1,5 @@
+/* DRUM PAD */
+
 
 .DrumPad h2 {
   font-family: 'Press Start 2P', sans-serif;
@@ -35,7 +37,33 @@
   transition: .05s ease-in;
 }
 
+.DrumPad .master-volume-div {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.DrumPad .master-volume-div label {
+  white-space: nowrap;
+  font-size: 0.75rem;
+  letter-spacing: 0.1rem;
+  text-transform: uppercase;
+  margin: 0;
+}
+.DrumPad .master-volume-div input {
+  margin: 0 0 0 0.5rem;
+}
 
+.DrumPad .pad.assignmode {
+  outline: 1px dotted var(--purple-color);
+  cursor: pointer;
+}
+.DrumPad .pad.assignmode:hover {
+  outline: 3px solid var(--purple-color);
+}
+.DrumPad .pad.assignmode.selected {
+  outline: 3px solid var(--purple-color);
+  box-shadow: inset 0 0 15px 1px black;
+}
 
 @media (min-width: 850px) {
   .DrumPad-pads-div {
@@ -46,17 +74,12 @@
   .DrumPad-pads-div {
     grid-template-columns: repeat(2, 1fr);
   }
-}
-
-@media (max-width: 500px) {
   .list-and-pads {
     flex-direction: column;
   }
-  .MiniSampleList {
-    max-height: 10rem;
-    overflow: hidden;
-    overflow-y: scroll;
-  }
+}
+
+@media (max-width: 500px) {
   .DrumPad h2 {
     font-size: 1rem;
     margin: 0 0 0 .5rem;

@@ -24,6 +24,7 @@ class UserSerializer(serializers.ModelSerializer):
 class SampleSerializer(serializers.ModelSerializer):
   
   image = serializers.ImageField(required=False)
+  date = serializers.DateTimeField(format="%m/%d/%Y", required=False)
   
   class Meta:
     model = models.Sample

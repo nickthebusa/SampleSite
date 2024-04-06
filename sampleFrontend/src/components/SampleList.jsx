@@ -310,12 +310,17 @@ function SampleList({
                 <div>No tags...</div>}
             </div>
 
+
             <AudioVisualizer
               audio_file={sample.audio_file}
               id={sample.id}
               selected={selected}
               setPlaying={setPlaying}
             />
+
+            <div className="sample-date-div">
+              <p><strong>Created: </strong>{sample.date}</p>
+            </div>
 
           </div>
         ))}

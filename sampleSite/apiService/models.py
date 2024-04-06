@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
-import datetime
 
 # Create your models here.
 class User(AbstractUser):
@@ -29,7 +28,7 @@ class Sample(models.Model):
   description = models.CharField(max_length=150, blank=True)
   audio_file = models.FileField(upload_to='audio_files/')
   tags = models.ManyToManyField('Tag', blank=True)
-  date = models.DateField(default=datetime.date.today)
+  date = models.DateTimeField(auto_now_add=True)
   image = models.ImageField(upload_to="sample_images/", default='defaults/output01.webp')
   
   def save(self, *args, **kwargs):
@@ -41,7 +40,7 @@ class Sample(models.Model):
   
 
 class Tag(models.Model):
-  name = models.CharField(max_length=50)
+  name = models.CharField(max_length=25)
   
   def __str__(self):
     return self.name

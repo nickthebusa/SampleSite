@@ -12,30 +12,18 @@ from . import models
 from .serializers import *
 
 # Create your views here.
-
 class UserViewSet(viewsets.ModelViewSet):
   queryset = models.User.objects.all()
   serializer_class = UserSerializer
 
-  
-  #
-    # permission_classes = [IsAuthenticated]
-    # authentication_classes = (TokenAuthentication,)
-    
-    # def get_permissions(self):
-    #   if self.request.method == "GET":
-    #     return [permissions.AllowAny()]
-    #   return super().get_permissions()
 
-  
 class SampleViewSet(viewsets.ModelViewSet):
   queryset = models.Sample.objects.all()
   serializer_class = SampleSerializer
-  
+
   def create(self, request, *args, **kwargs):
-    print(request.data)
     return super().create(request, *args, **kwargs)
-  
+
   # returns the sample objects from a list of pk's in the url
   @action(detail=True, methods=['get'])
   def get_samples_by_ids(self, request):

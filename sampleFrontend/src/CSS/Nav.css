@@ -44,7 +44,7 @@
   position: absolute;
   display: flex;
   flex-direction: column;
-  background-color: var(--white-color);
+  background-color: var(--background-color);
   z-index: 9;
   box-shadow: 0 10px 15px -3px rgb(46 41 51 / 8%), 0 4px 6px -2px rgb(71 63 79 / 16%);
   transform: translateY(-1000px);
@@ -52,7 +52,6 @@
   justify-content: center;
   width: 95vw;
   max-width: 500px;
-  border: 2px solid var(--background-color);
   border-radius: 10px;
 }
 .menu-nav.show-menu {
@@ -61,11 +60,18 @@
 }
 .menu-nav a {
   color: var(--purple-color);
-  border: 1px solid var(--background-color);
+  border-bottom: 1px solid black;
   font-size: 1.2rem;
   font-family: 'Turret Road', sans-serif;
   font-weight: 700;
   padding: 1rem;
+}
+.menu-nav a:first-child {
+  border-radius: 10px 10px 0 0;
+}
+.menu-nav a:last-child {
+  border: none;
+  border-radius: 0 0 10px 10px;
 }
 .menu-nav a:hover {
   color: var(--white-color);

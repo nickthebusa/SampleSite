@@ -117,6 +117,12 @@
   text-align: left;
   margin: 10px 20px;
 }
+.sample-date-div p {
+  font-size: .6rem;
+  text-align: right;
+  margin: 0 20px;
+  opacity: 0.7;
+}
 .sample-tags-div {
   display:flex;
   flex-wrap: wrap;
@@ -152,7 +158,6 @@
 .confirm-delete-window button, .confirm-unsave-window button {
   margin: 20px;
 }
-
 
 /*  AUDIO VISUALIZER  */
 .audioVisualizer {

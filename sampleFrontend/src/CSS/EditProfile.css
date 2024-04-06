@@ -56,3 +56,15 @@
     font-size: 0.9rem;
   }
 }
+@media (max-width: 500px) {
+  .EditProfile .img-container {
+    width: 100px;
+    height: 100px;
+  }
+  .EditProfile .img-and-input-div {
+    margin: 0 0.5rem;
+  }
+  .custom-input-text.name {
+    font-size: 0.7rem;
+  }
+}
