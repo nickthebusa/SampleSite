@@ -58,9 +58,9 @@
   cursor: pointer;
 }
 .DrumPad .pad.assignmode:hover {
-  outline: 3px solid var(--purple-color);
+  outline: 3px dotted var(--purple-color);
 }
-.DrumPad .pad.assignmode.selected {
+.DrumPad .pad.selected {
   outline: 3px solid var(--purple-color);
   box-shadow: inset 0 0 15px 1px black;
 }

@@ -25,41 +25,36 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
   // useQuery
   const [samples] = useSamples();
 
-  // web audio api
+
+  // --------- Web Audio Api ------------------
   const [masterGain, setMasterGain] = useState(0.8);
+  const [audioSources, setAudioSources] = useState(Array(8).fill(null));
+
+  const masterAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const masterGainNode = masterAudioCtx.createGain();
+  masterGainNode.connect(masterAudioCtx.destination);
 
   function handleMasterGainChange(e) {
     setMasterGain(parseFloat(e.target.value))
   }
 
 
-  // initialize audioContext for drum pads
-  //  const initAudio = useCallback(() => {
-  //
-  //    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  //
-  //    const source = audioCtx.createMediaElementSource(audioElmRef.current);
-  //    source.connect(audioCtx.destination);
-  //    source.onended = () => {
-  //      source.disconnect();
-  //    };
-  //
-  //  }, [audioRefs])
-
+  // --------------------------------------------
 
   // for dragging and dropping events
   function handleDragOver(e) {
     e.preventDefault();
-    console.log('drag-over', e.target);
+    e.target.classList.add("selected");
   }
 
   function handleDragLeave(e) {
-    console.log('drag-leave', e.target);
+    e.preventDefault();
+    e.target.classList.remove("selected");
   }
 
   function handleDrop(e) {
     e.preventDefault();
-
+    e.target.classList.remove("selected");
     const draggedData = JSON.parse(e.dataTransfer.getData('text/plain'));
     let padSamplesNew = [...padSamples];
     padSamplesNew[e.target.id] = draggedData;
@@ -74,17 +69,20 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
   }
 
   function playAudio(i) {
-    if (audioRefs.current[i]?.src) {
-      if (!audioRefs.current[i].paused) {
-        audioRefs.current[i].pause();
-        audioRefs.current[i].currentTime = 0;
-      }
-      audioRefs.current[i].play();
-      playHitAnimation(i, padsRef.current[i]);
+    // add play audio functionality
+    if (audioSources[i]) {
+      const source = masterAudioCtx.createBufferSource();
+      source.buffer = audioSources[i];
+      source.connect(masterGainNode);
+      source.start();
+
+      playHitAnimation(i);
     }
+
   }
 
-  function playHitAnimation(i, curPad) {
+  function playHitAnimation(i) {
+    const curPad = padsRef.current[i];
     curPad.classList.add('press');
     setTimeout(() => {
       // update state for if audio is playing after removing press class
@@ -98,8 +96,30 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
     }, 100)
   }
 
+  async function loadAudioFiles(audioCtx) {
+    const audioBuffers = [];
+    for (let i of audioRefs.current) {
+      if (i && i.src) {
+        const res = await fetch(i.src);
+        const arrayBuf = await res.arrayBuffer();
+        const audioBuf = await audioCtx.decodeAudioData(arrayBuf);
+        audioBuffers.push(audioBuf);
+      }
+    }
+    return audioBuffers;
+  }
+
+  useEffect(() => {
+    async function updateAudioCtx() {
+      const audioBuffers = await loadAudioFiles(masterAudioCtx);
+      setAudioSources(audioBuffers);
+    }
+    updateAudioCtx();
+  }, [padSamples])
+
   useEffect(() => {
 
+    // ---------play pads with keys-------------
     function playKeys(e) {
       e.preventDefault();
       const playableKeys = ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k'];
@@ -109,9 +129,9 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
         playAudio(index);
       }
     }
-
     window.addEventListener('keydown', playKeys);
 
+    // -------changes playing state fopr pads that have finished playing
     function handleAudioEnd(i) {
       setPlaying(prev => {
         const newPlaying = [...prev];
@@ -119,9 +139,7 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
         return newPlaying;
       })
     }
-
     const myAudioElements = audioRefs.current;
-
     myAudioElements.forEach((ref, i) => {
       if (ref) {
         ref.addEventListener('ended', () => handleAudioEnd(i));
@@ -129,11 +147,8 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
     })
 
 
-    // Audio Stuff
-    const masterAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const masterGainNode = masterAudioCtx.createGain();
-    masterGainNode.connect(masterAudioCtx.destination);
-
+    // --------- update master gain -------------
+    masterGainNode.gain.value = masterGain;
 
 
     return () => {
@@ -148,6 +163,7 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
     };
   }, [masterGain])
 
+
   useEffect(() => {
     if (assignSamples) {
       if (selectedPad !== null && selectedItem) {
@@ -156,10 +172,14 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
         setPadSamples(tmp);
         setSelectedItem(null);
       }
+    } else {
+      setSelectedPad(null);
+      setSelectedItem(null);
     }
   }, [assignSamples, selectedPad, selectedItem])
 
-  console.log(selectedPad, selectedItem)
+  console.log(audioSources);
+
 
   return (
     <div className="DrumPad">

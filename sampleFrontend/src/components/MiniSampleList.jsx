@@ -5,7 +5,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons'
 
 
-function MiniSampleList({ samples, userLogged, assignSamples, setAssignSamples, selectedItem, setSelectedItem }) {
+function MiniSampleList({
+  samples,
+  userLogged,
+  assignSamples,
+  setAssignSamples,
+  selectedItem,
+  setSelectedItem }) {
 
   const [currentSamples, setCurrentSamples] = useState(samples);
 
@@ -54,6 +60,7 @@ function MiniSampleList({ samples, userLogged, assignSamples, setAssignSamples, 
       setSelectedItem(sample);
     }
   }
+
 
   useEffect(() => {
 

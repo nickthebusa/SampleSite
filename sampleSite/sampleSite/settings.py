@@ -70,9 +70,9 @@ MIDDLEWARE = [
 # CORS_ALLOWED_CREDENTIALS = True
 
 # allowed origins (for requests)
-CORS_ALLOWED_ORIGINS = ['http://localhost:5173', 'http://192.168.1.177:5173']
+CORS_ALLOWED_ORIGINS = ['http://localhost:5173', 'http://192.168.1.177:5173', 'http://172.23.88.236:5173']
 # allow csrf tokens to be accepted from these origins
-CSRF_TRUSTED_ORIGINS = ['http://localhost:5173', 'http://192.168.1.177:5173']
+CSRF_TRUSTED_ORIGINS = ['http://localhost:5173', 'http://192.168.1.177:5173', 'http://172.23.88.236:5173']
 
 
 ROOT_URLCONF = 'sampleSite.urls'
