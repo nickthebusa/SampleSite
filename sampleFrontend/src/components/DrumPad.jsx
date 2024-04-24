@@ -6,6 +6,12 @@ import Nav from "./Nav"
 
 import { useSamples } from "../hooks/useFetch";
 
+
+// NOTES: TODO
+// - check if pad is playing then pause then play to avoid clipping sound
+// - add a gain node to each pad to control each pad's sample volume.
+
+
 function DrumPad({ userLogged, loggedUserRefetch }) {
 
   // drum pads state
@@ -25,19 +31,53 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
   // useQuery
   const [samples] = useSamples();
 
-
   // --------- Web Audio Api ------------------
   const [masterGain, setMasterGain] = useState(0.8);
   const [audioSources, setAudioSources] = useState(Array(8).fill(null));
-
-  const masterAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  const masterGainNode = masterAudioCtx.createGain();
-  masterGainNode.connect(masterAudioCtx.destination);
+  const [masterAudioContext, setMasterAudioContext] = useState(null);
+  const [masterGainNode, setMasterGainNode] = useState(null);
 
   function handleMasterGainChange(e) {
     setMasterGain(parseFloat(e.target.value))
   }
 
+  const loadAudioFiles = useCallback(async () => {
+    const audioBuffers = [];
+    for (let i of audioRefs.current) {
+      if (i && i.src) {
+        const res = await fetch(i.src);
+        const arrayBuf = await res.arrayBuffer();
+        const audioBuf = await masterAudioContext.decodeAudioData(arrayBuf);
+        audioBuffers.push(audioBuf);
+      }
+    }
+    return audioBuffers;
+  }, [masterAudioContext])
+
+  function setAudioContext() {
+    const masterAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const masterGainN = masterAudioCtx.createGain();
+    masterGainN.connect(masterAudioCtx.destination);
+    setMasterAudioContext(masterAudioCtx);
+    setMasterGainNode(masterGainN);
+  }
+
+  const updateAudioCtx = useCallback(async () => {
+    const audioBuffers = await loadAudioFiles();
+    setAudioSources(audioBuffers);
+  }, [loadAudioFiles])
+
+  const playAudio = useCallback((i) => {
+    // add play audio functionality
+    if (audioSources[i]) {
+      const source = masterAudioContext.createBufferSource();
+      source.buffer = audioSources[i];
+      source.connect(masterGainNode);
+      source.start();
+
+      playHitAnimation(i);
+    }
+  }, [audioSources, masterAudioContext, masterGainNode])
 
   // --------------------------------------------
 
@@ -61,25 +101,12 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
     setPadSamples(padSamplesNew);
   }
 
-  function handlePadClick(i) {
+  const handlePadClick = useCallback((i) => {
     if (assignSamples) {
       setSelectedPad(i);
     }
     playAudio(i);
-  }
-
-  function playAudio(i) {
-    // add play audio functionality
-    if (audioSources[i]) {
-      const source = masterAudioCtx.createBufferSource();
-      source.buffer = audioSources[i];
-      source.connect(masterGainNode);
-      source.start();
-
-      playHitAnimation(i);
-    }
-
-  }
+  }, [assignSamples, playAudio])
 
   function playHitAnimation(i) {
     const curPad = padsRef.current[i];
@@ -96,27 +123,36 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
     }, 100)
   }
 
-  async function loadAudioFiles(audioCtx) {
-    const audioBuffers = [];
-    for (let i of audioRefs.current) {
-      if (i && i.src) {
-        const res = await fetch(i.src);
-        const arrayBuf = await res.arrayBuffer();
-        const audioBuf = await audioCtx.decodeAudioData(arrayBuf);
-        audioBuffers.push(audioBuf);
-      }
-    }
-    return audioBuffers;
-  }
-
+  // Conditionally creates or updates the audioContext
   useEffect(() => {
-    async function updateAudioCtx() {
-      const audioBuffers = await loadAudioFiles(masterAudioCtx);
-      setAudioSources(audioBuffers);
-    }
-    updateAudioCtx();
-  }, [padSamples])
 
+    if (!masterAudioContext) {
+      setAudioContext();
+    }
+    else {
+      updateAudioCtx();
+    }
+
+  }, [padSamples, masterAudioContext, updateAudioCtx])
+
+
+  // updates state for assigning samples to pads
+  useEffect(() => {
+    if (assignSamples) {
+      if (selectedPad !== null && selectedItem) {
+        const tmp = [...padSamples];
+        tmp[selectedPad] = selectedItem;
+        setPadSamples(tmp);
+        setSelectedItem(null);
+      }
+    } else {
+      setSelectedPad(null);
+      setSelectedItem(null);
+    }
+  }, [assignSamples, selectedPad, selectedItem, padSamples])
+
+
+  // event listeners for playing pads with keys
   useEffect(() => {
 
     // ---------play pads with keys-------------
@@ -126,12 +162,12 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
       const key = e.key.toLowerCase()
       if (playableKeys.includes(key)) {
         const index = playableKeys.indexOf(key);
-        playAudio(index);
+        handlePadClick(index);
       }
     }
     window.addEventListener('keydown', playKeys);
 
-    // -------changes playing state fopr pads that have finished playing
+    // -------changes playing state for pads that have finished playing
     function handleAudioEnd(i) {
       setPlaying(prev => {
         const newPlaying = [...prev];
@@ -146,39 +182,22 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
       }
     })
 
-
     // --------- update master gain -------------
-    masterGainNode.gain.value = masterGain;
-
+    if (masterGainNode) {
+      masterGainNode.gain.value = masterGain;
+    }
 
     return () => {
       window.removeEventListener('keydown', playKeys);
+
       myAudioElements.forEach((ref) => {
         if (ref) {
           ref.removeEventListener('ended', handleAudioEnd);
         }
       })
-      masterGainNode.disconnect();
-      masterAudioCtx.close();
     };
-  }, [masterGain])
 
-
-  useEffect(() => {
-    if (assignSamples) {
-      if (selectedPad !== null && selectedItem) {
-        const tmp = [...padSamples];
-        tmp[selectedPad] = selectedItem;
-        setPadSamples(tmp);
-        setSelectedItem(null);
-      }
-    } else {
-      setSelectedPad(null);
-      setSelectedItem(null);
-    }
-  }, [assignSamples, selectedPad, selectedItem])
-
-  console.log(audioSources);
+  }, [masterGain, audioSources, masterGainNode, handlePadClick])
 
 
   return (

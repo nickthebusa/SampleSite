@@ -21,17 +21,13 @@ function SampleList({
   refetchSaved
 }) {
 
+  const [selected, setSelected] = useState({});
 
-  let [selected, setSelected] = useState({});
-  const [playing, setPlaying] = useState(false);
-
-  // sample actions
-  const [sampleActions, setSampleActions] = useState({ open: false, sample: null });
+  const [actionsMenu, setActionsMenu] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [unsaveConfirm, setUnsaveConfirm] = useState(false);
 
   const selectedRef = useRef(selected);
-
 
   function checkUncheckTag(id) {
     if (!currentTags.includes(id)) {
@@ -45,9 +41,8 @@ function SampleList({
   const playPause = useCallback(() => {
     if (selected.id) {
       setSelected({ ...selected, playing: true })
-      setPlaying(true);
     }
-  }, [selected, setPlaying])
+  }, [selected])
 
   useEffect(() => {
     selectedRef.current = selected;
@@ -76,9 +71,7 @@ function SampleList({
               id: new_id
             });
           } else {
-            if (playing) {
-              playPause();
-            }
+            playPause();
           }
         } else if (event.key === 'ArrowDown') {
           event.preventDefault();
@@ -92,9 +85,7 @@ function SampleList({
               id: new_id
             });
           } else {
-            if (playing) {
-              playPause();
-            }
+            playPause();
           }
         }
 
@@ -128,7 +119,7 @@ function SampleList({
       window.removeEventListener('keydown', handleKeyPress);
       window.removeEventListener('click', handleWindowPress);
     };
-  }, [samples, playPause, selected, deleteConfirm, unsaveConfirm, playing]);
+  }, [samples, playPause, selected, deleteConfirm, unsaveConfirm]);
 
 
   function selectDiv(i, sample_id) {
@@ -141,15 +132,15 @@ function SampleList({
 
   function toggleSampleActions(sample_id) {
 
-    if (sampleActions.open & sampleActions.sample !== sample_id) {
+    if (actionsMenu === null) {
       setUnsaveConfirm(false);
       setDeleteConfirm(false)
     }
 
-    if (sampleActions.open & !sample_id) {
-      setSampleActions({ open: false, sample: null })
+    if (actionsMenu !== null & !sample_id) {
+      setActionsMenu(null)
     } else {
-      setSampleActions({ open: true, sample: sample_id })
+      setActionsMenu(sample_id)
     }
   }
 
@@ -199,21 +190,21 @@ function SampleList({
   }
 
 
-
   return (
     <div className="sampleList-wrapper">
       <div className="sampleList">
+
         {samples.map((sample, i) => (
           <div key={i}
             className={selected.index === i ? "sample selected" : "sample"}
             id={`id${sample.id}`}
           >
 
-            {(deleteConfirm || unsaveConfirm) && sampleActions.sample === sample.id &&
+            {(deleteConfirm || unsaveConfirm) && actionsMenu === sample.id &&
               <div className="overlay-sample-list"></div>}
 
             {userLogged?.user === sample.user && deleteConfirm &&
-              sampleActions.sample === sample.id &&
+              actionsMenu === sample.id &&
               <div className="confirm-delete-window">
                 Confirm delete?
                 <div>
@@ -223,7 +214,7 @@ function SampleList({
               </div>}
 
 
-            {userLogged && unsaveConfirm && sampleActions.sample === sample.id &&
+            {userLogged && unsaveConfirm && actionsMenu === sample.id &&
               <div className="confirm-unsave-window">
                 Remove from saved samples?
                 <div>
@@ -236,7 +227,7 @@ function SampleList({
 
             <div className={'sample-actions-div'}>
 
-              <div className={`actions ${sampleActions.open && sampleActions.sample === sample.id ? "open" : "closed"}`}>
+              <div className={`actions ${actionsMenu === sample.id ? "open" : "closed"}`}>
                 <div onClick={() => downloadFile(sample)}>download</div>
 
                 {userLogged && userLogged?.saved_samples.includes(sample.id) &&
@@ -253,8 +244,8 @@ function SampleList({
               </div>
 
               <div className={`open-close-div 
-            ${sampleActions.open && sampleActions.sample === sample.id ? 'rotate-in' : 'rotate-out'}`}>
-                {sampleActions.open && sampleActions.sample === sample.id ?
+                      ${actionsMenu === sample.id ? 'rotate-in' : 'rotate-out'}`}>
+                {actionsMenu === sample.id ?
                   <FontAwesomeIcon
                     icon={faX}
                     onClick={toggleSampleActions}
@@ -315,7 +306,6 @@ function SampleList({
               audio_file={sample.audio_file}
               id={sample.id}
               selected={selected}
-              setPlaying={setPlaying}
             />
 
             <div className="sample-date-div">

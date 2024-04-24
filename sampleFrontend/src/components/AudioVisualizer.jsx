@@ -4,7 +4,7 @@ import WaveForm from "./WaveForm";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlay, faPause } from '@fortawesome/free-solid-svg-icons'
 
-function AudioVisualizer({ audio_file, id, selected, setPlaying }) {
+function AudioVisualizer({ audio_file, id, selected }) {
 
   const [analyzerData, setAnalyzerData] = useState(null);
   const audioElmRef = useRef(null);
@@ -42,8 +42,7 @@ function AudioVisualizer({ audio_file, id, selected, setPlaying }) {
   const pauseAudio = useCallback((e = null) => {
     e && e.target.blur();
     audioElmRef.current.pause();
-    setPlaying(false);
-  }, [audioElmRef, setPlaying])
+  }, [audioElmRef])
 
 
   useEffect(() => {

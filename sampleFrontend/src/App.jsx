@@ -10,7 +10,11 @@ import { useSamples, useTags, useProfiles } from "./hooks/useFetch";
 
 /* NOTES: */
 // add loading functionally for slow connection
-// post to users to add usr id to following or followers
+// (maybe ) mini sample list
+// edit sample in SampleList, also figure out where to add edit button
+// (maybe ) add icon for download, save, and delete in actions menu
+// probably need to make a sample element it's own component to make minimalsamplelist work
+// with all the functionality
 
 /* SECURITY*/
 // - have secret key in django & react .env files 
@@ -26,6 +30,9 @@ function App({ userLogged, followingPage, loggedUserRefetch }) {
 
   // samples that get sent to SampleList Component
   const [filteredSamples, setFilteredSamples] = useState([]);
+
+  // state for list type
+  const [miniList, setMiniList] = useState(false);
 
   // useQuery
   const [samples, refetchSamples] = useSamples();
@@ -79,6 +86,16 @@ function App({ userLogged, followingPage, loggedUserRefetch }) {
         setSearchMode={setSearchMode}
       />
 
+      <div className="mini-list-switch-div">
+        <label htmlFor="mini-list-switch">minimal list</label>
+        <input
+          id="mini-list-switch"
+          type="checkbox"
+          checked={miniList}
+          onChange={()=>setMiniList(!miniList)}
+        />
+      </div>
+
       {
         filteredSamples?.length > 0 && profiles
           ?
@@ -91,6 +108,7 @@ function App({ userLogged, followingPage, loggedUserRefetch }) {
             userLogged={userLogged}
             loggedUserRefetch={loggedUserRefetch}
             refetchSamples={refetchSamples}
+            miniList={miniList}
           // refetchSaved passed in props from Account component
           />
           :
