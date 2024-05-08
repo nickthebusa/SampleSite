@@ -2,7 +2,9 @@ import axios from 'axios';
 
 // const siteName = "http://192.168.1.177:8000";
 //const siteName = 'http://127.0.0.1:8000';
-const siteName = "http://172.31.162.37:8000";
+//const siteName = "http://172.31.162.37:8000"; //hp laptop Ubuntu
+const siteName = "http://192.168.1.247:8000" //hp laptop windows
+
 
 export default class APIService {
 

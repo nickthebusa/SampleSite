@@ -11,6 +11,9 @@ import { useSamples } from "../hooks/useFetch";
 // - check if pad is playing then pause then play to avoid clipping sound
 // - add a gain node to each pad to control each pad's sample volume.
 
+// !!!!!!!
+// - when assigning to pad (dragging or using assign mode)
+// the audio doesn't correspond to the pad it was assigned to, it just adds to an array from 0 to 8
 
 function DrumPad({ userLogged, loggedUserRefetch }) {
 
@@ -42,14 +45,16 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
   }
 
   const loadAudioFiles = useCallback(async () => {
-    const audioBuffers = [];
+    const audioBuffers = Array(8).fill(null);
+    let c = 0;
     for (let i of audioRefs.current) {
       if (i && i.src) {
         const res = await fetch(i.src);
         const arrayBuf = await res.arrayBuffer();
         const audioBuf = await masterAudioContext.decodeAudioData(arrayBuf);
-        audioBuffers.push(audioBuf);
+        audioBuffers[c] = audioBuf;
       }
+      c++;
     }
     return audioBuffers;
   }, [masterAudioContext])
