@@ -1,0 +1,19 @@
+/*  SAMPLESMALL  */
+.sample-small {
+  width: 100%;
+  height: 100%;
+  margin: 5px 5px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sample-actions-small {
+
+}
+
+.sample-small-visualizer {
+  display: none;
+}

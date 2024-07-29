@@ -1,33 +1,28 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import AudioVisualizer from "./AudioVisualizer";
-import { Link } from 'react-router-dom';
-
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faEllipsisVertical, faX } from '@fortawesome/free-solid-svg-icons'
+import SampleLarge from "./SampleLarge";
+import SampleSmall from "./SampleSmall";
 import APIService from "../fetching/APIService";
-
 import '../CSS/SampleList.css';
 
 
 function SampleList({
   samples,
   tags,
-  users,
   currentTags,
   setCurrentTags,
   userLogged,
   loggedUserRefetch,
   refetchSamples,
-  refetchSaved
+  refetchSaved,
+  miniList,
 }) {
 
   const [selected, setSelected] = useState({});
+  const selectedRef = useRef(selected);
 
   const [actionsMenu, setActionsMenu] = useState(null);
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [unsaveConfirm, setUnsaveConfirm] = useState(false);
-
-  const selectedRef = useRef(selected);
 
   function checkUncheckTag(id) {
     if (!currentTags.includes(id)) {
@@ -121,35 +116,18 @@ function SampleList({
     };
   }, [samples, playPause, selected, deleteConfirm, unsaveConfirm]);
 
-
   function selectDiv(i, sample_id) {
-    if (i === selected.index) {
+    if (sample_id === selected.id) {
       setSelected({});
     } else {
       setSelected({ playing: false, id: sample_id, index: i });
     }
   }
 
-  function toggleSampleActions(sample_id) {
-
-    if (actionsMenu === null) {
-      setUnsaveConfirm(false);
-      setDeleteConfirm(false)
-    }
-
-    if (actionsMenu !== null & !sample_id) {
-      setActionsMenu(null)
-    } else {
-      setActionsMenu(sample_id)
-    }
-  }
-
   function downloadFile(sample) {
-
     APIService.DownloadFile(sample.id, sample.title)
       .then(res => console.log(res))
       .catch(err => console.log(err))
-
   }
 
   function deleteFile(sample) {
@@ -192,131 +170,59 @@ function SampleList({
 
   return (
     <div className="sampleList-wrapper">
-      <div className="sampleList">
 
-        {samples.map((sample, i) => (
-          <div key={i}
-            className={selected.index === i ? "sample selected" : "sample"}
-            id={`id${sample.id}`}
-          >
-
-            {(deleteConfirm || unsaveConfirm) && actionsMenu === sample.id &&
-              <div className="overlay-sample-list"></div>}
-
-            {userLogged?.user === sample.user && deleteConfirm &&
-              actionsMenu === sample.id &&
-              <div className="confirm-delete-window">
-                Confirm delete?
-                <div>
-                  <button onClick={() => deleteFile(sample)}>Confirm</button>
-                  <button onClick={() => setDeleteConfirm(false)}>Cancel</button>
-                </div>
-              </div>}
-
-
-            {userLogged && unsaveConfirm && actionsMenu === sample.id &&
-              <div className="confirm-unsave-window">
-                Remove from saved samples?
-                <div>
-                  <button onClick={() => unsaveSample(sample)}>Confirm</button>
-                  <button onClick={() => setUnsaveConfirm(false)}>Cancel</button>
-                </div>
-              </div>
-            }
-
-
-            <div className={'sample-actions-div'}>
-
-              <div className={`actions ${actionsMenu === sample.id ? "open" : "closed"}`}>
-                <div onClick={() => downloadFile(sample)}>download</div>
-
-                {userLogged && userLogged?.saved_samples.includes(sample.id) &&
-                  <div onClick={() => setUnsaveConfirm(true)}>saved</div>
-                }
-
-                {userLogged && !(userLogged?.saved_samples.includes(sample.id)) &&
-                  <div onClick={() => saveSample(sample)}>save</div>
-                }
-
-                {userLogged?.user === sample.user &&
-                  <div onClick={() => setDeleteConfirm(true)} className="actions-delete">delete</div>}
-
-              </div>
-
-              <div className={`open-close-div 
-                      ${actionsMenu === sample.id ? 'rotate-in' : 'rotate-out'}`}>
-                {actionsMenu === sample.id ?
-                  <FontAwesomeIcon
-                    icon={faX}
-                    onClick={toggleSampleActions}
-                    className="open-close"
-                  /> :
-                  <FontAwesomeIcon
-                    icon={faEllipsisVertical}
-                    onClick={() => toggleSampleActions(sample.id)}
-                    className="open-close"
-                  />
-                }
-              </div>
-            </div>
-
-
-            <div className="sample-title-section">
-              <div className="sample-img-wrapper">
-                <img src={sample.image} alt="sample-image" />
-              </div>
-
-              <span className="sample-name" onClick={() => selectDiv(i, sample.id)}>{sample.title}</span>
-              {users &&
-                <div>
-                  <Link reloadDocument to={`/account/${sample.user}`}>
-                    {sample.username}
-                  </Link>
-                </div>
-              }
-            </div>
-
-            <div className="sample-description-div">
-              <p><strong>Description: </strong>{sample.description || 'no description'}</p>
-            </div>
-
-            <div className="sample-tags-div">
-              <h6>tags:</h6>
-              {tags && tags.length > 0 ? sample.tags.map((tag, i) => (
-                <div key={i} className="sample-tag-div">
-                  <label htmlFor={`tag-${tag}`}>
-                    <input
-                      id={`tag-${tag}`}
-                      type='checkbox'
-                      onChange={() => checkUncheckTag(tag)}
-                      hidden
-                      checked={currentTags?.includes(tag)}
-                    ></input>
-                    <div className="Filter-tag-checkbox-btn">
-                      {tags.find(t => t.id === tag).name}
-                    </div>
-                  </label>
-                </div>
-              )) :
-                <div>No tags...</div>}
-            </div>
-
-
-            <AudioVisualizer
-              audio_file={sample.audio_file}
-              id={sample.id}
-              selected={selected}
-            />
-
-            <div className="sample-date-div">
-              <p><strong>Created: </strong>{sample.date}</p>
-            </div>
-
+      {miniList ?
+        (
+          <div className="sampleList minimal">
+            {samples.length > 0 && samples.map((sample, i) => (
+              <SampleSmall
+                key={sample.id}
+                sample={sample}
+                selected={selected}
+                selectDiv={selectDiv}
+                actionsMenu={actionsMenu}
+                setActionsMenu={setActionsMenu}
+                deleteConfirm={deleteConfirm}
+                setDeleteConfirm={setDeleteConfirm}
+                unsaveConfirm={unsaveConfirm}
+                setUnsaveConfirm={setUnsaveConfirm}
+                userLogged={userLogged}
+                i={i}
+              />
+            ))}
           </div>
-        ))}
+        )
+        :
+        (
+          <div className="sampleList">
+            {samples.length > 0 && samples.map((sample, i) => (
+              <SampleLarge
+                key={sample.id}
+                sample={sample}
+                selected={selected}
+                selectDiv={selectDiv}
+                actionsMenu={actionsMenu}
+                setActionsMenu={setActionsMenu}
+                deleteConfirm={deleteConfirm}
+                setDeleteConfirm={setDeleteConfirm}
+                unsaveConfirm={unsaveConfirm}
+                setUnsaveConfirm={setUnsaveConfirm}
+                userLogged={userLogged}
+                tags={tags}
+                currentTags={currentTags}
+                checkUncheckTag={checkUncheckTag}
+                downloadFile={downloadFile}
+                deleteFile={deleteFile}
+                saveSample={saveSample}
+                unsaveSample={unsaveSample}
+                i={i}
+              />
+            ))}
+          </div>
+        )
+      }
 
-      </div>
-    </div>
+    </div >
   )
 }
 

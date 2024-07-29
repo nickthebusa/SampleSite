@@ -8,12 +8,8 @@ import { useSamples } from "../hooks/useFetch";
 
 
 // NOTES: TODO
-// - check if pad is playing then pause then play to avoid clipping sound
 // - add a gain node to each pad to control each pad's sample volume.
 
-// !!!!!!!
-// - when assigning to pad (dragging or using assign mode)
-// the audio doesn't correspond to the pad it was assigned to, it just adds to an array from 0 to 8
 
 function DrumPad({ userLogged, loggedUserRefetch }) {
 
@@ -21,9 +17,9 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
   const [padSamples, setPadSamples] = useState(Array(8).fill(null));
   const [playing, setPlaying] = useState(Array(8).fill(false));
 
-  // references for the audio element in each drum pad
+  // references to audio source tag
   const audioRefs = useRef(Array(8).fill(null));
-  // references for the div of each pad
+  // and the pad div element
   const padsRef = useRef(Array(8).fill(null));
 
   // assign pads
@@ -39,6 +35,9 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
   const [audioSources, setAudioSources] = useState(Array(8).fill(null));
   const [masterAudioContext, setMasterAudioContext] = useState(null);
   const [masterGainNode, setMasterGainNode] = useState(null);
+
+  // state for touch/click events
+  const [isHandled, setIsHandled] = useState(false);
 
   function handleMasterGainChange(e) {
     setMasterGain(parseFloat(e.target.value))
@@ -106,7 +105,7 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
     setPadSamples(padSamplesNew);
   }
 
-  const handlePadClick = useCallback((i) => {
+  const handlePadClick = useCallback(i => {
     if (assignSamples) {
       setSelectedPad(i);
     }
@@ -130,16 +129,13 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
 
   // Conditionally creates or updates the audioContext
   useEffect(() => {
-
     if (!masterAudioContext) {
       setAudioContext();
     }
     else {
       updateAudioCtx();
     }
-
   }, [padSamples, masterAudioContext, updateAudioCtx])
-
 
   // updates state for assigning samples to pads
   useEffect(() => {
@@ -204,6 +200,37 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
 
   }, [masterGain, audioSources, masterGainNode, handlePadClick])
 
+  useEffect(() => {
+
+    const handleTouchStart = (event) => {
+      setIsHandled(true);
+      handlePadClick(event.target.id);
+    };
+
+    const handleClick = (event) => {
+      if (!isHandled) {
+        handlePadClick(event.target.id);
+      }
+      setIsHandled(false);
+    };
+
+    const pads = padsRef.current;
+    pads.forEach(pad => {
+      if (pad) {
+        pad.addEventListener('touchstart', handleTouchStart);
+        pad.addEventListener('click', handleClick);
+      }
+    })
+
+    return () => {
+      pads.forEach(pad => {
+        if (pad) {
+          pad.removeEventListener('touchstart', handleTouchStart);
+          pad.removeEventListener('click', handleClick);
+        }
+      });
+    };
+  }, [handlePadClick, isHandled])
 
   return (
     <div className="DrumPad">
@@ -211,8 +238,8 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
 
       <h2>DrumPad</h2>
 
-
       <div className="list-and-pads">
+
 
         <MiniSampleList
           samples={samples}
@@ -223,25 +250,30 @@ function DrumPad({ userLogged, loggedUserRefetch }) {
           setSelectedItem={setSelectedItem}
         />
 
-        <div className='DrumPad-pads-div'>
-          {padSamples?.map((pad, i) => (
-            <div
-              ref={el => padsRef.current[i] = el}
-              key={i}
-              id={i}
-              className={`pad ${playing[i] ? 'playing' : ''}
-                          ${assignSamples ? 'assignmode' : ''}
-                          ${selectedPad === i ? 'selected' : ''}`}
-              onClick={() => handlePadClick(i)}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              onDrop={handleDrop}
-            >
-              {pad ? pad.title : 'none'}
-              <audio ref={el => audioRefs.current[i] = el} src={pad?.audio_file} crossOrigin="anonymous" />
-            </div>
-          ))
-          }
+        <div className="Drumpads-wrapper">
+          <div className='DrumPad-pads-div'>
+            {padSamples?.map((pad, i) => (
+              <div
+                ref={el => padsRef.current[i] = el}
+                key={i}
+                id={i}
+                className={
+                  `pad
+                ${pad?.audio_file ? 'loaded' : ''}
+                ${playing[i] ? 'playing' : ''}
+                ${assignSamples ? 'assignmode' : ''}
+                ${selectedPad === i ? 'selected' : ''}`
+                }
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+              >
+                {pad ? pad.title : 'none'}
+                <audio ref={el => audioRefs.current[i] = el} src={pad?.audio_file} crossOrigin="anonymous" />
+              </div>
+            ))
+            }
+          </div>
         </div>
       </div>
 

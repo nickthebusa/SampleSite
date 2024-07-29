@@ -19,10 +19,13 @@ function AudioVisualizer({ audio_file, id, selected }) {
     const bufferLength = analyzer.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
     const source = audioCtx.createMediaElementSource(audioElmRef.current);
-    source.connect(analyzer);
-    source.connect(audioCtx.destination);
+    const gain = audioCtx.createGain();
+    source.connect(gain);
+    gain.connect(analyzer);
+    gain.connect(audioCtx.destination);
     source.onended = () => {
       source.disconnect();
+      gain.disconnect();
     };
     setAnalyzerData({ analyzer, bufferLength, dataArray });
 
@@ -31,13 +34,20 @@ function AudioVisualizer({ audio_file, id, selected }) {
 
   const playAudio = useCallback((e = null) => {
     e && e.target.blur();
+
+    // initialize audio context and source
     if (!srcSet) audioAnalyzer();
+
+    // If already playing, stop and reset
     if (!audioElmRef.current.paused) {
       audioElmRef.current.pause();
       audioElmRef.current.currentTime = 0;
     }
+
     audioElmRef.current.play();
+
   }, [srcSet, audioAnalyzer, audioElmRef])
+
 
   const pauseAudio = useCallback((e = null) => {
     e && e.target.blur();
@@ -56,6 +66,7 @@ function AudioVisualizer({ audio_file, id, selected }) {
       // }
     }
   }, [selected, id, playAudio, pauseAudio])
+
 
 
 

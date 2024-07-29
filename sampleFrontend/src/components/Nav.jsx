@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import samplesite_logo from '../pictures/sampleSiteLogoNewpurpleCropped.png';
-import {useCookies} from 'react-cookie';
+import { useCookies } from 'react-cookie';
 import { useEffect, useState, useRef } from 'react';
 import '../CSS/Nav.css';
 
@@ -10,15 +10,15 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
 
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [token, , removeToken] = useCookies(['my-token']);
-  
+
   const ref = useRef();
   const menuRef = useRef();
-  
+
   useEffect(() => {
 
     const handler = (e) => {
       if (navbarOpen && ref.current && !(ref.current.contains(e.target))
-      && e.target !== menuRef.current) {
+        && e.target !== menuRef.current) {
         setNavbarOpen(false);
       }
     }
@@ -33,7 +33,7 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
   function logOut() {
     if (token['my-token'] && userLogged) {
       localStorage.removeItem("user_id");
-      removeToken('my-token', {path: '/'});
+      removeToken('my-token', { path: '/' });
       loggedUserRefetch();
       if (fromAccount) navigate('/')
       window.location.reload();
@@ -41,12 +41,12 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
   }
 
 
-  return ( 
+  return (
     <div className='Nav'>
 
       {navbarOpen &&
-       <div className='overlay-hamburger'></div>}
-      
+        <div className='overlay-hamburger'></div>}
+
       <Link to={'/'} className='logo-and-name'>
         <div className='Nav-img-wrapper'>
           <img className='Nav-img' src={samplesite_logo} alt="nick_logo" />
@@ -62,34 +62,34 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
         {userLogged ?
           <a onClick={logOut} className='link'>logout</a>
           :
-          <Link to={"/login"} state={{register: false}}>login</Link>
+          <Link to={"/login"} state={{ register: false }}>login</Link>
         }
-        {!userLogged && <Link to={"/login"} state={{register: true}}>register</Link>}
+        {!userLogged && <Link to={"/login"} state={{ register: true }}>register</Link>}
       </div>
 
 
-        <div 
+      <div
         className={`menu-nav${navbarOpen ? ' show-menu' : ''}`}
         ref={ref}
-        onClick={()=> {
+        onClick={() => {
           setNavbarOpen(false);
         }}
-        >
-          <Link to={'/'}>home</Link>
-          {userLogged && <Link to={'/following'} onClick={loggedUserRefetch} >following</Link>}
-          <Link to={'/drumpad'}>drumpad</Link>
-          {userLogged && <Link reloadDocument to={`/account/${userLogged.user}`}>account</Link>}
-          {userLogged ?
-            <a onClick={logOut} className='link'>logout</a>
-                          :
-            <Link to={"/login"}state={{register: false}} >login</Link>
-          }
-        {!userLogged && <Link to={"/login"} state={{register: true}}>register</Link>}
-        </div>
-        
+      >
+        <Link to={'/'}>home</Link>
+        {userLogged && <Link to={'/following'} onClick={loggedUserRefetch} >following</Link>}
+        <Link to={'/drumpad'}>drumpad</Link>
+        {userLogged && <Link reloadDocument to={`/account/${userLogged.user}`}>account</Link>}
+        {userLogged ?
+          <a onClick={logOut} className='link'>logout</a>
+          :
+          <Link to={"/login"} state={{ register: false }} >login</Link>
+        }
+        {!userLogged && <Link to={"/login"} state={{ register: true }}>register</Link>}
+      </div>
+
 
       <input
-        onChange={() => setNavbarOpen(!navbarOpen)} 
+        onChange={() => setNavbarOpen(!navbarOpen)}
         type="checkbox"
         role="button"
         name="nav"
@@ -98,7 +98,7 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
         checked={navbarOpen}
         ref={menuRef}
       ></input>
-      
+
     </div>
   )
 }

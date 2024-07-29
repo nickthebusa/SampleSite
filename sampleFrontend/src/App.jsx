@@ -8,6 +8,7 @@ import { sampleSearch } from './functions/sampleSearch';
 
 import { useSamples, useTags, useProfiles } from "./hooks/useFetch";
 
+
 /* NOTES: */
 // add loading functionally for slow connection
 // (maybe ) mini sample list
@@ -27,12 +28,10 @@ function App({ userLogged, followingPage, loggedUserRefetch }) {
   const [currentTags, setCurrentTags] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [searchMode, setSearchMode] = useState('title');
+  const [miniList, setMiniList] = useState(false);
 
   // samples that get sent to SampleList Component
   const [filteredSamples, setFilteredSamples] = useState([]);
-
-  // state for list type
-  const [miniList, setMiniList] = useState(false);
 
   // useQuery
   const [samples, refetchSamples] = useSamples();
@@ -84,17 +83,10 @@ function App({ userLogged, followingPage, loggedUserRefetch }) {
         setSearchQuery={setSearchQuery}
         searchMode={searchMode}
         setSearchMode={setSearchMode}
+        miniList={miniList}
+        setMiniList={setMiniList}
       />
 
-      <div className="mini-list-switch-div">
-        <label htmlFor="mini-list-switch">minimal list</label>
-        <input
-          id="mini-list-switch"
-          type="checkbox"
-          checked={miniList}
-          onChange={()=>setMiniList(!miniList)}
-        />
-      </div>
 
       {
         filteredSamples?.length > 0 && profiles

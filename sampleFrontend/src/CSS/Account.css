@@ -1,4 +1,3 @@
-
 /*  ACCOUNT  */
 .Account-pic-name {
   display: flex;
@@ -40,8 +39,6 @@
   font-weight: 500;
   cursor: pointer;
 }
-
-
 .user-or-saved-div {
   display: flex;
   flex-direction: row;
@@ -55,7 +52,7 @@
 .user-or-saved-div div {
   cursor: pointer;
   width: 50%;
-  -webkit-user-select: none; /* Safari */        
+  -webkit-user-select: none; /* Safari */
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* IE10+/Edge */
   user-select: none; /* Standard */
@@ -63,4 +60,42 @@
 .user-or-saved-div .selected {
   background-color: var(--white-color);
   color: var(--background-color);
+}
+.upload-sample-link-div {
+  width: 10rem;
+  margin: 15px auto;
+}
+.upload-sample-link-div p {
+  margin: 0;
+}
+.upload-sample-link-div svg {
+  font-size: 2rem;
+  margin: 10px;
+  cursor: pointer;
+}
+/* pop up windowws (upload, edit, followlist)  */
+.upload-sample-window-div,
+.edit-profile-window-div,
+.follow-list-window-div
+{
+  position: fixed;
+  background-color: var(--background-color);
+  border-radius: 0.5rem;
+  width: 90%;
+  max-width: 1200px;
+  max-height: 95vh;
+  z-index: 3;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  overflow-y: auto;
+}
+.upload-sample-window-div .x,
+.edit-profile-window-div .x,
+.follow-list-window-div .x {
+  position: absolute;
+  right: 0.5rem;
+  top: 0.5rem;
+  font-size: 1.3rem;
+  cursor: pointer;
 }

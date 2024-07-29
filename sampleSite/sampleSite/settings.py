@@ -71,19 +71,13 @@ MIDDLEWARE = [
 
 # allowed origins (for requests)
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173',
-    'http://192.168.1.177:5173',
-    'http://172.23.88.236:5173',
-    'http://172.31.162.37:5173',
-    'http://192.168.1.247:5173', # hp windows laptop
+    'http://192.168.1.177:5000',
+    'http://172.23.88.236:5000'
 ]
 # allow csrf tokens to be accepted from these origins
 CSRF_TRUSTED_ORIGINS = [
-    'http://localhost:5173',
-    'http://192.168.1.177:5173',
-    'http://172.23.88.236:5173',
-    'http://172.31.162.37:5173',
-    'http://192.168.1.247:5173',
+    'http://192.168.1.177:5000',
+    'http://172.23.88.236:5000'
 ]
 
 

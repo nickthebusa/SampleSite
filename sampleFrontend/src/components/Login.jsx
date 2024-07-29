@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'; 
-import {useCookies} from 'react-cookie';
-import {useNavigate} from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
+import { useNavigate } from 'react-router-dom';
 import APIService from '../fetching/APIService';
 import { useLocation } from 'react-router-dom';
 import { useProfiles } from '../hooks/useFetch';
@@ -8,13 +8,13 @@ import '../CSS/Login.css';
 
 import Nav from './Nav';
 
-function Login({userLogged, userId}) {
+function Login({ userLogged, userId }) {
   const [isLogin, setIsLogin] = useState(true);
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loginErrors, setLoginErrors] = useState('');
-  
+
   const [token, setToken] = useCookies(['my-token']);
 
   const location = useLocation();
@@ -33,11 +33,11 @@ function Login({userLogged, userId}) {
     } else {
       setIsLogin(true);
     }
-    
+
     if (token['my-token'] && userId) {
       navigate(`/account/${userId}`);
     }
-    
+
   }, [navigate, token, userId, register])
 
   function loginBtn() {
@@ -46,7 +46,7 @@ function Login({userLogged, userId}) {
       .then(res => {
         if (res.token && res.user_id) {
           // sets auth token in cookies && userId in local-storage
-          setToken('my-token', res.token, {path: '/'})
+          setToken('my-token', res.token, { path: '/' })
           localStorage.setItem('user_id', parseInt(res.user_id));
         } else {
           setLoginErrors("Credentials didn't match");
@@ -80,10 +80,10 @@ function Login({userLogged, userId}) {
   return (
     <div className='Login'>
 
-      <Nav userLogged={userLogged}  />
+      <Nav userLogged={userLogged} />
 
       {isLogin ? <h2>Log In</h2> : <h2>Register</h2>}
-      
+
       {/*  LOGIN FORM  */}
 
       <div className="div-form">
@@ -129,14 +129,14 @@ function Login({userLogged, userId}) {
 
       {/*  CHECKS IF MODE IS LOGIN OR REGISTER  */}
       {isLogin ? <button onClick={loginBtn} >LOGIN</button>
-        :  
-      <button onClick={registerBtn} >Register</button>}
+        :
+        <button onClick={registerBtn} >Register</button>}
 
       <div>
         <br />
-        {isLogin ? <h5>No account? Please <button onClick={() => setIsLogin(false)}>Register</button> here</h5> 
+        {isLogin ? <h5>No account? Please <button onClick={() => setIsLogin(false)}>Register</button> here</h5>
           :
-        <h5>If you have account, please <button onClick={() => setIsLogin(true)}>Log in</button></h5>}
+          <h5>If you have account, please <button onClick={() => setIsLogin(true)}>Log in</button></h5>}
       </div>
 
 

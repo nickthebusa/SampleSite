@@ -1,12 +1,20 @@
-
-/* figure out how to make sample element stretch to max-width when in a single row */
-
 /*  SAMPLE LIST  */
 .sampleList {
-  display: inline-block;
-  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 0 0.5rem 1rem 0.5rem;
+}
+.sampleList.minimal {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  margin: 0 0.5rem 1rem 0.5rem;
+  grid-gap: 0;
 }
 .sample {
+  width: 100%;
+  height: 100%;
   max-width: 35rem;
   margin: 5px 5px;
   position: relative;
@@ -120,6 +128,9 @@
   margin: 10px 20px;
 }
 .sample-date-div p {
+  position: absolute;
+  bottom: 1px;
+  right: 1px;
   font-size: .6rem;
   text-align: right;
   margin: 0 20px;
@@ -182,7 +193,6 @@
   bottom: 0;
 }
 
-
 @media (min-width: 1400px) {
   .sampleList-wrapper {
     width: 100%;
@@ -193,7 +203,6 @@
     grid-gap: 1.5rem;
   }
 }
-
 @media (min-width: 850px) and (max-width: 1399px) {
   .sampleList-wrapper {
     margin: 0 auto;

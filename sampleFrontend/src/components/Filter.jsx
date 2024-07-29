@@ -1,12 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faCaretDown, faX } from '@fortawesome/free-solid-svg-icons'
+import { faCaretDown, faX, faListUl, faTable } from '@fortawesome/free-solid-svg-icons'
 import '../CSS/Filter.css';
 import FlippingText from './FlippingText.jsx';
 
 
+
 function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery,
-  searchMode, setSearchMode }) {
+  searchMode, setSearchMode, miniList, setMiniList }) {
 
   const searchModes = ['title', 'description', 'username'];
 
@@ -191,9 +192,18 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
           </div>
         </div>
 
+        <div className="mini-list-switch-div">
+          <p>List-Style: </p>
+          {miniList ? (
+            <FontAwesomeIcon icon={faTable} onClick={() => setMiniList(!miniList)} />
+          ) : (
+            <FontAwesomeIcon icon={faListUl} onClick={() => setMiniList(!miniList)} />
+          )}
+        </div>
+
       </div>
     </div>
   )
 }
 
-export default Filter
+export default Filter;

@@ -45,7 +45,6 @@
   -webkit-border-radius: .5rem;
   -moz-border-radius: .5rem;
 }
-
 .upload-audio-label {
   cursor: pointer;
   display: inline-block;
@@ -85,7 +84,6 @@
 .upload-image-input {
   display: none;
 }
-
 .pic-title-username-div {
   display: flex;
   margin: 0.6rem;
@@ -133,7 +131,6 @@
   flex-wrap: nowrap;
   margin: .5rem 0;
 }
-
 .errors {
   color: red;
   font-size: 0.7rem;
@@ -141,7 +138,6 @@
   text-transform: uppercase;
   margin: 0;
 }
-
 .audio-upload-div {
   display: flex;
   flex-direction: row;

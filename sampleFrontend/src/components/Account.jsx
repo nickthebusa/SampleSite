@@ -1,27 +1,25 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faPlus, faX } from '@fortawesome/free-solid-svg-icons'
-
-import APIService from '../fetching/APIService';
+import '../CSS/Account.css';
 
 //components
 import Nav from './Nav';
 import FollowList from './FollowList';
 import SampleList from './SampleList';
 import Filter from "./Filter";
-//import UploadSample from './UploadSample';
 import NewUploadSample from './NewUploadSample';
 import EditProfile from './EditProfile';
 
+import APIService from '../fetching/APIService';
 import { sampleSearch } from '../functions/sampleSearch';
 import { useTags, useProfile, useUserSamplesById, useUserSavedSamples } from "../hooks/useFetch";
 
-import '../CSS/Account.css';
 
 function Account({ userLogged, loggedUserRefetch }) {
-  // id of user who's page app is on
+
   const { id } = useParams();
 
   // state for FollowList, null for not open, then modes ('following', followers)
@@ -32,6 +30,7 @@ function Account({ userLogged, loggedUserRefetch }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [filteredSamples, setFilteredSamples] = useState([]);
   const [searchMode, setSearchMode] = useState('title');
+  const [miniList, setMiniList] = useState(false);
 
   // state for displaying user's posts or saved posts
   const [savedOn, setSavedOn] = useState(false);
@@ -46,68 +45,44 @@ function Account({ userLogged, loggedUserRefetch }) {
   const [userSamples, refetchSamples] = useUserSamplesById(id);
   const [savedSamples, refetchSaved] = useUserSavedSamples(id);
 
+
+  const filterSamples = (samples, searchQuery, tags, mode) => {
+    return sampleSearch(samples, searchQuery, tags, mode);
+  };
+
+  const memoizedFilteredSamples = useMemo(() => {
+    let samplesToFilter = savedOn ? savedSamples : userSamples;
+    if (samplesToFilter?.length > 0) {
+      if (currentTags.length > 0 || searchQuery.trim() !== '') {
+        return filterSamples(samplesToFilter, searchQuery, currentTags, searchMode);
+      }
+      return samplesToFilter;
+    }
+    return [];
+  }, [userSamples, savedSamples, currentTags, searchQuery, searchMode, savedOn]);
+
   useEffect(() => {
+    setFilteredSamples(memoizedFilteredSamples);
+  }, [memoizedFilteredSamples]);
 
-    // filter by loggedUser's saved samples
-    if (savedOn) {
-      if (savedSamples) {
-
-        let tempFilteredSamples = savedSamples;
-
-        // filter by tags and search query
-        if (currentTags.length > 0 || searchQuery.trim() !== '') {
-          tempFilteredSamples =
-            sampleSearch(savedSamples, searchQuery, currentTags, searchMode);
-        }
-        setFilteredSamples(tempFilteredSamples);
-      }
-      else {
-        setFilteredSamples([]);
-      }
-    }
-    // default, display account page user's samples
-    else {
-      if (userSamples?.length > 0) {
-
-        let tempFilteredSamples = userSamples;
-
-        // filter by tags and search query
-        if (currentTags.length > 0 || searchQuery.trim() !== '') {
-          tempFilteredSamples =
-            sampleSearch(userSamples, searchQuery, currentTags, searchMode);
-        }
-        setFilteredSamples(tempFilteredSamples);
-      }
-      else {
-        setFilteredSamples([]);
-      }
-    }
-
-    // for clicking out of pop up form 
-    function handleWindowPress(e) {
-
-      const overlay = document.querySelector('.overlay');
-      if (e.target === overlay && editProfile) {
-        setEditProfile(false);
-      }
-      if (e.target === overlay && uploadForm) {
-        setUploadForm(false);
-      }
-      if (e.target === overlay && followComp) {
-        setFollowComp(null);
-      }
-    }
-
-    window.addEventListener('click', handleWindowPress)
+  useEffect(() => {
+    window.addEventListener('click', handleWindowPress);
 
     return () => {
       window.removeEventListener('click', handleWindowPress);
     };
 
-  }, [userSamples, currentTags, tags, searchQuery,
-    editProfile, uploadForm, searchMode, savedOn,
-    savedSamples, followComp])
+  }, [editProfile, uploadForm, followComp])
 
+  // for clicking out of pop up form
+  function handleWindowPress(e) {
+    const overlay = document.querySelector('.overlay');
+    if (overlay && e.target === overlay && (editProfile || uploadForm || followComp)) {
+      setEditProfile(false);
+      setUploadForm(false);
+      setFollowComp(null);
+    }
+  }
 
   // For following and un-following
   function followBtn(e) {
@@ -137,6 +112,7 @@ function Account({ userLogged, loggedUserRefetch }) {
     loggedUserRefetch();
   }
 
+  console.log("Account")
 
   return (
     <div className='Account'>
@@ -216,7 +192,7 @@ function Account({ userLogged, loggedUserRefetch }) {
             <>
               <div className='upload-sample-link-div'>
                 <p>upload sample! </p>
-                <FontAwesomeIcon icon={faPlus} onClick={() => setUploadForm(!uploadForm)} />
+                <FontAwesomeIcon icon={faPlus} onClick={() => setUploadForm(true)} />
               </div>
               {/* UPLOAD SAMPLE POP UP FORM */}
               {uploadForm &&
@@ -257,6 +233,8 @@ function Account({ userLogged, loggedUserRefetch }) {
         setSearchQuery={setSearchQuery}
         searchMode={searchMode}
         setSearchMode={setSearchMode}
+        miniList={miniList}
+        setMiniList={setMiniList}
       />
 
       {/* SWITCH BETWEEN USER SAMPLES AND SAVED SAMPLES */}
@@ -284,6 +262,7 @@ function Account({ userLogged, loggedUserRefetch }) {
           loggedUserRefetch={loggedUserRefetch}
           refetchSamples={refetchSamples}
           refetchSaved={refetchSaved}
+          miniList={miniList}
         />
         :
         <div>NONE</div>

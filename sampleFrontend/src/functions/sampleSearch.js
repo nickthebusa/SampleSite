@@ -5,7 +5,6 @@ export function sampleSearch(samples, query, currentTags, mode) {
 
   const theQuery = query.toLowerCase().trim().replace(/\s/g, "");
 
-
   // order array from most tags to least
   function rankTagAmount(arr) {
     return arr.sort((a, b) => {
@@ -15,7 +14,7 @@ export function sampleSearch(samples, query, currentTags, mode) {
     })
   }
 
-
+  // if there is a search query AND tags selected
   if (theQuery && currentTags.length > 0) {
 
     // first add tags that begin with query
@@ -47,8 +46,8 @@ export function sampleSearch(samples, query, currentTags, mode) {
 
     return beginQuerySamples.concat(subQuerySamples);
   }
+  // if only query and no tags
   else if (theQuery) {
-
     const filteredSamples = [];
     for (let sample of samples) {
       if (sample[mode].toLowerCase().startsWith(theQuery)) {
@@ -64,6 +63,8 @@ export function sampleSearch(samples, query, currentTags, mode) {
 
     return filteredSamples;
   }
+
+  // if only tags selected and no query
   else if (currentTags.length > 0) {
     let filteredSamples = [];
     for (let sample of samples) {
@@ -76,6 +77,5 @@ export function sampleSearch(samples, query, currentTags, mode) {
     filteredSamples = rankTagAmount(filteredSamples);
     return filteredSamples;
   }
-
 }
 
