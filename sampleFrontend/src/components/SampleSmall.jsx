@@ -34,46 +34,10 @@ function SampleSmall({
 
   return (
     <div
-      className={selected.id === sample.id ? "sample selected" : "sample"}
+      className={selected.id === sample.id ? "sample small selected" : "sample small"}
       id={`id${sample.id}`}
     >
       <p onClick={() => selectDiv(i, sample.id)}>{sample.title}</p>
-
-      <div className="sample-actions-small">
-
-        <div className={`actions ${actionsMenu === sample.id ? "open" : "closed"}`}>
-          <div onClick={() => downloadFile(sample)}>download</div>
-
-          {userLogged && userLogged?.saved_samples.includes(sample.id) &&
-            <div onClick={() => setUnsaveConfirm(true)}>saved</div>
-          }
-
-          {userLogged && !(userLogged?.saved_samples.includes(sample.id)) &&
-            <div onClick={() => saveSample(sample)}>save</div>
-          }
-
-          {userLogged?.user === sample.user &&
-            <div onClick={() => setDeleteConfirm(true)} className="actions-delete">delete</div>
-          }
-
-        </div>
-
-        <div className={`open-close-div
-                      ${actionsMenu === sample.id ? 'rotate-in' : 'rotate-out'}`}>
-          {actionsMenu === sample.id ?
-            <FontAwesomeIcon
-              icon={faX}
-              onClick={toggleSampleActions}
-              className="open-close"
-            /> :
-            <FontAwesomeIcon
-              icon={faEllipsisVertical}
-              onClick={() => toggleSampleActions(sample.id)}
-              className="open-close"
-            />
-          }
-        </div>
-      </div>
 
       <AudioVisualizer
         audio_file={sample.audio_file}

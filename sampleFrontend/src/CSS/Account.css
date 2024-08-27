@@ -44,7 +44,7 @@
   flex-direction: row;
   justify-content: space-evenly;
   text-align: center;
-  border: 1px solid var(--white-color);
+  border: 1px solid var(--text-color);
   border-radius: 5px;
   max-width: 30rem;
   margin: 1rem auto;
@@ -58,7 +58,7 @@
   user-select: none; /* Standard */
 }
 .user-or-saved-div .selected {
-  background-color: var(--white-color);
+  background-color: var(--purple-color);
   color: var(--background-color);
 }
 .upload-sample-link-div {

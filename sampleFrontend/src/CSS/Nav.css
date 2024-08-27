@@ -75,12 +75,12 @@
   border-radius: 0 0 10px 10px;
 }
 .menu-nav a:hover {
-  color: var(--white-color);
+  color: var(--text-color);
   background-color: var(--purple-color);
 } 
 .menu {
   --s: 48px; /* control the size */
-  --c: var(--white-color); /* the color */
+  --c: var(--text-color); /* the color */
   
   height: var(--s);
   aspect-ratio: 1;

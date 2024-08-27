@@ -63,7 +63,7 @@
   cursor: pointer;
   padding: 10px 20px;
   background-color: var(--background-color);
-  color: var(--white-color);
+  color: var(--text-color);
   border-radius: 999px;
   outline: none;
   padding: 8px;
@@ -74,13 +74,13 @@
 }
 input[type='checkbox']:checked + .Filter-tag-checkbox-btn {
   background-color: var(--purple-color);
-  color: var(--white-color);
+  color: var(--text-color);
 }
 
 @media (hover: hover) {
   .Filter-tag-checkbox-btn:hover {
     background-color: var(--purple-color);
-    color: var(--white-color);
+    color: var(--text-color);
   }
 }
 
@@ -100,7 +100,7 @@ input[type='checkbox']:checked + .Filter-tag-checkbox-btn {
   background-color: var(--background-color);
   max-height: 400px;
   z-index: 1;
-  border: 1px solid var(--white-color);
+  border: 1px solid var(--text-color);
   border-top: none;
   margin: 5px 1rem;
   border-radius: 5px;

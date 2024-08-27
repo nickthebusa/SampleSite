@@ -9,7 +9,7 @@
   flex-direction: column;
   justify-content: center;
   text-align: left;
-  border: 1px solid var(--white-color);
+  border: 1px solid var(--text-color);
   background-color: var(--background-color);
   padding: 20px;
 }

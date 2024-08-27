@@ -22,7 +22,7 @@
   border-radius: 0.5rem;
 }
 .sample-actions-div {
-  border-bottom: 1px solid var(--white-color);
+  border-bottom: 1px solid var(--text-color);
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -78,8 +78,8 @@
   margin: 0;
 }
 .sample.selected {
-  -webkit-box-shadow: 0 0 7px var(--white-color);
-  box-shadow: 0 0 7px var(--white-color);
+  -webkit-box-shadow: 0 0 7px var(--purple-color);
+  box-shadow: 0 0 7px var(--purple-color);
 }
 .sample-title-section {
   display: grid;
@@ -155,7 +155,7 @@
   background-color: var(--background-color);
   width: 90%;
   height: 100px;
-  border: 1px solid var(--white-color);
+  border: 1px solid var(--text-color);
   z-index: 15;
   left: 50%;
   top: 50%;

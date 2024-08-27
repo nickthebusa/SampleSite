@@ -2,11 +2,6 @@
 /* font-family: 'Silkscreen', sans-serif; */
 /* font-family: 'Press Start 2P', sans-serif; */
 
-:root {
-  --background-color: #242424;
-  --purple-color: #9f64ff;
-  --white-color: #fff;
-}
 #root {
   max-width: 1280px;
   text-align: center;
@@ -75,20 +70,20 @@ body {
   position: absolute;
   left: 2em;
   top: -.7em;
-  background-color: var(--background-color);
   margin: 0;
   font-size: 0.7em;
   letter-spacing: 0.1em;
   display: flex;
   flex-direction: row;
+  background-color: var(--background-color);
 }
 .custom-input-text,
 .custom-input-text-search,
 .custom-input-password {
   outline: none;
   padding: 0.8em 1em;
-  border: .1em solid var(--white-color);
-  background-color: var(--background-color);
+  border: .1em solid;
+  background-color: transparent;
   background-origin: border-box;
   background-clip: padding-box, border-box;
   border-radius: 1.8em;

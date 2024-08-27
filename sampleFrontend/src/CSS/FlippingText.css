@@ -4,10 +4,10 @@
   margin: 0;
   vertical-align: top;
   position: relative;
-  -webkit-user-select: none;    
-  -moz-user-select: none; 
-  -ms-user-select: none; 
-  user-select: none; 
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   position: relative;
 }
 .flipping-text-div .word {

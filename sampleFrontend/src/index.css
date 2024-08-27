@@ -3,9 +3,16 @@
   line-height: 1.5;
   font-weight: 400;
 
+
+  --background-color: #242424;
+  --purple-color: #9f64ff;
+  --text-color: #fff;
+
   color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  /* initialize with dark mode */
+  color: var(--text-color);
+  background-color: var(--background-color);
+  border-color: var(--text-color);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -55,15 +62,17 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+/* change theme */
 @media (prefers-color-scheme: light) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+   --background-color: #fff;
+   --text-color: #242424;
   }
   a:hover {
     color: #747bff;
   }
   button {
-    background-color: #f9f9f9;
+    background-color: var(--background-color);
+    outline: 1px solid var(--text-color);
   }
 }
