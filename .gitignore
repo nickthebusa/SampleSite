@@ -4,7 +4,9 @@ Pipfile.lock
 sampleFrontend/node_modules
 sampleFrontend/yarn.lock 
 
-sampleSite/media
+sampleSite/media/audio_files
+sampleSite/media/profile_images
+sampleSite/media/sample_images
 
 .gitconfig
 
