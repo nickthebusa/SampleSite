@@ -132,11 +132,12 @@ function Login({ userLogged, userId }) {
         :
         <button onClick={registerBtn} >Register</button>}
 
-      <div>
+      <div className="toggle-login-div">
         <br />
-        {isLogin ? <h5>No account? Please <button onClick={() => setIsLogin(false)}>Register</button> here</h5>
+        {isLogin ?
+          <p>No account? Please <button onClick={() => setIsLogin(false)}>Register</button> here</p>
           :
-          <h5>If you have account, please <button onClick={() => setIsLogin(true)}>Log in</button></h5>}
+          <p>If you have account, please <button onClick={() => setIsLogin(true)}>Log in</button></p>}
       </div>
 
 

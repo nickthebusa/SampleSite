@@ -236,14 +236,18 @@ function Account({ userLogged, loggedUserRefetch }) {
       {/* SWITCH BETWEEN USER SAMPLES AND SAVED SAMPLES */}
       {userLogged?.user === userAccount?.user &&
         <div className='user-or-saved-div'>
-          <div className={!savedOn ? 'selected' : ''} onClick={() => {
-            setSavedOn(false);
-          }
-          }>Your Uploads</div>
-          <div className={savedOn ? 'selected' : ''} onClick={() => {
-            setSavedOn(true);
-          }
-          }>Saved</div>
+          <div className={!savedOn ? 'selected' : ''}
+            style={{ borderRadius: "1rem 0 0 1rem", borderRight: "none" }}
+            onClick={() => {
+              setSavedOn(false);
+            }
+            }>Your Uploads</div>
+          <div className={savedOn ? 'selected' : ''}
+            style={{ borderRadius: "0 1rem 1rem 0", borderLeft: "none" }}
+            onClick={() => {
+              setSavedOn(true);
+            }
+            }>Saved</div>
         </div>
       }
 

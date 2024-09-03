@@ -1,13 +1,44 @@
 /*  LOGIN  */
 .Login>h2 {
   font-family: 'Press Start 2P', sans-serif;
-  font-size: 2.5rem;
+  font-size: 2rem;
+  margin: 1.5rem 0;
 }
 .Login .div-form {
   display: flex;
-  max-width: 500px;
   justify-content: center;
   align-items: center;
   flex-direction: column;
-  margin: 0 auto;
+  margin: 0 1rem;
+}
+
+/* inputs */
+.Login .custom-input-div {
+  margin: 1rem;
+  width: 90%;
+}
+.Login .custom-input-text,
+.Login .custom-input-password {
+  font-size: 1.2rem;
+}
+.Login .custom-input-label {
+  font-size: 0.8rem;
+  left: 2.6em;
+  padding: 0 0.3em;
+}
+
+.Login .toggle-login-div {
+  font-size: 1.2rem;
+}
+.Login .toggle-login-div button {
+  border: none;
+  outline: none;
+  background-color: transparent;
+  padding: 0;
+  color: var(--purple-color);
+  text-decoration: underline;
+}
+.Login .toggle-login-div button:focus,
+.Login .toggle-login-div button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
 }

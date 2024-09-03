@@ -1,12 +1,17 @@
-/* FONTS*/
-/* font-family: 'Silkscreen', sans-serif; */
-/* font-family: 'Press Start 2P', sans-serif; */
+/* FONTS */
+/*
+font-family: 'Silkscreen', sans-serif;
+font-family: 'Press Start 2P', sans-serif;
+font-family: "Outfit", sans-serif;
+font-family: "Turret Road", sans-serif;
+*/
 
 #root {
   max-width: 1280px;
   text-align: center;
   width: 100%;
   margin: 0 auto;
+  font-family: "Outfit", sans-serif;
 }
 body {
   margin: 0;
@@ -59,7 +64,7 @@ body {
   flex: 1;
   flex-direction: column;
   position: relative;
-  margin: 0.5rem;
+  width: 100%;
 }
 .custom-input-label {
   padding: 0 0.8em;
@@ -86,7 +91,7 @@ body {
   border-radius: 1.8em;
   font-size: 0.8em;
   letter-spacing: 0.1em;
-  color: inherit
+  color: inherit;
 }
 .custom-input-text:focus,
 .custom-input-password:focus {
