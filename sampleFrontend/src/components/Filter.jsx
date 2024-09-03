@@ -5,7 +5,6 @@ import '../CSS/Filter.css';
 import FlippingText from './FlippingText.jsx';
 
 
-
 function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery,
   searchMode, setSearchMode, miniList, setMiniList }) {
 
@@ -110,8 +109,8 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
       <div className='Filter-types'>
 
         <div className='Filter-by-title'>
-          <div className='custom-input-div-search'>
-            <label htmlFor="title-search" className='custom-input-label-search'>
+          <div className='custom-input-div search'>
+            <label htmlFor="title-search" className='custom-input-label search'>
               Search by :
               <div className='search-main-select' onClick={toggleSearchMode}>
                 <FontAwesomeIcon className='search-main-arrow' icon={faCaretDown} rotation={270} />
@@ -126,7 +125,7 @@ function Filter({ tags, currentTags, setCurrentTags, searchQuery, setSearchQuery
             <input
               id="title-search"
               type="text"
-              className='custom-input-text-search'
+              className='custom-input-text search'
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />

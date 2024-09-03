@@ -45,16 +45,12 @@ function Account({ userLogged, loggedUserRefetch }) {
   const [userSamples, refetchSamples] = useUserSamplesById(id);
   const [savedSamples, refetchSaved] = useUserSavedSamples(id);
 
-
-  const filterSamples = (samples, searchQuery, tags, mode) => {
-    return sampleSearch(samples, searchQuery, tags, mode);
-  };
-
+  // filter samples
   const memoizedFilteredSamples = useMemo(() => {
     let samplesToFilter = savedOn ? savedSamples : userSamples;
     if (samplesToFilter?.length > 0) {
       if (currentTags.length > 0 || searchQuery.trim() !== '') {
-        return filterSamples(samplesToFilter, searchQuery, currentTags, searchMode);
+        return sampleSearch(samplesToFilter, searchQuery, currentTags, searchMode);
       }
       return samplesToFilter;
     }

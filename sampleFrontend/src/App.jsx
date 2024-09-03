@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 
 import Nav from "./components/Nav";
 import SampleList from "./components/SampleList";
@@ -17,12 +17,10 @@ import { useSamples, useTags, useProfiles } from "./hooks/useFetch";
 // probably need to make a sample element it's own component to make minimalsamplelist work
 // with all the functionality
 
-/* SECURITY*/
+/* SECURITY */
 // - have secret key in django & react .env files 
 
-
 function App({ userLogged, followingPage, loggedUserRefetch }) {
-
 
   // state for Filter Component
   const [currentTags, setCurrentTags] = useState([]);
@@ -39,6 +37,23 @@ function App({ userLogged, followingPage, loggedUserRefetch }) {
   const [profiles] = useProfiles();
 
 
+  // filter samples
+  const memoizedFilteredSamples = useMemo(() => {
+    let samplesToFilter = (followingPage && userLogged) ? samples.filter(s => userLogged.following.includes(s.user)) : samples;
+    if (samplesToFilter?.length > 0) {
+      if (currentTags.length > 0 || searchQuery.trim() !== '') {
+        return sampleSearch(samplesToFilter, searchQuery, currentTags, searchMode);
+      }
+      return samplesToFilter;
+    }
+    return [];
+  }, [samples, currentTags, searchQuery, searchMode, followingPage, userLogged]);
+
+  useEffect(() => {
+    setFilteredSamples(memoizedFilteredSamples);
+  }, [memoizedFilteredSamples]);
+
+  /*
   useEffect(() => {
 
     if (samples?.length > 0) {
@@ -62,8 +77,8 @@ function App({ userLogged, followingPage, loggedUserRefetch }) {
       setFilteredSamples([]);
     }
 
-  }, [samples, tags, profiles, currentTags, searchQuery, followingPage, userLogged, searchMode])
-
+  }, [samples, currentTags, searchQuery, followingPage, userLogged, searchMode])
+  */
 
   return (
     <div className="App">

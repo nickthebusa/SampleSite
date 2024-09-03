@@ -84,6 +84,20 @@ input[type='checkbox']:checked + .Filter-tag-checkbox-btn {
   }
 }
 
+.custom-input-div.search {
+  padding-top: .8rem
+}
+.custom-input-label.search {
+  left: 1.5em;
+  cursor: default;
+  display: flex;
+  align-items: center;
+}
+.custom-input-text.search {
+  font-size: 1.3rem;
+  padding: .5rem 1rem;
+}
+
 .custom-input-div.search-tags {
   margin: 0;
 }

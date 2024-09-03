@@ -24,7 +24,7 @@ export function sampleSearch(samples, query, currentTags, mode) {
         for (let tag of sample.tags) {
           if (currentTags.includes(tag)) {
             beginQuerySamples.push(sample);
-            leftovers.splice(samples.indexOf(sample), 1);
+            leftovers.splice(leftovers.indexOf(sample), 1);
           }
         }
       }
@@ -52,7 +52,7 @@ export function sampleSearch(samples, query, currentTags, mode) {
     for (let sample of samples) {
       if (sample[mode].toLowerCase().startsWith(theQuery)) {
         filteredSamples.push(sample);
-        leftovers.splice(samples.indexOf(sample), 1);
+        leftovers.splice(leftovers.indexOf(sample), 1);
       }
     }
     for (let sample of leftovers) {
