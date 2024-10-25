@@ -31,7 +31,7 @@ class SampleViewSet(viewsets.ModelViewSet):
     samples = models.Sample.objects.filter(id__in=sample_ids)
     serializer = self.get_serializer(samples, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
-  
+
   # returns the user's uploaded samples of a user based on the pk in url
   @action(detail=True, methods=['get'])
   def get_user_samples_by_user_id(self, request, pk=None):
@@ -39,7 +39,7 @@ class SampleViewSet(viewsets.ModelViewSet):
     samples = models.Sample.objects.filter(id__in=user.user_samples.all())
     serializer = self.get_serializer(samples, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
-  
+
   # returns the user's saved samples of a user based on the pk in url
   @action(detail=True, methods=['get'])
   def get_user_saved_samples(self, request, pk=None):
@@ -47,7 +47,7 @@ class SampleViewSet(viewsets.ModelViewSet):
     samples = models.Sample.objects.filter(id__in=user.saved_samples.all())
     serializer = self.get_serializer(samples, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
-  
+
   # endpoint for downloading sample audio file
   @action(detail=True, methods=["get"])
   def download_file(self, request, pk=None):

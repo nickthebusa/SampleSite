@@ -33,6 +33,10 @@
 .Nav-links {
   font-family: 'Turret Road', sans-serif;
   font-size: 1rem;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-items: center;
 }
 .Nav-links a {
   margin: 0 10px;

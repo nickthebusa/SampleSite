@@ -3,13 +3,8 @@
   line-height: 1.5;
   font-weight: 400;
 
-
-  --background-color: #242424;
   --purple-color: #9f64ff;
-  --text-color: #fff;
 
-  color-scheme: light dark;
-  /* initialize with dark mode */
   color: var(--text-color);
   background-color: var(--background-color);
   border-color: var(--text-color);
@@ -18,6 +13,18 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+
+[data-theme="dark"] {
+  --background-color: #242424;
+  --text-color: #fff;
+  --overlay-color: rgba(0,0,0,0.25);
+}
+[data-theme="light"] {
+   --background-color: #fff;
+   --text-color: #242424;
+  --overlay-color: linear-gradient(90deg, rgba(159,100,255,1) 0%, rgba(255,255,255,1) 72%);
 }
 
 a {
@@ -36,13 +43,13 @@ body {
   min-height: 100vh;
   overflow: hidden;
   overflow-y: auto;
+  position: relative;
 }
 
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
 }
-
 button {
   border-radius: 8px;
   border: 1px solid transparent;
@@ -50,29 +57,16 @@ button {
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  background-color: #1a1a1a;
   cursor: pointer;
   transition: border-color 0.25s;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: var(--text-color);
 }
 button:hover {
-  border-color: #646cff;
+  border-color: var(--purple-color);
 }
 button:focus,
 button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
-/* change theme */
-@media (prefers-color-scheme: light) {
-  :root {
-   --background-color: #fff;
-   --text-color: #242424;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: var(--background-color);
-    outline: 1px solid var(--text-color);
-  }
-}

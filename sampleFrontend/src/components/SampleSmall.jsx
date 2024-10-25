@@ -37,15 +37,19 @@ function SampleSmall({
       className={selected.id === sample.id ? "sample small selected" : "sample small"}
       id={`id${sample.id}`}
     >
-      <p onClick={() => selectDiv(i, sample.id)}>{sample.title}</p>
-
-      <AudioVisualizer
-        audio_file={sample.audio_file}
-        id={sample.id}
-        selected={selected}
-      />
-
-
+      <div className="left-side">
+        <AudioVisualizer
+          audio_file={sample.audio_file}
+          id={sample.id}
+          selected={selected}
+        />
+        <p onClick={() => selectDiv(i, sample.id)} title={sample.title}>{sample.title}</p>
+      </div>
+      <div className="right-side">
+        <Link reloadDocument to={`/account/${sample.user}`}>
+          {sample.username}
+        </Link>
+      </div>
     </div>
   )
 }

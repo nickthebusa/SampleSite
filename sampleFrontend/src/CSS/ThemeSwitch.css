@@ -1,0 +1,13 @@
+.ThemeSwitch button {
+  padding: 0;
+  margin: 0;
+}
+.ThemeSwitch button:focus,
+.ThemeSwitch button:focus-visible {
+  outline: 0;
+  border: none;
+}
+.ThemeSwitch button svg {
+  font-size: 2rem;
+  color: var(--purple-color);
+}

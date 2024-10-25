@@ -46,6 +46,7 @@
   text-align: center;
   max-width: 30rem;
   margin: 1rem auto;
+  padding: 0 1rem;
 }
 .user-or-saved-div div {
   cursor: pointer;

@@ -4,6 +4,8 @@ import { useCookies } from 'react-cookie';
 import { useEffect, useState, useRef } from 'react';
 import '../CSS/Nav.css';
 
+import ThemeSwitch from './ThemeSwitch';
+
 function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
 
   let navigate = useNavigate();
@@ -45,7 +47,8 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
     <div className='Nav'>
 
       {navbarOpen &&
-        <div className='overlay-hamburger'></div>}
+        <div className='overlay-hamburger'></div>
+      }
 
       <Link to={'/'} className='logo-and-name'>
         <div className='Nav-img-wrapper'>
@@ -54,6 +57,7 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
         <h1 className='Nav-name'>Sampler</h1>
       </Link>
 
+      {/* REGULAR MENU */}
       <div className='Nav-links'>
         <Link to={'/'}>home</Link>
         {userLogged && <Link to={'/following'} onClick={loggedUserRefetch} >following</Link>}
@@ -65,9 +69,11 @@ function Nav({ userLogged, loggedUserRefetch, fromAccount }) {
           <Link to={"/login"} state={{ register: false }}>login</Link>
         }
         {!userLogged && <Link to={"/login"} state={{ register: true }}>register</Link>}
+        <ThemeSwitch />
       </div>
 
 
+      {/* HAMBURGER MENU */}
       <div
         className={`menu-nav${navbarOpen ? ' show-menu' : ''}`}
         ref={ref}

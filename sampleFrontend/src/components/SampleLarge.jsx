@@ -122,7 +122,7 @@ function SampleLarge({
       </div>
 
       <div className="sample-description-div">
-        <p><strong>Description: </strong>{sample.description || 'no description'}</p>
+        <p>{sample.description || 'no description'}</p>
       </div>
 
       <div className="sample-tags-div">

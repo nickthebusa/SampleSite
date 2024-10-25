@@ -2,19 +2,50 @@
 .sample.small {
   width: 100%;
   height: 100%;
-  margin: 5px 5px;
   position: relative;
   display: flex;
-  flex-direction: row;
   justify-content: space-between;
+  margin: 0;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid;
+  border-radius: 0;
+  background: var(--overlay-color);
+  box-shadow: inset 0 0 15px 10px var(--background-color);
+  flex: 1;
+  max-width: none;
+}
+.left-side {
+  display: flex;
+  flex-direction: row;
   align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
 }
-
-.sample-actions-small {
+.right-side {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: end;
+  padding: 0 0 0 0.3rem;
+  margin: 0 0.3rem 0 0;
+}
+.sample.small p {
+  margin: 0 0 0 1rem;
+  cursor: pointer;
+}
+.sample.small .audioVisualizer {
+  height: inherit;
+}
+.sample.small .audioVisualizer-btns {
+  position: relative;
+}
+.sample.small .audioVisualizer-btns button {
+  background-color: transparent;
+  border: none;
+  padding: 0 1.5rem 0 0.5rem;
+  margin: 0;
+  width: 0;
+}
+.sample.small a {
 
 }
-
-.sample-small-visualizer {
-  display: none;
-}
-
