@@ -52,7 +52,5 @@ class ProfileSerializer(serializers.ModelSerializer):
               'following')
 
   def get_following(self, obj):
-    # Assuming 'following' is a related_name on the ManyToManyField
-    following_data = ProfileSerializer(obj.following.all(), many=True).data
-    user_ids = [profile['user'] for profile in following_data]
-    return user_ids
+    user_ids = obj.following.values_list('user', flat=True)
+    return list(user_ids)
